@@ -7,8 +7,10 @@ license = "MIT"
 readme = "README.md"
 
 [tool.poetry.dependencies]
-python = "^3.8"
-qcio = { path = "../qcio", develop = true }
+python = "^3.8.1"
+qcio = ">=0.2.1"
+qcparse = ">=0.3.1"
+qcengine = { extras = ["qcengine"], version = ">=0.26.0" }
 
 
 [tool.poetry.group.dev.dependencies]
@@ -18,7 +20,43 @@ pytest = "^7.3.2"
 pytest-cov = "^4.1.0"
 ruff = "^0.0.272"
 isort = "^5.12.0"
+pytest-mock = "^3.11.1"
 
 [build-system]
 requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"
+
+[tool.black]
+line-length = 88
+
+[tool.isort]
+force_grid_wrap = 0
+include_trailing_comma = true
+line_length = 88
+multi_line_output = 3
+use_parentheses = true
+
+[tool.ruff]
+line-length = 88
+isort = { known-first-party = ["qcop", "tests"] }
+target-version = "py38"
+
+[tool.coverage.run]
+branch = true
+omit = ["*/tests/*", "*__init__.py"]
+
+[tool.mypy]
+plugins = "pydantic.mypy"
+ignore_missing_imports = true
+
+[tool.pydantic-mypy]
+init_forbid_extra = true
+init_typed = true
+warn_required_dynamic_aliases = true
+warn_untyped_fields = true
+
+[tool.pytest.ini_options]
+addopts = "-m 'not integration'"
+markers = [
+    "integration: marks tests as integration (deselect with '-m \"not integration\"')",
+]
