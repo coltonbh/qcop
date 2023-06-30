@@ -1,9 +1,9 @@
-from typing import List, Optional
+from typing import Optional
 
 import pytest
-from qcio import Molecule, SinglePointComputedProperties, SinglePointInput, SPCalcType
+from qcio import CalcType, Molecule, ProgramInput, SinglePointResults
 
-from qcop.adapters.base import QCOPSinglePointAdapter
+from qcop.adapters.base import ProgramAdapter
 from qcop.utils import prog_available
 
 
@@ -22,23 +22,21 @@ def hydrogen_mol():
 
 @pytest.fixture(scope="session")
 def sp_input(hydrogen_mol):
-    """Create a function that returns a SinglePointInput object with a specified
+    """Create a function that returns a ProgramInput object with a specified
     calculation type."""
 
-    def _create_sp_input(calc_type):
-        return SinglePointInput(
+    def _create_sp_input(calctype):
+        return ProgramInput(
             molecule=hydrogen_mol,
-            program_args={
-                "calc_type": calc_type,
-                # Integration tests depend up this model; do not change
-                "model": {"method": "hf", "basis": "sto-3g"},
-                "keywords": {
-                    "maxiter": 100,
-                    "purify": "no",
-                    "some-bool": False,
-                    "displacement": 1e-3,
-                    "thermo_temp": 298.15,
-                },
+            calctype=calctype,
+            # Integration tests depend up this model; do not change
+            model={"method": "hf", "basis": "sto-3g"},
+            keywords={
+                "maxiter": 100,
+                "purify": "no",
+                "some-bool": False,
+                "displacement": 1e-3,
+                "thermo_temp": 298.15,
             },
         )
 
@@ -47,13 +45,13 @@ def sp_input(hydrogen_mol):
 
 @pytest.fixture(scope="session")
 def sp_test_adapter():
-    class TestAdapter(QCOPSinglePointAdapter):
+    class TestAdapter(ProgramAdapter):
         # Both program and supported_driver defined
         program = "test"
-        supported_calc_types = [SPCalcType.energy]
+        supported_calctypes = [CalcType.energy]
 
         def _compute(self, inp_obj, update_func=None, update_interval=None):
-            return SinglePointComputedProperties(energy=0.0), "Some stdout."
+            return SinglePointResults(energy=0.0), "Some stdout."
 
         def program_version(self, stdout: Optional[str] = None) -> str:
             return "v1.0.0"
@@ -66,13 +64,3 @@ def skipif_program_not_available(program_name: str):
     return pytest.mark.skipif(
         not prog_available(program_name), reason=f"{program_name} is not installed."
     )
-
-
-def skipif_no_programs_available(programs: List[str]):
-    """Skip a test if the given program is not available."""
-    for program in programs:
-        if prog_available(program):
-            return pytest.mark.skipif(
-                False, reason=f"None of {programs} are installed."
-            )
-    return pytest.mark.skipif(True, reason=f"None of {programs} are installed.")

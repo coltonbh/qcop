@@ -1,21 +1,19 @@
 import os
+import platform
 import shutil
-import subprocess
 import tempfile
-import time
 from contextlib import contextmanager
 from functools import lru_cache
 from pathlib import Path
-from typing import Callable, List, Optional
+from time import time
+from typing import Optional
 
+from qcio import Provenance
 from qcio.helper_types import StrOrPath
+from qcio.models import FileInput, InputBase
 
-from .adapters import registry
-from .exceptions import (
-    AdapterNotFoundError,
-    ExternalProgramExecutionError,
-    ProgramNotFoundError,
-)
+from .adapters import BaseAdapter, FileAdapter, registry
+from .exceptions import AdapterNotFoundError, ProgramNotFoundError
 
 
 @contextmanager
@@ -35,111 +33,6 @@ def tmpdir(directory: Optional[StrOrPath] = None, rmdir: bool = True):
     if rmdir:  # After exiting context manager
         shutil.rmtree(path)
     os.chdir(cwd)
-
-
-def execute_subprocess(
-    program: str,
-    cmdline_args: Optional[List[str]] = None,
-    update_func: Optional[Callable] = None,
-    update_interval: Optional[float] = 0.5,
-) -> str:
-    """Execute a subprocess and monitor its stdout/stderr using a callback function.
-
-    Args:
-        program: The program to run.
-        cmdline_args: The command line arguments to pass to the program.
-        update_func: A function to call as the program executes to monitor stdout. The
-            function must accept two string arguments, 1) The entire stdout/stderr
-            output from the process, and 2) The output since the last call to
-            update_func. The update_func is called at least once, and then every
-            update_interval seconds. This is useful when executing code on remote
-            servers and you want to pass a callback to monitor the output in real time.
-            If you want to simply monitor stdout on your local machine in real time
-            pass a simple update_func like this:
-                execute_subprocess(
-                    program,
-                    update_func=lambda stdout, new_stdout: print(new_stdout
-                    update_interval=0.5,
-                )
-        update_interval: The minimum time in seconds between calls to the update_func.
-            Defaults to 0.5 seconds if update_func is not None. Default is set inside
-            the function to avoid issues with mypy and default arguments.
-
-    Returns:
-        The stdout of the program as a string.
-
-    Raises:
-        ProgramNotFoundException: If the program is not found.
-        ExternalProgramExecutionError: If the program fails during execution and
-            returns a non-zero exit code.
-    """
-    cmd = [program] + (cmdline_args or [])
-    # Execute subprocess asynchronously so we can monitor stdout and stderr.
-    try:
-        proc = subprocess.Popen(
-            cmd,
-            # redirects stdout to a pipe, ensures proc.stdout is not None
-            stdout=subprocess.PIPE,
-            stderr=subprocess.STDOUT,  # stderr is redirected to stdout
-            universal_newlines=True,  # returns stdout as string
-        )
-    except FileNotFoundError:
-        raise ProgramNotFoundError(program)
-
-    # Setup variables for monitoring stdout
-    stdout_lines: List[str] = []
-    prev_update_time = time.time()
-    prev_line_count = len(stdout_lines)
-
-    # Read stdout line by line as it is available until proc terminates
-    while proc.poll() is None:
-        # This blocks until it receives a newline.
-        # ignore mypy because stdout=subprocess.PIPE, not None
-        line = proc.stdout.readline()  # type: ignore
-        if line:  # readline may return '' at EOF and we don't want to append that
-            stdout_lines.append(line)
-
-        if (
-            update_func
-            and time.time() - prev_update_time > (update_interval or 0.5)
-            and len(stdout_lines) > prev_line_count
-        ):
-            # Call update_func with the current stdout
-            stdout = "".join(stdout_lines)
-            stdout_since_last_update = "".join(stdout_lines[prev_line_count:])
-            update_func(stdout, stdout_since_last_update)
-            prev_update_time = time.time()
-            prev_line_count = len(stdout_lines)
-
-    # Unconsumed output may still need to be processed
-    # ignore mypy because stdout=subprocess.PIPE, not None
-    for line in proc.stdout.readlines():  # type: ignore
-        stdout_lines.append(line)
-    stdout = "".join(stdout_lines)
-
-    # Check if program executed successfully
-    if proc.returncode != 0:
-        raise ExternalProgramExecutionError(
-            returncode=proc.returncode, cmd=" ".join(cmd), stdout=stdout
-        )
-
-    return stdout
-
-
-def qcng_get_program(program: str) -> None:
-    """Wrapper around qcng.get_program that raises correct qcop errors if the
-    adapter (harness) or program are not found
-    """
-    from qcengine import get_program
-    from qcengine.exceptions import InputError, ResourceError
-
-    try:
-        get_program(program)
-    except InputError as e:  # Program not registered with QCEngine
-        raise AdapterNotFoundError(program) from e
-    # IndexError insulates from .pyenv/shims not covered in qcng
-    except (ResourceError, IndexError):  # Program not installed on system
-        raise ProgramNotFoundError(program)
 
 
 @lru_cache  # Improves perf of tests when repeatedly called
@@ -173,3 +66,94 @@ def available_programs():
         for adapter in registry.values()
         if prog_available(adapter.program)
     ]
+
+
+def check_qcng_support(program: str) -> None:
+    """Wrapper around qcng.get_program that raises correct qcop errors if the
+    adapter (harness) or program are not found.
+
+    Args:
+        program: The program to check.
+
+    Raises:
+        AdapterNotFoundError: If QCEngine has no adapter for the program.
+        ProgramNotFoundError: If the program is not installed on the host system.
+    """
+    try:  # Import QCEngine
+        from qcengine import get_program
+        from qcengine.exceptions import InputError, ResourceError
+    except ModuleNotFoundError as e:
+        raise ModuleNotFoundError(
+            "QCEngine not installed. To use qcengine as a fallback, "
+            "install it by running 'python -m pip install "
+            "'qcop[qcengine]'."
+        ) from e
+
+    try:
+        get_program(program)
+    except InputError as e:  # Raised by QCEngine if program not registered
+        raise AdapterNotFoundError(program) from e
+    # Raised by QCEngine if program not installed on system
+    # IndexError insulates from .pyenv/shims not covered in qcng
+    except (ResourceError, IndexError):
+        raise ProgramNotFoundError(program)
+
+
+def get_adapter(
+    program: str, inp_obj: InputBase, qcng_fallback: bool = False
+) -> BaseAdapter:
+    """Get the adapter for a program.
+
+    Args:
+        program: The program to get the adapter for.
+        inp_obj: The input object for the calculation.
+        qcng_fallback: Fallback to use QCEngine if the adapter is not in qcop.
+
+    Returns:
+        The adapter for the program.
+
+    Raises:
+        AdapterNotFoundError: If the adapter is not found.
+    """
+    if isinstance(inp_obj, FileInput):
+        return FileAdapter(program)
+    try:
+        return registry[program]()
+    except KeyError:
+        if qcng_fallback:
+            # Raises AdapterNotFoundError or ProgramNotFoundError
+            check_qcng_support(program)
+            return registry["qcengine"](program)
+        raise AdapterNotFoundError(program)
+
+
+def construct_provenance(
+    program: str,
+    adapter: BaseAdapter,
+    working_dir: Path,
+    start: float,
+    stdout: Optional[str],
+) -> Provenance:
+    """Construct a provenance object for a calculation.
+
+    Args:
+        program: The program used for the calculation.
+        adapter: The adapter used for the calculation.
+        working_dir: The working directory of the calculation.
+        start: The start time of the calculation.
+        stdout: The stdout of the calculation.
+
+    Returns:
+        The Provenance object.
+    """
+    wall_time = time() - start
+    program_version = getattr(adapter, "program_version", lambda _: None)(stdout)
+
+    return Provenance(
+        program=program,
+        program_version=program_version,
+        working_dir=str(working_dir),
+        wall_time=round(wall_time, 6),
+        hostname=platform.node(),
+        hostcpus=os.cpu_count(),
+    )

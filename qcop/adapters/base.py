@@ -1,8 +1,7 @@
 from abc import ABC, abstractmethod
-from typing import Callable, List, Optional
+from typing import Callable, List, Optional, Tuple
 
-from qcio.models.base_io import ComputedPropertiesBase, InputBase
-from qcio.models.single_point import SinglePointComputedProperties
+from qcio import InputBase, ResultsBase
 
 from qcop.exceptions import UnsupportedCalcTypeError
 
@@ -29,7 +28,7 @@ class BaseAdapter(ABC):
         inp_obj: InputBase,
         update_func: Optional[Callable] = None,
         update_interval: Optional[float] = None,
-    ) -> ComputedPropertiesBase:
+    ) -> Tuple[ResultsBase, str]:
         """Compute the given program on the given files.
 
         Implementations of this function can assume:
@@ -46,26 +45,34 @@ class BaseAdapter(ABC):
 
 
         Returns:
-            The computed properties object for a computation.
+            Tuple of ResultsBase object and stdout from the program.
         """
 
 
-class QCOPProgramAdapter(BaseAdapter):
-    """Base adapter for all program adapters."""
+class ProgramAdapter(BaseAdapter):
+    """Base adapter for all program adapters (all but FileAdaptor)."""
 
     program: str  # All subclasses must specify program name
+    supported_calctypes: List[str]  # All subclasses must specify supported calctypes
 
     def __init_subclass__(cls, **kwargs):
         super().__init_subclass__(**kwargs)
         # Ensure that subclasses define the required class attributes
         if not getattr(cls, "program", None):
             raise NotImplementedError(
-                f"Subclasses of QCOPProgramAdapter must define a program string. "
-                f"{cls.__name__} does not meet this requirement."
+                f"Subclasses of {ProgramAdapter.__name__} must define a program "
+                f"string. {cls.__name__} does not meet this requirement."
             )
 
         # Automatically register all subclasses
         registry[cls.program] = cls
+
+        if not getattr(cls, "supported_calctypes", None):
+            raise NotImplementedError(
+                f"Subclasses of {ProgramAdapter.__name__} must define a nonempty "
+                f"supported_calctypes list. {cls.__name__} does not meet this "
+                "requirement."
+            )
 
     @abstractmethod
     def program_version(self, stdout: Optional[str]) -> str:
@@ -76,37 +83,25 @@ class QCOPProgramAdapter(BaseAdapter):
                 can be extremely slow for some programs, the stdout from the program
                 is passed in here so that the version can be extracted from it if
                 possible. If the version cannot be extracted from the stdout, then
-                this function should extract the program version in some other way.
+                this function should return the program version in some other way.
         """
-
-
-class QCOPSinglePointAdapter(QCOPProgramAdapter):
-    # TODO: This is a hack. Remove!
-    program = "fake program"
-    supported_calc_types: List[str]  # All subclasses must specify supported drivers
-
-    def __init_subclass__(cls, **kwargs):
-        super().__init_subclass__(**kwargs)
-
-        if not getattr(cls, "supported_calc_types", None):
-            raise NotImplementedError(
-                f"Subclasses of QCOPProgramAdapter must define a nonempty "
-                f"supported_calc_types list. {cls.__name__} does not meet this "
-                "requirement."
-            )
 
     def compute(
         self,
         inp_obj: InputBase,
         update_func: Optional[Callable] = None,
         update_interval: Optional[float] = None,
-    ) -> SinglePointComputedProperties:
-        """Single point compute method."""
-        if inp_obj.program_args.calc_type not in self.supported_calc_types:
+    ) -> Tuple[ResultsBase, str]:
+        """Top level compute method used by external calls.
+
+        Performs all necessary checks and then calls the _compute method which is
+        bespoke to each adapter.
+        """
+        if inp_obj.calctype not in self.supported_calctypes:
             raise UnsupportedCalcTypeError(
                 program=self.program,
-                calc_type=inp_obj.program_args.calc_type,
-                supported_calc_types=self.supported_calc_types,
+                calctype=inp_obj.calctype,
+                supported_calctypes=self.supported_calctypes,
             )
         return self._compute(inp_obj, update_func, update_interval)
 
@@ -116,5 +111,5 @@ class QCOPSinglePointAdapter(QCOPProgramAdapter):
         inp_obj: InputBase,
         update_func: Optional[Callable] = None,
         update_interval: Optional[float] = None,
-    ) -> SinglePointComputedProperties:
+    ) -> Tuple[ResultsBase, str]:
         """Subclasses should implement this method with custom compute logic."""

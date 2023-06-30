@@ -1,9 +1,10 @@
-from typing import Callable, Optional
+from typing import Callable, Optional, Tuple
 
-from qcio import FileInput, FileSuccessfulOutput
+from qcio import FileInput, FileOutput
 
 from qcop.adapters.base import BaseAdapter
-from qcop.utils import execute_subprocess
+
+from .utils import execute_subprocess
 
 
 class FileAdapter(BaseAdapter):
@@ -18,7 +19,7 @@ class FileAdapter(BaseAdapter):
         inp_obj: FileInput,
         update_func: Optional[Callable] = None,
         update_interval: Optional[float] = None,
-    ) -> FileSuccessfulOutput:
+    ) -> Tuple[FileOutput, str]:
         """Compute the given program on the given files.
 
         Args:
@@ -28,7 +29,7 @@ class FileAdapter(BaseAdapter):
             update_func.
 
         Returns:
-            Tuple of None and FileSuccessfulOutput object for a computation. None is
+            Tuple of None and FileOutput object for a computation. None is
                 returned because no computed properties are returned for a file
                 computation.
 
@@ -37,9 +38,6 @@ class FileAdapter(BaseAdapter):
 
         """
         stdout = execute_subprocess(
-            self.program,
-            inp_obj.program_args.cmdline_args,
-            update_func,
-            update_interval,
+            self.program, inp_obj.cmdline_args, update_func, update_interval
         )
         return None, stdout

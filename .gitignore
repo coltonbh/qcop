@@ -164,5 +164,7 @@ cython_debug/
 scr.*
 tc.in
 *.xyz
+# Keep example file
+!examples/h2o.xyz
 # Psi4 scratch files
 *.dat

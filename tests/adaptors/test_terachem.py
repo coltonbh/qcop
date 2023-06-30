@@ -24,21 +24,21 @@ def test_write_input_files(sp_input):
     # 3. Model
     # 4. Keywords (test booleans to lower case, ints, sts, floats)
     assert text == (
-        f"{'run':<{tc_adapter.padding}} {sp_input.program_args.calc_type}\n"
+        f"{'run':<{tc_adapter.padding}} {sp_input.calctype}\n"
         f"{'coordinates':<{tc_adapter.padding}} geom.xyz\n"
         f"{'charge':<{tc_adapter.padding}} {sp_input.molecule.charge}\n"
         f"{'spinmult':<{tc_adapter.padding}} {sp_input.molecule.multiplicity}\n"
-        f"{'method':<{tc_adapter.padding}} {sp_input.program_args.model.method}\n"
-        f"{'basis':<{tc_adapter.padding}} {sp_input.program_args.model.basis}\n"
+        f"{'method':<{tc_adapter.padding}} {sp_input.model.method}\n"
+        f"{'basis':<{tc_adapter.padding}} {sp_input.model.basis}\n"
         f"{'maxiter':<{tc_adapter.padding}} "
-        f"{sp_input.program_args.keywords['maxiter']}\n"
-        f"{'purify':<{tc_adapter.padding}} {sp_input.program_args.keywords['purify']}\n"
+        f"{sp_input.keywords['maxiter']}\n"
+        f"{'purify':<{tc_adapter.padding}} {sp_input.keywords['purify']}\n"
         f"{'some-bool':<{tc_adapter.padding}} "
-        f"{str(sp_input.program_args.keywords['some-bool']).lower()}\n"
+        f"{str(sp_input.keywords['some-bool']).lower()}\n"
         f"{'displacement':<{tc_adapter.padding}} "
-        f"{sp_input.program_args.keywords['displacement']}\n"
+        f"{sp_input.keywords['displacement']}\n"
         f"{'thermo_temp':<{tc_adapter.padding}} "
-        f"{sp_input.program_args.keywords['thermo_temp']}\n"
+        f"{sp_input.keywords['thermo_temp']}\n"
     )
 
 
@@ -65,17 +65,17 @@ def test_write_input_files_renames_hessian_to_frequencies(sp_input):
         f"{'coordinates':<{tc_adapter.padding}} geom.xyz\n"
         f"{'charge':<{tc_adapter.padding}} {sp_input.molecule.charge}\n"
         f"{'spinmult':<{tc_adapter.padding}} {sp_input.molecule.multiplicity}\n"
-        f"{'method':<{tc_adapter.padding}} {sp_input.program_args.model.method}\n"
-        f"{'basis':<{tc_adapter.padding}} {sp_input.program_args.model.basis}\n"
+        f"{'method':<{tc_adapter.padding}} {sp_input.model.method}\n"
+        f"{'basis':<{tc_adapter.padding}} {sp_input.model.basis}\n"
         f"{'maxiter':<{tc_adapter.padding}} "
-        f"{sp_input.program_args.keywords['maxiter']}\n"
-        f"{'purify':<{tc_adapter.padding}} {sp_input.program_args.keywords['purify']}\n"
+        f"{sp_input.keywords['maxiter']}\n"
+        f"{'purify':<{tc_adapter.padding}} {sp_input.keywords['purify']}\n"
         f"{'some-bool':<{tc_adapter.padding}} "
-        f"{str(sp_input.program_args.keywords['some-bool']).lower()}\n"
+        f"{str(sp_input.keywords['some-bool']).lower()}\n"
         f"{'displacement':<{tc_adapter.padding}} "
-        f"{sp_input.program_args.keywords['displacement']}\n"
+        f"{sp_input.keywords['displacement']}\n"
         f"{'thermo_temp':<{tc_adapter.padding}} "
-        f"{sp_input.program_args.keywords['thermo_temp']}\n"
+        f"{sp_input.keywords['thermo_temp']}\n"
     )
 
 
@@ -117,6 +117,6 @@ def test_prepare_inputs_raises_error_qcio_args_passes_as_keywords(sp_input):
     sp_input = sp_input("energy")
     adapter = TeraChemAdapter()
     for keyword in qcio_keywords_from_terachem:
-        sp_input.program_args.keywords[keyword] = "some value"
+        sp_input.keywords[keyword] = "some value"
         with pytest.raises(AdapterInputError):
             adapter.prepare_inputs(sp_input)

@@ -3,7 +3,7 @@
 from subprocess import CalledProcessError
 from typing import List, Optional
 
-from qcio import SPCalcType
+from qcio import CalcType
 
 
 class QCOPBaseError(Exception):
@@ -60,16 +60,16 @@ class UnsupportedCalcTypeError(AdapterError):
     def __init__(
         self,
         program: str,
-        calc_type: SPCalcType,
-        supported_calc_types: List[SPCalcType],
+        calctype: CalcType,
+        supported_calctypes: List[CalcType],
     ):
         self.program = program
-        self.calc_type = calc_type
-        self.supported_calc_types = supported_calc_types
+        self.calctype = calctype
+        self.supported_calctypes = supported_calctypes
         self.message = (
             f"The {self.program} adapter does not yet support "
-            f"'{self.calc_type.value}' calculations. This adaptor can compute: "
-            f"{[i.value for i in self.supported_calc_types]}"
+            f"'{self.calctype.value}' calculations. This adaptor can compute: "
+            f"{[i.value for i in self.supported_calctypes]}"
         )
         super().__init__(self.message)
 

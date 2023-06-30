@@ -1,5 +1,5 @@
 import pytest
-from qcio.models.single_point import SPCalcType
+from qcio import CalcType
 
 from qcop.adapters import base, registry
 from qcop.exceptions import UnsupportedCalcTypeError
@@ -10,21 +10,21 @@ def test_adapter_subclasses_must_define_program():
     program list."""
     with pytest.raises(NotImplementedError):
 
-        class TestAdapter(base.QCOPProgramAdapter):
-            # supported_calc_types defined but program not defined
-            supported_calc_types = [SPCalcType.energy]
+        class TestAdapter(base.ProgramAdapter):
+            # supported_calctypes defined but program not defined
+            supported_calctypes = [CalcType.energy]
 
             def _compute(self, *args, **kwargs):
                 pass
 
 
-def test_adapter_subclasses_must_define_supported_calc_types():
+def test_adapter_subclasses_must_define_supported_calctypes():
     """Test that subclasses of QCOPSinglePointAdapter must define a nonempty
-    supported_calc_types list."""
+    supported_calctypes list."""
     with pytest.raises(NotImplementedError):
 
-        class TestAdapter(base.QCOPSinglePointAdapter):
-            # program defined but supported_calc_types not defined
+        class TestAdapter(base.ProgramAdapter):
+            # program defined but supported_calctypes not defined
             program = "test"
 
             def _compute(self, *args, **kwargs):
@@ -33,25 +33,25 @@ def test_adapter_subclasses_must_define_supported_calc_types():
 
 def test_adapter_subclasses_must_define_compute_method():
     """Test that subclasses of QCOPProgramAdapter defining a nonempty program
-    list and supported_calc_types list can be instantiated."""
+    list and supported_calctypes list can be instantiated."""
 
-    class TestAdapter(base.QCOPProgramAdapter):
-        # Both program and supported_calc_types defined
+    class TestAdapter(base.ProgramAdapter):
+        # Both program and supported_calctypes defined
         program = "test"
-        supported_calc_types = [SPCalcType.energy]
+        supported_calctypes = [CalcType.energy]
 
     with pytest.raises(TypeError):
         TestAdapter()
 
 
-def test_adapter_subclasses_defining_program_and_supported_calc_types():
+def test_adapter_subclasses_defining_program_and_supported_calctypes():
     """Test that subclasses of QCOPProgramAdapter defining a nonempty program
-    list and supported_calc_types list can be instantiated."""
+    list and supported_calctypes list can be instantiated."""
 
-    class TestAdapter(base.QCOPProgramAdapter):
-        # Both program and supported_calc_types defined
+    class TestAdapter(base.ProgramAdapter):
+        # Both program and supported_calctypes defined
         program = "test"
-        supported_calc_types = [SPCalcType.energy]
+        supported_calctypes = [CalcType.energy]
 
         def _compute(self, *args, **kwargs):
             pass
@@ -59,14 +59,14 @@ def test_adapter_subclasses_defining_program_and_supported_calc_types():
     assert registry.get("test") == TestAdapter
 
 
-def test_single_point_subclasses_raise_error_if_calc_type_not_supported(sp_input):
+def test_single_point_subclasses_raise_error_if_calctype_not_supported(sp_input):
     """Test that subclasses of QCOPSinglePointAdapter raise an error if the
-    calc_type is not supported."""
+    calctype is not supported."""
 
-    class TestAdapter(base.QCOPSinglePointAdapter):
-        # Both program and supported_calc_types defined
+    class TestAdapter(base.ProgramAdapter):
+        # Both program and supported_calctypes defined
         program = "test"
-        supported_calc_types = [SPCalcType.energy]
+        supported_calctypes = [CalcType.energy]
 
         def program_version(self, *args, **kwargs) -> str:
             return "v1.0.0"

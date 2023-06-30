@@ -1,23 +1,19 @@
 from typing import Callable, Optional, Tuple
 
-from qcio.models.single_point import (
-    SinglePointComputedProperties,
-    SinglePointInput,
-    SPCalcType,
-)
-from qcparse import parse_computed_props
+from qcio import CalcType, ProgramInput, SinglePointResults
+from qcparse import parse_results
 from qcparse.parsers.terachem import parse_version_string
 
 from qcop.exceptions import AdapterInputError
-from qcop.utils import execute_subprocess
 
-from .base import QCOPSinglePointAdapter
+from .base import ProgramAdapter
+from .utils import execute_subprocess
 
 
-class TeraChemAdapter(QCOPSinglePointAdapter):
+class TeraChemAdapter(ProgramAdapter):
     """Adapter for TeraChem."""
 
-    supported_calc_types = [SPCalcType.energy, SPCalcType.gradient, SPCalcType.hessian]
+    supported_calctypes = [CalcType.energy, CalcType.gradient, CalcType.hessian]
     program = "terachem"
     padding = 20  # padding between keyword and value in tc.in
 
@@ -36,11 +32,11 @@ class TeraChemAdapter(QCOPSinglePointAdapter):
             # Cut out "TeraChem version " (17 chars) from the output
             return execute_subprocess(self.program, ["--version"])[17:]
 
-    def prepare_inputs(self, inp_obj: SinglePointInput) -> str:
+    def prepare_inputs(self, inp_obj: ProgramInput) -> str:
         """Translate qcio objects into TeraChem inputs files. Write files to disk.
 
         Args:
-            inp_obj: The qcio SinglePointInput object for a computation.
+            inp_obj: The qcio ProgramInput object for a computation.
 
         Returns:
             Filename of input file (tc.in).
@@ -53,29 +49,29 @@ class TeraChemAdapter(QCOPSinglePointAdapter):
         inp_filename = "tc.in"
 
         with open(inp_filename, "w") as f:
-            # calc_type
-            if inp_obj.program_args.calc_type == "hessian":
-                calc_type = "frequencies"
+            # calctype
+            if inp_obj.calctype == "hessian":
+                calctype = "frequencies"
             else:
-                calc_type = inp_obj.program_args.calc_type
-            f.write(f"{'run':<{self.padding}} {calc_type}\n")
+                calctype = inp_obj.calctype
+            f.write(f"{'run':<{self.padding}} {calctype}\n")
             # Molecule
             f.write(f"{'coordinates':<{self.padding}} {xyz_filename}\n")
             f.write(f"{'charge':<{self.padding}} {inp_obj.molecule.charge}\n")
             f.write(f"{'spinmult':<{self.padding}} {inp_obj.molecule.multiplicity}\n")
             # Model
-            f.write(f"{'method':<{self.padding}} {inp_obj.program_args.model.method}\n")
-            f.write(f"{'basis':<{self.padding}} {inp_obj.program_args.model.basis}\n")
+            f.write(f"{'method':<{self.padding}} {inp_obj.model.method}\n")
+            f.write(f"{'basis':<{self.padding}} {inp_obj.model.basis}\n")
 
             # Keywords
             non_keywords = {
                 "charge": ".molecule.charge",
                 "spinmult": ".molecule.multiplicity",
-                "run": ".program_args.calc_type",
-                "basis": ".program_args.model.basis",
-                "method": ".program_args.model.method",
+                "run": ".calctype",
+                "basis": ".model.basis",
+                "method": ".model.method",
             }
-            for key, value in inp_obj.program_args.keywords.items():
+            for key, value in inp_obj.keywords.items():
                 # Check for keywords that should be passed as structured data
                 if key in non_keywords:
                     raise AdapterInputError(
@@ -94,26 +90,19 @@ class TeraChemAdapter(QCOPSinglePointAdapter):
         inp_obj,
         update_func: Optional[Callable] = None,
         update_interval: Optional[float] = None,
-    ) -> Tuple[SinglePointComputedProperties, str]:
+    ) -> Tuple[SinglePointResults, str]:
         """Execute TeraChem on the given input.
 
         Args:
-            inp_obj: The qcio SinglePointInput object for a computation.
+            inp_obj: The qcio ProgramInput object for a computation.
             update_func: A callback function to call as the program executes.
             update_interval: The minimum time in seconds between calls to the
                 update_func.
 
         Returns:
-            A tuple of SinglePointComputedProperties and the stdout str.
+            A tuple of SinglePointComputedProps and the stdout str.
         """
         tc_in = self.prepare_inputs(inp_obj)
         stdout = execute_subprocess(self.program, [tc_in], update_func, update_interval)
-        # Hardcoding "terachem" so "terachemd" isn't passed to parse
-        parsed_output = parse_computed_props(stdout, "terachem", "stdout")
+        parsed_output = parse_results(stdout, self.program, "stdout")
         return parsed_output, stdout
-
-
-class TeraChemDockerAdapter(TeraChemAdapter):
-    """Adapter for TeraChem executable running in Docker."""
-
-    program = "terachemd"
