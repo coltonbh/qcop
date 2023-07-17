@@ -1,9 +1,15 @@
 {
     "cSpell.words": [
         "allclose",
+        "calctype",
+        "calctypes",
         "dockerized",
         "hostcpus",
         "htmlcov",
+        "mrchem",
+        "pstdout",
+        "pyenv",
+        "qcel",
         "qcio",
         "qcop",
         "qcparse",

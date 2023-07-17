@@ -6,6 +6,11 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## [unreleased]
 
+### Changed
+
+- Updated to flattened `qcio v0.3.0` data models.
+- Changed order of args to `compute()` to allow for the same pattern to `compute_args`.
+
 ## [0.1.0]
 
 ### Added

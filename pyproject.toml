@@ -8,8 +8,8 @@ readme = "README.md"
 
 [tool.poetry.dependencies]
 python = "^3.8.1"
-qcio = ">=0.2.1"
-qcparse = ">=0.3.1"
+qcio = ">=0.3.0"
+qcparse = ">=0.4.0"
 qcengine = { extras = ["qcengine"], version = ">=0.26.0" }
 
 
