@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "qcop"
-version = "0.1.0"
+version = "0.2.0"
 description = "A package for operating Quantum Chemistry programs using qcio standardized data structures."
 authors = ["Colton Hicks <github@coltonhicks.com>"]
 license = "MIT"
