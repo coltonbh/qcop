@@ -166,6 +166,22 @@ files = [
 test = ["pytest (>=6)"]
 
 [[package]]
+name = "geometric"
+version = "1.0.1"
+description = "Geometry optimization for quantum chemistry"
+category = "main"
+optional = false
+python-versions = "*"
+files = [
+    {file = "geometric-1.0.1.tar.gz", hash = "sha256:132b7f96985717127ba7d8ff2ddc4a65494d5c2f5df66b9e94b9d05af5d1899f"},
+]
+
+[package.dependencies]
+networkx = "*"
+numpy = ">=1.11"
+six = "*"
+
+[[package]]
 name = "iniconfig"
 version = "2.0.0"
 description = "brain-dead simple config-ini parsing"
@@ -253,6 +269,25 @@ files = [
     {file = "mypy_extensions-1.0.0-py3-none-any.whl", hash = "sha256:4392f6c0eb8a5668a69e23d168ffa70f0be9ccfd32b5cc2d26a34ae5b844552d"},
     {file = "mypy_extensions-1.0.0.tar.gz", hash = "sha256:75dbf8955dc00442a438fc4d0666508a9a97b6bd41aa2f0ffe9d2f2725af0782"},
 ]
+
+[[package]]
+name = "networkx"
+version = "3.1"
+description = "Python package for creating and manipulating graphs and networks"
+category = "main"
+optional = false
+python-versions = ">=3.8"
+files = [
+    {file = "networkx-3.1-py3-none-any.whl", hash = "sha256:4f33f68cb2afcf86f28a45f43efc27a9386b535d567d2127f8f61d51dec58d36"},
+    {file = "networkx-3.1.tar.gz", hash = "sha256:de346335408f84de0eada6ff9fafafff9bcda11f0a0dfaa931133debb146ab61"},
+]
+
+[package.extras]
+default = ["matplotlib (>=3.4)", "numpy (>=1.20)", "pandas (>=1.3)", "scipy (>=1.8)"]
+developer = ["mypy (>=1.1)", "pre-commit (>=3.2)"]
+doc = ["nb2plots (>=0.6)", "numpydoc (>=1.5)", "pillow (>=9.4)", "pydata-sphinx-theme (>=0.13)", "sphinx (>=6.1)", "sphinx-gallery (>=0.12)", "texext (>=0.6.7)"]
+extra = ["lxml (>=4.6)", "pydot (>=1.4.2)", "pygraphviz (>=1.10)", "sympy (>=1.10)"]
+test = ["codecov (>=2.1)", "pytest (>=7.2)", "pytest-cov (>=4.0)"]
 
 [[package]]
 name = "numpy"
@@ -622,14 +657,14 @@ tests = ["pytest", "pytest-cov"]
 
 [[package]]
 name = "qcio"
-version = "0.3.0"
+version = "0.4.0"
 description = "Beautiful and user friendly data structures for quantum chemistry."
 category = "main"
 optional = false
 python-versions = ">=3.8,<4.0"
 files = [
-    {file = "qcio-0.3.0-py3-none-any.whl", hash = "sha256:f031d2ae3121a48b331440ded042b08e24110e96828f9c3df03a26a8a1506889"},
-    {file = "qcio-0.3.0.tar.gz", hash = "sha256:940cf4525eb4c52aabb0f34845394fe2bd4cee578342847d7c765a7c67b23152"},
+    {file = "qcio-0.4.0-py3-none-any.whl", hash = "sha256:704012c840345191644ecfc03e2aa0fa57b0ed382a3d20834980279c0e02cf63"},
+    {file = "qcio-0.4.0.tar.gz", hash = "sha256:498c81bbbb3ecb365941d337a35d814a5348167823501a6fd2c0f76840189fe0"},
 ]
 
 [package.dependencies]
@@ -641,19 +676,19 @@ typing-extensions = ">=4.7.1,<5.0.0"
 
 [[package]]
 name = "qcparse"
-version = "0.4.0"
+version = "0.4.1"
 description = "A package for parsing Quantum Chemistry program file outputs into structured qcio data objects."
 category = "main"
 optional = false
 python-versions = ">=3.8.1,<4.0.0"
 files = [
-    {file = "qcparse-0.4.0-py3-none-any.whl", hash = "sha256:7100fc6e7706704197da6fdf974e1a0cfdcaa19ebfa4bf63bdd9cb28404df425"},
-    {file = "qcparse-0.4.0.tar.gz", hash = "sha256:aba6644c43c99030705c1cd4dd53dc484587d603e8508b47605160eb879b70a1"},
+    {file = "qcparse-0.4.1-py3-none-any.whl", hash = "sha256:2292524df549c43c68f227b2d2e27b133738853f0d5fc514b9b13468ca4698f2"},
+    {file = "qcparse-0.4.1.tar.gz", hash = "sha256:625cd52e7c13b15b2e555a9cefc8ef5b35d5235d1b257aa9cc7cda1f3ad8617a"},
 ]
 
 [package.dependencies]
 pydantic = ">=1.7.4,<1.8 || >1.8,<1.8.1 || >1.8.1,<2.0.0"
-qcio = ">=0.3.0"
+qcio = ">=0.4.0"
 
 [[package]]
 name = "ruff"
@@ -680,6 +715,18 @@ files = [
     {file = "ruff-0.0.272-py3-none-win_amd64.whl", hash = "sha256:a37ec80e238ead2969b746d7d1b6b0d31aa799498e9ba4281ab505b93e1f4b28"},
     {file = "ruff-0.0.272-py3-none-win_arm64.whl", hash = "sha256:06b8ee4eb8711ab119db51028dd9f5384b44728c23586424fd6e241a5b9c4a3b"},
     {file = "ruff-0.0.272.tar.gz", hash = "sha256:273a01dc8c3c4fd4c2af7ea7a67c8d39bb09bce466e640dd170034da75d14cab"},
+]
+
+[[package]]
+name = "six"
+version = "1.16.0"
+description = "Python 2 and 3 compatibility utilities"
+category = "main"
+optional = false
+python-versions = ">=2.7, !=3.0.*, !=3.1.*, !=3.2.*"
+files = [
+    {file = "six-1.16.0-py2.py3-none-any.whl", hash = "sha256:8abb2f1d86890a2dfb989f9a77cfcfd3e47c2a354b01111771326f8aa26e0254"},
+    {file = "six-1.16.0.tar.gz", hash = "sha256:1e61c37477a1626458e36f7b1d82aa5c9b094fa4802892072e49de9c60c4c926"},
 ]
 
 [[package]]
@@ -721,4 +768,4 @@ files = [
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.8.1"
-content-hash = "a4b65b54049233a78f43a245390435d603daa4e646b7c6b7f332a0e7ae306918"
+content-hash = "2155b244523a3885cec59862e2a635e522d5bc4f978b6f8b38b453424873bd20"

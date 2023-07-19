@@ -8,9 +8,10 @@ readme = "README.md"
 
 [tool.poetry.dependencies]
 python = "^3.8.1"
-qcio = ">=0.3.0"
-qcparse = ">=0.4.0"
+qcio = ">=0.4.0"
+qcparse = ">=0.4.1"
 qcengine = { extras = ["qcengine"], version = ">=0.26.0" }
+geometric = { extras = ["geometric"], version = ">=1.0.1" }
 
 
 [tool.poetry.group.dev.dependencies]
@@ -21,6 +22,7 @@ pytest-cov = "^4.1.0"
 ruff = "^0.0.272"
 isort = "^5.12.0"
 pytest-mock = "^3.11.1"
+geometric = "^1.0.1"
 
 [build-system]
 requires = ["poetry-core"]

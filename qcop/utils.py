@@ -1,38 +1,10 @@
-import os
-import platform
 import shutil
-import tempfile
-from contextlib import contextmanager
 from functools import lru_cache
-from pathlib import Path
-from time import time
-from typing import Optional
 
-from qcio import Provenance
-from qcio.helper_types import StrOrPath
 from qcio.models import FileInput, InputBase
 
 from .adapters import BaseAdapter, FileAdapter, registry
 from .exceptions import AdapterNotFoundError, ProgramNotFoundError
-
-
-@contextmanager
-def tmpdir(directory: Optional[StrOrPath] = None, rmdir: bool = True):
-    """Context manager for a temporary directory.
-
-    Args:
-        directory: Where to create the temporary directory. If None, a new directory is
-            created in the system default temporary directory.
-        rmdir: Whether to remove the temporary directory when the context manager exits.
-    """
-    path = Path(directory or tempfile.mkdtemp())  # Set path to directory
-    path.mkdir(parents=True, exist_ok=True)  # Create directory
-    cwd = Path.cwd()  # Save current working directory
-    os.chdir(path)  # Change to temporary directory
-    yield path  # Execute code in context manager
-    if rmdir:  # After exiting context manager
-        shutil.rmtree(path)
-    os.chdir(cwd)
 
 
 @lru_cache  # Improves perf of tests when repeatedly called
@@ -127,33 +99,9 @@ def get_adapter(
         raise AdapterNotFoundError(program)
 
 
-def construct_provenance(
-    program: str,
-    adapter: BaseAdapter,
-    working_dir: Path,
-    start: float,
-    stdout: Optional[str],
-) -> Provenance:
-    """Construct a provenance object for a calculation.
+def inherit_docstring_from(func):
+    def decorator(target_func):
+        target_func.__doc__ = func.__doc__
+        return target_func
 
-    Args:
-        program: The program used for the calculation.
-        adapter: The adapter used for the calculation.
-        working_dir: The working directory of the calculation.
-        start: The start time of the calculation.
-        stdout: The stdout of the calculation.
-
-    Returns:
-        The Provenance object.
-    """
-    wall_time = time() - start
-    program_version = getattr(adapter, "program_version", lambda _: None)(stdout)
-
-    return Provenance(
-        program=program,
-        program_version=program_version,
-        working_dir=str(working_dir),
-        wall_time=round(wall_time, 6),
-        hostname=platform.node(),
-        hostcpus=os.cpu_count(),
-    )
+    return decorator

@@ -8,10 +8,10 @@ from tests.conftest import skipif_program_not_available
 
 @pytest.mark.integration
 @skipif_program_not_available("terachem")
-def test_terachem_energy(hydrogen_mol):
+def test_terachem_energy(hydrogen):
     # Modify keywords
     energy_inp = ProgramInput(
-        molecule=hydrogen_mol,
+        molecule=hydrogen,
         calctype=CalcType.energy,
         model={"method": "hf", "basis": "sto-3g"},
         keywords={"purify": "no"},
@@ -20,15 +20,15 @@ def test_terachem_energy(hydrogen_mol):
     output = compute(program, energy_inp)
     assert output.input_data == energy_inp
     assert output.provenance.program == program
-    assert np.isclose(output.results.energy, -0.8884229462, atol=1e-6)
+    assert np.isclose(output.results.energy, -1.1167143325, atol=1e-6)
 
 
 @pytest.mark.integration
 @skipif_program_not_available("terachem")
-def test_terachem_gradient(hydrogen_mol):
+def test_terachem_gradient(hydrogen):
     # Modify keywords
     energy_inp = ProgramInput(
-        molecule=hydrogen_mol,
+        molecule=hydrogen,
         calctype=CalcType.gradient,
         model={"method": "hf", "basis": "sto-3g"},
         keywords={"purify": "no"},
@@ -38,10 +38,10 @@ def test_terachem_gradient(hydrogen_mol):
     output = compute(program, energy_inp)
     assert output.input_data == energy_inp
     assert output.provenance.program == program
-    assert np.isclose(output.results.energy, -0.8884229462, atol=1e-6)
+    assert np.isclose(output.results.energy, -1.1167143325, atol=1e-6)
     assert np.allclose(
         output.results.gradient,
-        np.array([[0.0, 0.0, 1.13381288], [0.0, 0.0, -1.13381288]]),
+        np.array([[0.0, 0.0, -0.02845402], [0.0, 0.0, 0.02845402]]),
         atol=1e-6,
     )
 

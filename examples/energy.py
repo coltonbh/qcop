@@ -14,11 +14,11 @@ prog_input = ProgramInput(
     molecule=h2o,
     calctype=CalcType.energy,
     model={"method": "hf", "basis": "sto-3g"},
-    keywords={"purify": "no"},
+    keywords={"purify": "no", "restricted": False},
 )
 
 # Run the calculation
-output = compute("terachem", prog_input)
+output = compute("terachem", prog_input, collect_files=True)
 
 # Stdout from the program
 print(output.stdout)  # or output.pstdout for short

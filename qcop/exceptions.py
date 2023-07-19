@@ -1,9 +1,7 @@
 """Experimental exception hierarchy. This may be too complex and unhelpful for now"""
 
 from subprocess import CalledProcessError
-from typing import List, Optional
-
-from qcio import CalcType
+from typing import Optional
 
 
 class QCOPBaseError(Exception):
@@ -48,32 +46,6 @@ class AdapterInputError(AdapterError):
         super().__init__(self.message)
 
 
-class UnsupportedCalcTypeError(AdapterError):
-    """
-    Exception raised when the required driver is not supported by an adapter.
-
-    Args:
-        driver: driver which is not supported
-        message: explanation of the error
-    """
-
-    def __init__(
-        self,
-        program: str,
-        calctype: CalcType,
-        supported_calctypes: List[CalcType],
-    ):
-        self.program = program
-        self.calctype = calctype
-        self.supported_calctypes = supported_calctypes
-        self.message = (
-            f"The {self.program} adapter does not yet support "
-            f"'{self.calctype.value}' calculations. This adaptor can compute: "
-            f"{[i.value for i in self.supported_calctypes]}"
-        )
-        super().__init__(self.message)
-
-
 class QCEngineError(QCOPBaseError):
     """Exception raised when any part of qcengine execution fails."""
 
@@ -81,7 +53,7 @@ class QCEngineError(QCOPBaseError):
 
 
 class ExternalProgramError(QCOPBaseError):
-    """Base Exception raised when an external program fails."""
+    """Base Exception raised for errors with an external program."""
 
     pass
 
