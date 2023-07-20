@@ -8,6 +8,7 @@
         "coordsys",
         "Delocalized",
         "dockerized",
+        "excinfo",
         "hostcpus",
         "htmlcov",
         "mrchem",

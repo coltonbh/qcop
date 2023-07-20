@@ -14,7 +14,10 @@ from .utils import construct_provenance, tmpdir
 
 __all__ = ["BaseAdapter", "registry"]
 
-# Registry for all Adaptors
+# Registry for all Adaptors.
+# NOTE: Registry stores class objects, not instances.
+# Use registry[program]() to instantiate an adaptor
+# Or use the higher level qcop.utils.get_adapter() function.
 registry = {}
 
 
@@ -39,7 +42,7 @@ class BaseAdapter(ABC):
         """Validate input object to ensure compatibility with adapter.
         Adapters should override this method.
         """
-        pass
+        raise NotImplementedError
 
     @abstractmethod
     def compute_results(
@@ -107,15 +110,15 @@ class BaseAdapter(ABC):
             OptimizationOutput.
 
         Raises:
-            AdapterNotFoundException: If the program is not supported (i.e., no Adapter
+            AdapterNotFoundError: If the program is not supported (i.e., no Adapter
                 is implemented for it in qcop or qcengine).
-            ProgramNotFoundException: If the program executable is not found on the
+            ProgramNotFoundError: If the program executable is not found on the
                 system at execution time. This likely means the program is not installed
                 on the system.
             AdapterInputError: If the input is invalid for the adapter.
-            ExecutionFailedException: If the program fails during execution and
+            ExternalProgramExecutionError: If the program fails during execution and
                 raise_exc=True.
-            QCEngineException: If QCEngine performed the computation, fails and
+            QCEngineError: If QCEngine performed the computation, fails and
                 raise_exc=True.
         """
         self.validate_input(inp_obj)
@@ -152,8 +155,8 @@ class BaseAdapter(ABC):
                 else:
                     # Return a ProgramFailure object.
                     output_cls = ProgramFailure
-                    # Someday may may put half-completed results here
-                    results, stdout = None, getattr(e, "stdout", None)
+                    results = getattr(e, "results", None)  # Any half-completed results
+                    stdout = getattr(e, "stdout", None)
                     # For mypy because e.stdout is not of a a known type
                     stdout = str(stdout) if stdout is not None else None
                     output_dict["traceback"] = traceback.format_exc()

@@ -7,18 +7,20 @@ from qcop import compute
 current_dir = Path(__file__).resolve().parent
 
 # Create the molecule
-h2o = Molecule.open(current_dir / "h2o.xyz")
+h2o_dict = Molecule.open(current_dir / "h2o.xyz").dict()
+# Must have explicit connectivity for for fields
+h2o_dict["connectivity"] = [[0, 1, 1], [0, 2, 1]]
+h2o = Molecule(**h2o_dict)
 
 # Define the program input
 prog_input = ProgramInput(
     molecule=h2o,
     calctype=CalcType.energy,
-    model={"method": "hf", "basis": "sto-3g"},
-    keywords={"purify": "no", "restricted": False},
+    model={"method": "UFF"},
 )
 
 # Run the calculation
-output = compute("terachem", prog_input, collect_files=True)
+output = compute("rdkit", prog_input, collect_files=True)
 
 # Stdout from the program
 print(output.stdout)  # or output.pstdout for short

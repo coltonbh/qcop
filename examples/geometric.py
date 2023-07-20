@@ -6,10 +6,13 @@ from qcio import CalcType, DualProgramInput, Molecule
 
 from qcop import compute
 
+# Create Molecule
 h2 = Molecule(
     symbols=["H", "H"],
-    geometry=[[0, 0, 0], [0, 0, 1.4]],
+    geometry=[[0, 0.0, 0.0], [0, 0, 1.4]],
 )
+
+# Define the program input
 prog_inp = DualProgramInput(
     calctype=CalcType.optimization,
     molecule=h2,
@@ -29,6 +32,25 @@ prog_inp = DualProgramInput(
         },
     },
 )
+
+# Run calculation
 output = compute("geometric", prog_inp, propagate_wfn=True, rm_scratch_dir=False)
-print(output.stdout)
+
+### Accessing results ###
+# Stdout from the program
+print(output.stdout)  # or output.pstdout for short
+# Input data used to generate the calculation
+print(output.input_data)
+# Provenance of generated calculation
+print(output.provenance)
+
+# Check results
+if output.success:
+    print("Energies:", output.results.energies)
+    print("Molecules:", output.results.molecules)
+    print("Trajectory:", output.results.trajectory)
+
+else:  # output.success is False
+    print(output.traceback)  # See why the program failed; output.ptraceback for short
+
 print(output)

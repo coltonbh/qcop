@@ -38,10 +38,10 @@ def test_compute_raises_adapter_not_found_error_no_qcng_fallback(prog_inp):
         compute("not-a-real-program", energy_inp, qcng_fallback=False)
 
 
-def test_print_stdout(sp_test_adapter, prog_inp, mocker):
+def test_print_stdout(test_adapter, prog_inp, mocker):
     energy_inp = prog_inp("energy")
 
-    spy = mocker.spy(type(sp_test_adapter), "compute_results")
+    spy = mocker.spy(type(test_adapter), "compute_results")
 
     compute("test", energy_inp)
     assert spy.call_args.args[2] is None  # update_func
@@ -50,10 +50,10 @@ def test_print_stdout(sp_test_adapter, prog_inp, mocker):
     assert isinstance(spy.call_args.args[3], float)  # update_interval passed
 
 
-def test_update_func_preferred_over_print_stdout(sp_test_adapter, prog_inp, mocker):
+def test_update_func_preferred_over_print_stdout(test_adapter, prog_inp, mocker):
     energy_inp = prog_inp("energy")
 
-    spy = mocker.spy(type(sp_test_adapter), "compute_results")
+    spy = mocker.spy(type(test_adapter), "compute_results")
 
     def update_func(stdout, stderr):
         pass

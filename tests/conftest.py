@@ -99,7 +99,7 @@ def sp_output(prog_inp):
 
 
 @pytest.fixture(scope="session")
-def sp_test_adapter():
+def test_adapter():
     class TestAdapter(ProgramAdapter):
         # Both program and supported_driver defined
         program = "test"

@@ -24,10 +24,12 @@ def test_qcng_fallback_tried_if_adapter_not_in_qcop(mocker, prog_inp):
     # So qcng thinks this program is installed and has a harness
     qcng_spy = mocker.patch("qcengine.get_program")
 
-    qcng_adapter = registry["qcengine"]
-    compute_spy = mocker.spy(qcng_adapter, "compute")
+    qcng_adapter_cls = registry["qcengine"]
+    compute_spy = mocker.spy(qcng_adapter_cls, "compute")
     # Mock the "program_version" method and set its return value
-    mocker.patch.object(qcng_adapter, "program_version", return_value="fake-version")
+    mocker.patch.object(
+        qcng_adapter_cls, "program_version", return_value="fake-version"
+    )
 
     energy_inp = prog_inp("energy")
     compute("mrchem", energy_inp)  # Program not in qcop, but in qcng
@@ -36,7 +38,7 @@ def test_qcng_fallback_tried_if_adapter_not_in_qcop(mocker, prog_inp):
     assert compute_spy.call_count == 1
 
 
-def test_qcng_compute_not_called_if_adapter_in_qcop(mocker, prog_inp, sp_test_adapter):
+def test_qcng_compute_not_called_if_adapter_in_qcop(mocker, prog_inp, test_adapter):
     qcng_spy = mocker.patch("qcengine.compute")
     # compute_spy = mocker.patch("qcop.test_qcng_compat.compute")
 
