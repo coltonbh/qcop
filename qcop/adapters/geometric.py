@@ -53,7 +53,7 @@ class GeometricAdapter(ProgramAdapter):
             import geometric
 
             return geometric
-        except ImportError:
+        except ModuleNotFoundError:
             raise ProgramNotFoundError("geometric")
 
     def program_version(self, *args) -> str:

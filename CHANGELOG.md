@@ -8,6 +8,12 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## [0.3.0]
 
+### Fixed
+
+- Tiny bug in `ensure_geometric` test.
+
+## [0.3.0]
+
 ### Added
 
 - `GeometricAdapter`
@@ -32,7 +38,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 - Created adapter for TeraChem.
 - Exposed general purpose computing for any subprocess with `FileAdaptor`
 
-[unreleased]: https://github.com/coltonbh/qcop/compare/0.3.0...HEAD
+[unreleased]: https://github.com/coltonbh/qcop/compare/0.3.1...HEAD
+[0.3.1]: https://github.com/coltonbh/qcop/releases/tag/0.3.1
 [0.3.0]: https://github.com/coltonbh/qcop/releases/tag/0.3.0
 [0.2.0]: https://github.com/coltonbh/qcop/releases/tag/0.2.0
 [0.1.0]: https://github.com/coltonbh/qcop/releases/tag/0.1.0

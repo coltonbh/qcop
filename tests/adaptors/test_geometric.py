@@ -22,7 +22,7 @@ def test_ensure_geometric():
         # Test when geometric is not available
         with pytest.raises(ProgramNotFoundError) as excinfo:
             GeometricAdapter()._ensure_geometric()
-        assert str(excinfo.value) == "geometric"
+        assert "geometric" in str(excinfo.value)
 
 
 @pytest.mark.parametrize(
