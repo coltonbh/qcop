@@ -26,7 +26,9 @@ class QCEngineAdapter(ProgramAdapter):
         adapter = get_program(self.external_program)
         return adapter.get_version()
 
-    def _compute(self, inp_obj, *args, **kwargs) -> Tuple[SinglePointResults, str]:
+    def compute_results(
+        self, inp_obj, *args, propagate_wfn=False, **kwargs
+    ) -> Tuple[SinglePointResults, str]:
         from qcengine import compute as qcng_compute
         from qcengine.exceptions import QCEngineException
 

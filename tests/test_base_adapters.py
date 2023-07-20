@@ -2,7 +2,7 @@ import pytest
 from qcio import CalcType
 
 from qcop.adapters import base, registry
-from qcop.exceptions import UnsupportedCalcTypeError
+from qcop.exceptions import AdapterInputError
 
 
 def test_adapter_subclasses_must_define_program():
@@ -14,7 +14,7 @@ def test_adapter_subclasses_must_define_program():
             # supported_calctypes defined but program not defined
             supported_calctypes = [CalcType.energy]
 
-            def _compute(self, *args, **kwargs):
+            def compute_results(self, *args, **kwargs):
                 pass
 
 
@@ -27,7 +27,7 @@ def test_adapter_subclasses_must_define_supported_calctypes():
             # program defined but supported_calctypes not defined
             program = "test"
 
-            def _compute(self, *args, **kwargs):
+            def compute_results(self, *args, **kwargs):
                 pass
 
 
@@ -53,15 +53,14 @@ def test_adapter_subclasses_defining_program_and_supported_calctypes():
         program = "test"
         supported_calctypes = [CalcType.energy]
 
-        def _compute(self, *args, **kwargs):
+        def compute_results(self, *args, **kwargs):
             pass
 
     assert registry.get("test") == TestAdapter
 
 
-def test_single_point_subclasses_raise_error_if_calctype_not_supported(sp_input):
-    """Test that subclasses of QCOPSinglePointAdapter raise an error if the
-    calctype is not supported."""
+def test_adapters_raise_error_if_calctype_not_supported(prog_inp):
+    """Test that adapters raise an error if the calctype is not supported."""
 
     class TestAdapter(base.ProgramAdapter):
         # Both program and supported_calctypes defined
@@ -71,9 +70,9 @@ def test_single_point_subclasses_raise_error_if_calctype_not_supported(sp_input)
         def program_version(self, *args, **kwargs) -> str:
             return "v1.0.0"
 
-        def _compute(self, *args, **kwargs):
+        def compute_results(self, *args, **kwargs):
             pass
 
-    gradient_input = sp_input("gradient")
-    with pytest.raises(UnsupportedCalcTypeError):
-        TestAdapter().compute(gradient_input, None, None)
+    gradient_input = prog_inp("gradient")
+    with pytest.raises(AdapterInputError):
+        TestAdapter().compute(gradient_input)

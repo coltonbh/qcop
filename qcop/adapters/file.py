@@ -1,6 +1,6 @@
 from typing import Callable, Optional, Tuple
 
-from qcio import FileInput, FileOutput
+from qcio import FileInput, FileOutput, InputBase
 
 from qcop.adapters.base import BaseAdapter
 
@@ -14,11 +14,16 @@ class FileAdapter(BaseAdapter):
         super().__init__()
         self.program = program
 
-    def compute(
+    def validate_input(self, inp_obj: InputBase) -> None:
+        """No validation checks performed for FileAdapter"""
+        pass
+
+    def compute_results(
         self,
         inp_obj: FileInput,
         update_func: Optional[Callable] = None,
         update_interval: Optional[float] = None,
+        **kwargs,
     ) -> Tuple[FileOutput, str]:
         """Compute the given program on the given files.
 

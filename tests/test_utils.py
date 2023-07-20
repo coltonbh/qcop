@@ -1,12 +1,12 @@
-"""Test helpful functions in helpers.py."""
+"""Test utils functions."""
 import builtins
 from pathlib import Path
 
 import pytest
 
-from qcop.adapters.utils import execute_subprocess
+from qcop.adapters.utils import capture_logs, execute_subprocess, tmpdir
 from qcop.exceptions import ExternalProgramExecutionError, ProgramNotFoundError
-from qcop.utils import available_programs, prog_available, tmpdir
+from qcop.utils import available_programs, prog_available
 
 
 def test_tmpdir_makes_dir_by_default():
@@ -131,3 +131,12 @@ def test_prog_available_pyenv(mocker):
 def test_available_programs():
     """Test that available_programs returns an array of programs on the system."""
     assert isinstance(available_programs(), list)
+
+
+def test_capture_logs():
+    """Test that capture_logs captures logs."""
+    import logging
+
+    with capture_logs("") as (logger, log_capture_string):
+        logging.info("Hello World!")
+    assert "Hello World!" in log_capture_string.getvalue()

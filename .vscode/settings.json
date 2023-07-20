@@ -1,8 +1,12 @@
 {
     "cSpell.words": [
+        "addcart",
         "allclose",
+        "arange",
         "calctype",
         "calctypes",
+        "coordsys",
+        "Delocalized",
         "dockerized",
         "hostcpus",
         "htmlcov",
@@ -15,6 +19,8 @@
         "qcparse",
         "spinmult",
         "terachem",
-        "terachemd"
+        "terachemd",
+        "wfns",
+        "xyzout"
     ]
 }
