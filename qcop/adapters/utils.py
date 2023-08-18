@@ -120,8 +120,8 @@ def capture_logs(logger_name: str):
     logger.setLevel(logging.DEBUG)
 
     # Create a string buffer and add a StreamHandler using the buffer
-    log_capture_string = StringIO()
-    handler = logging.StreamHandler(log_capture_string)
+    logs_string = StringIO()
+    handler = logging.StreamHandler(logs_string)
 
     # Optional: set a format for the handler
     formatter = logging.Formatter(
@@ -133,7 +133,7 @@ def capture_logs(logger_name: str):
     logger.addHandler(handler)
 
     try:
-        yield (logger, log_capture_string)
+        yield (logger, logs_string)
     finally:
         # Remove the handler when done
         logger.removeHandler(handler)

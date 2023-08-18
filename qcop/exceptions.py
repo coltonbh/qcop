@@ -3,6 +3,8 @@
 from subprocess import CalledProcessError
 from typing import Optional
 
+from qcio import ResultsBase
+
 
 class QCOPBaseError(Exception):
     """Base class for exceptions in qcop. All custom exceptions should inherit from
@@ -81,8 +83,10 @@ class ExternalProgramExecutionError(ExternalProgramError, CalledProcessError):
     Exception raised when an external program fails.
 
     Args:
-        cmd: Command which failed
         returncode: Return code of the subprocess
+        cmd: Command which failed
+        results: Any computed results from the subprocess or previous steps in the
+            workflow. Used to pass trajectory results e.g., from a geometry optimization
         stdout: Standard output of the subprocess
         stderr: Standard error of the subprocess
     """
@@ -91,7 +95,9 @@ class ExternalProgramExecutionError(ExternalProgramError, CalledProcessError):
         self,
         returncode: int,
         cmd: str,
+        results: Optional[ResultsBase] = None,
         stdout: Optional[str] = None,
         stderr: Optional[str] = None,
     ):
         super().__init__(returncode, cmd, stdout, stderr)
+        self.results = results

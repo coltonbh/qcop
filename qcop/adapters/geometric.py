@@ -13,7 +13,11 @@ from qcio import (
     SinglePointOutput,
 )
 
-from qcop.exceptions import AdapterInputError, ProgramNotFoundError
+from qcop.exceptions import (
+    AdapterInputError,
+    ExternalProgramExecutionError,
+    ProgramNotFoundError,
+)
 from qcop.utils import get_adapter
 
 from .base import ProgramAdapter
@@ -26,6 +30,7 @@ class GeometricAdapter(ProgramAdapter):
 
     def __init__(self):
         super().__init__()
+        # Check that geomeTRIC is installed
         self.geometric = self._ensure_geometric()
         # Dictionary from geometric.run_json; copying QCSchema workflow
         self.coordsys_params = {
@@ -48,7 +53,8 @@ class GeometricAdapter(ProgramAdapter):
             ),
         }
 
-    def _ensure_geometric(self):
+    @staticmethod
+    def _ensure_geometric():
         try:
             import geometric
 
@@ -65,7 +71,7 @@ class GeometricAdapter(ProgramAdapter):
         inp_obj: DualProgramInput,
         update_func: Optional[Callable] = None,
         update_interval: Optional[float] = None,
-        propagate_wfn: bool = False,
+        propagate_wfn: bool = True,
         **kwargs,
     ) -> Tuple[OptimizationResults, str]:
         """Compute the requested calculation.
@@ -78,7 +84,7 @@ class GeometricAdapter(ProgramAdapter):
 
         # Update the input object based on its calctype
         self._update_inp_obj(inp_obj)
-        geometric_molecule = self._create_geometric_molecule(inp_obj)
+        geometric_molecule = self._create_geometric_molecule(inp_obj.molecule)
         internal_coords_sys = self._setup_coords(inp_obj, geometric_molecule)
 
         qcio_adapter = get_adapter(inp_obj.subprogram, inp_obj, qcng_fallback=True)
@@ -91,14 +97,14 @@ class GeometricAdapter(ProgramAdapter):
             **kwargs,
         )
 
-        with capture_logs("geometric") as (_, log_capture_io):
+        with capture_logs("geometric") as (_, log_string):
             optimizer.optimizeGeometry()
 
         return (
             OptimizationResults(
                 trajectory=optimizer.engine.qcio_trajectory,
             ),
-            log_capture_io.getvalue(),
+            log_string.getvalue(),
         )
 
     def _update_inp_obj(self, inp_obj: DualProgramInput) -> None:
@@ -115,17 +121,17 @@ class GeometricAdapter(ProgramAdapter):
         else:
             inp_obj.keywords["transition"] = False
 
-    def _create_geometric_molecule(self, inp_obj: DualProgramInput):
+    def _create_geometric_molecule(self, molecule: Molecule):
         """Create a geomeTRIC Molecule from the input object.
 
         Args:
-            inp_obj: The qcio DualProgramInput object for a computation.
+            molecule: The qcio Molecule object for a computation.
 
         Returns:
             The geomeTRIC Molecule object.
         """
         xyz_path = "initial_geometry.xyz"
-        inp_obj.molecule.save(xyz_path)
+        molecule.save(xyz_path)
         geometric_molecule = self.geometric.molecule.Molecule(fnm=xyz_path)
         # Delete file
         Path(xyz_path).unlink()
@@ -246,36 +252,42 @@ class GeometricAdapter(ProgramAdapter):
                 Returns:
                     A dictionary of {"energy": float, "gradient": ndarray}.
                 """
+                # Merge new coordinates into molecule
+                molecule = Molecule(**{**self.qcio_molecule.dict(), "geometry": coords})
                 prog_input = ProgramInput(
                     calctype=CalcType.gradient,
-                    molecule=Molecule(
-                        symbols=self.qcio_molecule.symbols,
-                        geometry=coords,
-                    ),
+                    molecule=molecule,
                     **self.qcio_program_args.dict(),
                 )
 
                 # Propagate wavefunction
                 if (
                     self.qcio_trajectory  # Not the first step
-                    and self.propagate_wfn  # Wfn propagation requested
-                    and hasattr(
-                        self.qcio_adapter, "propagate_wfn"
-                    )  # Adapter supports propagation
+                    and self.propagate_wfn
+                    and hasattr(self.qcio_adapter, "propagate_wfn")
                 ):
                     self.qcio_adapter.propagate_wfn(
                         self.qcio_trajectory[-1], prog_input
                     )
+
+                # Calculate energy and gradient
                 # raise_exc=True so ProgramFailure objects don't get returned
-                output = self.qcio_adapter.compute(
-                    prog_input,
-                    raise_exc=True,
-                    collect_wfn=self.propagate_wfn,
-                )
-                self.qcio_trajectory.append(output)
-                # geomeTRIC requires 1D array
+                try:
+                    output = self.qcio_adapter.compute(
+                        prog_input,
+                        raise_exc=True,
+                        collect_wfn=self.propagate_wfn,
+                    )
+                except ExternalProgramExecutionError as e:
+                    e.results = OptimizationResults(trajectory=self.qcio_trajectory)
+                    raise e
+
+                else:
+                    self.qcio_trajectory.append(output)
+
                 return {
                     "energy": output.results.energy,
+                    # geomeTRIC requires 1D array
                     "gradient": output.results.gradient.flatten(),
                 }
 
