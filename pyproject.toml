@@ -8,11 +8,11 @@ readme = "README.md"
 
 [tool.poetry.dependencies]
 python = "^3.8.1"
-qcio = ">=0.4.2"
-qcparse = ">=0.4.1"
-qcengine = { extras = ["qcengine"], version = ">=0.26.0" }
+qcio = ">=0.5.0"
+qcparse = ">=0.5.0"
+qcengine = { extras = ["qcengine"], version = ">=0.27.0" }
+qcelemental = { extras = ["qcengine"], version = ">=0.26.0" }
 geometric = { extras = ["geometric"], version = ">=1.0.1" }
-
 
 [tool.poetry.group.dev.dependencies]
 black = "^23.3.0"
@@ -62,3 +62,4 @@ addopts = "-m 'not integration'"
 markers = [
     "integration: marks tests as integration (deselect with '-m \"not integration\"')",
 ]
+filterwarnings = ["ignore::DeprecationWarning:qcengine.*"]

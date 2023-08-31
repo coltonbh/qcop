@@ -9,7 +9,7 @@ from tests.conftest import skipif_program_not_available
 @skipif_program_not_available("terachem")
 def test_full_optimization(dual_prog_inp):
     prog_inp = dual_prog_inp(CalcType.optimization)
-    prog_inp_dict = prog_inp.dict()
+    prog_inp_dict = prog_inp.model_dump()
     prog_inp_dict["subprogram"] = "terachem"
     prog_inp = DualProgramInput(**prog_inp_dict)
 
@@ -32,7 +32,7 @@ def test_full_transition_state(dual_prog_inp, water):
     """
     # Must use water or else the transition state search will fail
     prog_inp = dual_prog_inp(CalcType.transition_state)
-    prog_inp_dict = prog_inp.dict()
+    prog_inp_dict = prog_inp.model_dump()
     prog_inp_dict["subprogram"] = "terachem"
     prog_inp_dict["molecule"] = water
     prog_inp = DualProgramInput(**prog_inp_dict)

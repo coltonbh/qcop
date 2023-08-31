@@ -7,7 +7,7 @@ from qcop import compute
 current_dir = Path(__file__).resolve().parent
 
 # Create the molecule
-h2o_dict = Molecule.open(current_dir / "h2o.xyz").dict()
+h2o_dict = Molecule.open(current_dir / "h2o.xyz").model_dump()
 # Must have explicit connectivity for for fields
 h2o_dict["connectivity"] = [[0, 1, 1], [0, 2, 1]]
 h2o = Molecule(**h2o_dict)
