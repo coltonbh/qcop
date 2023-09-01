@@ -253,11 +253,13 @@ class GeometricAdapter(ProgramAdapter):
                     A dictionary of {"energy": float, "gradient": ndarray}.
                 """
                 # Merge new coordinates into molecule
-                molecule = Molecule(**{**self.qcio_molecule.dict(), "geometry": coords})
+                molecule = Molecule(
+                    **{**self.qcio_molecule.model_dump(), "geometry": coords}
+                )
                 prog_input = ProgramInput(
                     calctype=CalcType.gradient,
                     molecule=molecule,
-                    **self.qcio_program_args.dict(),
+                    **self.qcio_program_args.model_dump(),
                 )
 
                 # Propagate wavefunction
