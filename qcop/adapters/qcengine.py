@@ -22,9 +22,15 @@ class QCEngineAdapter(ProgramAdapter):
     def program_version(self, *args) -> str:
         """Get the program version."""
         from qcengine import get_program
+        from qcengine.exceptions import QCEngineException
 
-        adapter = get_program(self.external_program)
-        return adapter.get_version()
+        try:
+            adapter = get_program(self.external_program)
+            return adapter.get_version()
+        except QCEngineException:
+            raise QCEngineError(
+                f"Could not get version for program {self.external_program}."
+            )
 
     def compute_results(
         self, inp_obj, *args, propagate_wfn=False, **kwargs
@@ -49,10 +55,7 @@ class QCEngineAdapter(ProgramAdapter):
             )
 
         except QCEngineException as e:  # Base exception for all QCEngine
-            raise QCEngineError(
-                "Something went wrong with QCEngine. See the traceback above "
-                "for details."
-            ) from e
+            raise QCEngineError(inp_obj, self.external_program) from e
 
         else:
             return from_qcel_output_results(qcng_output), qcng_output["stdout"]

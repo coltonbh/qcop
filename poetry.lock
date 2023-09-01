@@ -570,13 +570,13 @@ typing-extensions = ">=4.6.0,<4.7.0 || >4.7.0"
 
 [[package]]
 name = "pytest"
-version = "7.4.0"
+version = "7.4.1"
 description = "pytest: simple powerful testing with Python"
 optional = false
 python-versions = ">=3.7"
 files = [
-    {file = "pytest-7.4.0-py3-none-any.whl", hash = "sha256:78bf16451a2eb8c7a2ea98e32dc119fd2aa758f1d5d66dbf0a59d69a3969df32"},
-    {file = "pytest-7.4.0.tar.gz", hash = "sha256:b4bf8c45bd59934ed84001ad51e11b4ee40d40a1229d2c79f9c592b0a3f6bd8a"},
+    {file = "pytest-7.4.1-py3-none-any.whl", hash = "sha256:460c9a59b14e27c602eb5ece2e47bec99dc5fc5f6513cf924a7d03a578991b1f"},
+    {file = "pytest-7.4.1.tar.gz", hash = "sha256:2f2301e797521b23e4d2585a0a3d7b5e50fdddaaf7e7d6773ea26ddb17c213ab"},
 ]
 
 [package.dependencies]
@@ -723,13 +723,13 @@ tests = ["pytest", "pytest-cov"]
 
 [[package]]
 name = "qcio"
-version = "0.5.0"
+version = "0.5.1"
 description = "Beautiful and user friendly data structures for quantum chemistry."
 optional = false
 python-versions = ">=3.8,<4.0"
 files = [
-    {file = "qcio-0.5.0-py3-none-any.whl", hash = "sha256:dfa356db90e7ac3a645a57f22ce5b8dcbf67b2eafc8de976cd2126495e464774"},
-    {file = "qcio-0.5.0.tar.gz", hash = "sha256:f2fdf50115b6119a84b33366c39d3e4dc8ca410b08934168c206a546dd916c81"},
+    {file = "qcio-0.5.1-py3-none-any.whl", hash = "sha256:258af8e93f17ec9a26053254e0fced7b14edaa043fa8ef9d4e99ac63e205d06c"},
+    {file = "qcio-0.5.1.tar.gz", hash = "sha256:15f6e573fd5e41d44a052de699317b1b1d8a38b5e2c896ffaa9db491d24ae84f"},
 ]
 
 [package.dependencies]

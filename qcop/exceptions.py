@@ -3,14 +3,18 @@
 from subprocess import CalledProcessError
 from typing import Optional
 
-from qcio import ResultsBase
+from qcio import ProgramFailure, ResultsBase
 
 
 class QCOPBaseError(Exception):
     """Base class for exceptions in qcop. All custom exceptions should inherit from
     this class."""
 
-    pass
+    def __init__(
+        self, *args, program_failure: Optional[ProgramFailure] = None, **kwargs
+    ):
+        super().__init__(*args, **kwargs)
+        self.program_failure = program_failure
 
 
 class AdapterError(QCOPBaseError):
@@ -51,7 +55,11 @@ class AdapterInputError(AdapterError):
 class QCEngineError(QCOPBaseError):
     """Exception raised when any part of qcengine execution fails."""
 
-    pass
+    def __init__(self, *args, **kwargs):
+        self.message = (
+            "Something went wrong with QCEngine. See the traceback above for details."
+        )
+        super().__init__(self.message)
 
 
 class ExternalProgramError(QCOPBaseError):
