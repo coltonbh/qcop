@@ -6,6 +6,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## [unreleased]
 
+## [0.4.1] - 2023-09-02
+
 ### Added
 
 - Added a `ProgramFailure` object to all program related exceptions raised by `adapter.compute()`. Now every exception returned from `.compute()` will have the full traceback context and provenance data for error handling. Very helpful so that BigChem can operate on a `raise_exc=True` paradigm to take advantage of python standard failure/retry logic based on exceptions but still return the entire `ProgramFailure` object for returning to end users via ChemCloud.
@@ -14,25 +16,25 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 - `stdout` now gets correctly added to `ProgramFailure` object.
 
-## [0.4.0]
+## [0.4.0] - 2023-08-31
 
 ### Changed
 
 - Updated pydantic from `v1` -> `v2`.
 
-## [0.3.2]
+## [0.3.2] - 2023-08-18
 
 ### Addedp
 
 - `GeometricEngine` now appends all computed trajectory results to the raised exception if subprogram crashes so a user can inspect the failed results.
 
-## [0.3.1]
+## [0.3.1] - 2023-07-19
 
 ### Fixed
 
 - Tiny bug in `ensure_geometric` test.
 
-## [0.3.0]
+## [0.3.0] - 2023-07-19
 
 ### Added
 
@@ -43,14 +45,14 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 - Refactored top level `main.compute()` function to mostly live in `BaseAdapter.compute()`. This makes consumption of adapters by dual program adapters, like `GeometricAdapter`, much cleaner.
 
-## [0.2.0]
+## [0.2.0] - 2023-07-17
 
 ### Changed
 
 - Updated to flattened `qcio v0.3.0` data models.
 - Changed order of args to `compute()` to allow for the same pattern to `compute_args`.
 
-## [0.1.0]
+## [0.1.0] - 2023-06-29
 
 ### Added
 
@@ -58,7 +60,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 - Created adapter for TeraChem.
 - Exposed general purpose computing for any subprocess with `FileAdaptor`
 
-[unreleased]: https://github.com/coltonbh/qcop/compare/0.4.0...HEAD
+[unreleased]: https://github.com/coltonbh/qcop/compare/0.4.1...HEAD
+[0.4.1]: https://github.com/coltonbh/qcop/releases/tag/0.4.1
 [0.4.0]: https://github.com/coltonbh/qcop/releases/tag/0.4.0
 [0.3.2]: https://github.com/coltonbh/qcop/releases/tag/0.3.2
 [0.3.1]: https://github.com/coltonbh/qcop/releases/tag/0.3.1
