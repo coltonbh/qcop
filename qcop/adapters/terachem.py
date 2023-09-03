@@ -51,10 +51,10 @@ class TeraChemAdapter(ProgramAdapter):
 
         with open(inp_filename, "w") as f:
             # calctype
-            if inp_obj.calctype == "hessian":
+            if inp_obj.calctype.value == "hessian":
                 calctype = "frequencies"
             else:
-                calctype = inp_obj.calctype
+                calctype = inp_obj.calctype.value
             f.write(f"{'run':<{self.padding}} {calctype}\n")
             # Molecule
             f.write(f"{'coordinates':<{self.padding}} {self.xyz_filename}\n")
