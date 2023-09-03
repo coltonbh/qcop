@@ -51,7 +51,7 @@ class TeraChemAdapter(ProgramAdapter):
 
         with open(inp_filename, "w") as f:
             # calctype
-            if inp_obj.calctype.value == "hessian":
+            if inp_obj.calctype.value == CalcType.hessian:
                 calctype = "frequencies"
             else:
                 calctype = inp_obj.calctype.value
