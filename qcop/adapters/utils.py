@@ -143,7 +143,7 @@ def construct_provenance(
     program: str,
     version: Optional[str],
     scratch_dir: Path,
-    start: float,
+    wall_time: float,
 ) -> Provenance:
     """Construct a provenance object for a calculation.
 
@@ -151,13 +151,12 @@ def construct_provenance(
         program: The program used for the calculation.
         version: The program version.
         scratch_dir: The working directory of the calculation.
-        start: The start time of the calculation.
+        wall_time: The wall time of the calculation in seconds.
         stdout: The stdout of the calculation.
 
     Returns:
         The Provenance object.
     """
-    wall_time = time() - start
 
     return Provenance(
         program=program,

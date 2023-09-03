@@ -40,7 +40,6 @@ def test_qcng_fallback_tried_if_adapter_not_in_qcop(mocker, prog_inp):
 
 def test_qcng_compute_not_called_if_adapter_in_qcop(mocker, prog_inp, test_adapter):
     qcng_spy = mocker.patch("qcengine.compute")
-    # compute_spy = mocker.patch("qcop.test_qcng_compat.compute")
 
     test_adapter = registry["test"]
     compute_spy = mocker.spy(test_adapter, "compute")

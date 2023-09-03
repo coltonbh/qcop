@@ -102,7 +102,6 @@ def test_results_added_to_program_failure_object_if_exception_contains_them(
 
     # Check that the exception object contains the results
     with pytest.raises(ExternalProgramExecutionError) as excinfo:
-        # import pdb; pdb.set_trace()
         test_adapter.compute(energy_input, raise_exc=True)
     assert excinfo.value.results == sp_output.results
 
@@ -110,3 +109,62 @@ def test_results_added_to_program_failure_object_if_exception_contains_them(
     prog_failure = test_adapter.compute(energy_input)
     assert isinstance(prog_failure, ProgramFailure)
     assert prog_failure.results == sp_output.results
+
+
+def test_program_failure_object_added_to_exception(
+    prog_inp, mocker, sp_output, test_adapter
+):
+    """Test that exceptions contain the ProgramFailure object."""
+    test_adapter = registry["test"]()
+
+    def raise_error(*args, **kwargs):
+        raise ExternalProgramExecutionError(
+            1,
+            "terachem tc.in",
+            stdout="some stdout",
+            results=sp_output.results,
+        )
+
+    mocker.patch.object(
+        test_adapter,
+        "compute_results",
+        side_effect=raise_error,
+    )
+    energy_input = prog_inp("energy")
+
+    # Check that the exception object contains the results
+    with pytest.raises(ExternalProgramExecutionError) as excinfo:
+        test_adapter.compute(energy_input, raise_exc=True)
+
+    assert isinstance(excinfo.value.program_failure, ProgramFailure)
+
+
+def test_stdout_collected_with_failed_execution(
+    prog_inp, mocker, sp_output, test_adapter
+):
+    """Test that stdout is collected even if the execution fails."""
+    test_adapter = registry["test"]()
+
+    def raise_error(*args, **kwargs):
+        raise ExternalProgramExecutionError(
+            1,
+            "terachem tc.in",
+            stdout="some stdout",
+            results=sp_output.results,
+        )
+
+    mocker.patch.object(
+        test_adapter,
+        "compute_results",
+        side_effect=raise_error,
+    )
+    energy_input = prog_inp("energy")
+
+    # Check that the exception object contains the results
+    with pytest.raises(ExternalProgramExecutionError) as excinfo:
+        test_adapter.compute(energy_input, raise_exc=True)
+
+    # Added to exception
+    assert excinfo.value.stdout == "some stdout"
+    # Added to ProgramFailure
+    assert excinfo.value.program_failure.stdout == "some stdout"
