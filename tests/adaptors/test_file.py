@@ -11,7 +11,7 @@ def test_file_adapter_compute(tmp_path):
     file_inp = FileInput(cmdline_args=["hello_world.py"])
     file_inp.files["hello_world.py"] = "print('hello world')"
     with tmpdir() as path:
-        file_inp.write_files(path)
+        file_inp.save_files(path)
         _, stdout = FileAdapter("python").compute_results(file_inp)
     assert stdout == "hello world\n"
 

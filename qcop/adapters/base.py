@@ -132,7 +132,7 @@ class BaseAdapter(ABC):
         # Change cwd to a temporary directory to run the program.
         with tmpdir(scratch_dir, rm_scratch_dir) as final_scratch_dir:
             if self.write_files:  # Write non structured input files to disk.
-                inp_obj.write_files()
+                inp_obj.save_files()
 
             output_dict: Dict[str, Optional[str]] = {}
             stdout: Optional[str]
@@ -187,7 +187,7 @@ class BaseAdapter(ABC):
             # Optionally collect output files
             if collect_files or isinstance(inp_obj, FileInput):
                 # Collect output files from the calc_dir
-                output_obj.add_files(
+                output_obj.open_files(
                     final_scratch_dir, recursive=True, exclude=inp_obj.files.keys()
                 )
 
@@ -200,6 +200,8 @@ class BaseAdapter(ABC):
         # Helpful for BigChem exception handling
         if raise_exc and qcop_exception:
             qcop_exception.program_failure = output_obj
+            # Updating .args is necessary for Celery to properly serialize the exception
+            qcop_exception.args = (*qcop_exception.args, output_obj)
             raise qcop_exception
 
         return output_obj

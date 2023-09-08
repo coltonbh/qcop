@@ -1,6 +1,5 @@
 """Experimental exception hierarchy. This may be too complex and unhelpful for now"""
 
-from subprocess import CalledProcessError
 from typing import Optional
 
 from qcio import ProgramFailure, ResultsBase
@@ -86,7 +85,7 @@ class ProgramNotFoundError(ExternalProgramError):
         super().__init__(self.message)
 
 
-class ExternalProgramExecutionError(ExternalProgramError, CalledProcessError):
+class ExternalProgramExecutionError(ExternalProgramError):
     """
     Exception raised when an external program fails.
 
@@ -103,9 +102,15 @@ class ExternalProgramExecutionError(ExternalProgramError, CalledProcessError):
         self,
         returncode: int,
         cmd: str,
-        results: Optional[ResultsBase] = None,
         stdout: Optional[str] = None,
-        stderr: Optional[str] = None,
+        results: Optional[ResultsBase] = None,
     ):
-        super().__init__(returncode, cmd, stdout, stderr)
+        self.returncode = returncode
+        self.cmd = cmd
+        self.stdout = stdout
         self.results = results
+        self.message = (
+            f"External program failed with return code {self.returncode}. "
+            f"Command: '{self.cmd}'"
+        )
+        super().__init__(self.message)

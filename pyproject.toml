@@ -8,7 +8,7 @@ readme = "README.md"
 
 [tool.poetry.dependencies]
 python = "^3.8.1"
-qcio = ">=0.5.0"
+qcio = ">=0.6.0"
 qcparse = ">=0.5.0"
 
 # A list of all of the optional dependencies, some of which are included in the below
