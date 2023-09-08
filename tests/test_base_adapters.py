@@ -137,6 +137,7 @@ def test_program_failure_object_added_to_exception(
         test_adapter.compute(energy_input, raise_exc=True)
 
     assert isinstance(excinfo.value.program_failure, ProgramFailure)
+    assert isinstance(excinfo.value.args[-1], ProgramFailure)
 
 
 def test_stdout_collected_with_failed_execution(
