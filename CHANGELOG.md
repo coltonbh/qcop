@@ -6,6 +6,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## [unreleased]
 
+## [0.4.4] - 2023-09-08
+
 ### Changed
 
 - Updated `qcio` from `>=0.5.0` to `>=0.6.0`.
@@ -81,7 +83,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 - Created adapter for TeraChem.
 - Exposed general purpose computing for any subprocess with `FileAdaptor`
 
-[unreleased]: https://github.com/coltonbh/qcop/compare/0.4.3...HEAD
+[unreleased]: https://github.com/coltonbh/qcop/compare/0.4.4...HEAD
+[0.4.4]: https://github.com/coltonbh/qcop/releases/tag/0.4.4
 [0.4.3]: https://github.com/coltonbh/qcop/releases/tag/0.4.3
 [0.4.2]: https://github.com/coltonbh/qcop/releases/tag/0.4.2
 [0.4.1]: https://github.com/coltonbh/qcop/releases/tag/0.4.1
