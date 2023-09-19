@@ -6,6 +6,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## [unreleased]
 
+## [0.4.5] - 2023-09-19
+
 ### Added
 
 - `README.md` documentation.
@@ -13,6 +15,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 ### Changed
 
 - Dropped Python version from `^3.8.1` to `3.8`.
+- Updated `qcparse` dependency from `>=0.5.0` to `>=0.5.1` to support Python `^3.8` change.
 
 ## [0.4.4] - 2023-09-08
 
@@ -91,7 +94,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 - Created adapter for TeraChem.
 - Exposed general purpose computing for any subprocess with `FileAdaptor`
 
-[unreleased]: https://github.com/coltonbh/qcop/compare/0.4.4...HEAD
+[unreleased]: https://github.com/coltonbh/qcop/compare/0.4.5...HEAD
+[0.4.5]: https://github.com/coltonbh/qcop/releases/tag/0.4.5
 [0.4.4]: https://github.com/coltonbh/qcop/releases/tag/0.4.4
 [0.4.3]: https://github.com/coltonbh/qcop/releases/tag/0.4.3
 [0.4.2]: https://github.com/coltonbh/qcop/releases/tag/0.4.2
