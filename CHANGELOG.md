@@ -6,6 +6,14 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## [unreleased]
 
+### Added
+
+- `README.md` documentation.
+
+### Changed
+
+- Dropped Python version from `^3.8.1` to `3.8`.
+
 ## [0.4.4] - 2023-09-08
 
 ### Changed
