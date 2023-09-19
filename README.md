@@ -83,6 +83,8 @@ output = compute_args(
 
 The behavior of `compute()` and `compute_args()` can be tuned by passing in keyword arguments like `collect_files` shown above. Keywords can modify which scratch directory location to use, whether to delete or keep the scratch files after a calculation completes, what files to collect from a calculation, whether to print the program stdout in real time as the program executes, and whether to propagate a wavefunction through a series of calculations. Keywords also include hooks for passing in update functions that can be called as a program executes in real time. See the [compute method docstring](https://github.com/coltonbh/qcop/blob/83868df51d241ffae3497981dfc3c72235319c6e/qcop/adapters/base.py#L57-L123) for more details.
 
+See the [/examples](https://github.com/coltonbh/qcop/tree/master/examples) directory for more examples.
+
 ## Support
 
 If you have any issues with `qcop` or would like to request a feature, please open an [issue](https://github.com/coltonbh/qcop/issues).
