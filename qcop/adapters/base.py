@@ -98,8 +98,9 @@ class BaseAdapter(ABC):
             propagate_wfn: For any adapter performing a sequential task, such
                 as a geometry optimization, propagate the wavefunction from the previous
                 step to the next step. This is useful for accelerating convergence by
-                using a previously computed wavefunction as a starting guess. This will
-                be ignored if the adapter does not support it.
+                using a previously computed wavefunction as a starting guess. If an
+                adapter does not support wavefunction propagation, an AdapterInputError
+                will be raised.
             **kwargs: Additional keyword arguments to pass to the adapter or
                 qcng.compute().
 
@@ -217,8 +218,9 @@ class BaseAdapter(ABC):
 
         """
         # Collect wavefunction file from the calc_dir
-        raise NotImplementedError(
-            f"Adapter for {self.program} does not support wavefunction collection."
+        raise AdapterInputError(
+            self.program,
+            f"Adapter for {self.program} does not support wavefunction collection.",
         )
 
 
