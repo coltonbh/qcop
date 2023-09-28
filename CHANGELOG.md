@@ -6,6 +6,12 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## [unreleased]
 
+### Changed
+
+- Removed TeraChem input file encoding as this was refactored to the `qcparse` library.
+- Updated `qcparse` dependency from `>=0.5.1` to `>=0.5.2` to support the new encoding API.
+- Updated `qcio` dependency to reflect the same minimum version as `qcparse`.
+
 ## [0.4.6] - 2023-09-22
 
 ### Changed
