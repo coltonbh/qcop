@@ -2,7 +2,8 @@ from pathlib import Path
 from typing import Callable, Optional, Tuple
 
 from qcio import CalcType, ProgramInput, SinglePointOutput, SinglePointResults
-from qcparse import parse_results
+from qcparse import encode, parse_results
+from qcparse.encoders.terachem import XYZ_FILENAME
 from qcparse.parsers.terachem import parse_version_string
 
 from qcop.exceptions import AdapterInputError
@@ -16,8 +17,6 @@ class TeraChemAdapter(ProgramAdapter):
 
     supported_calctypes = [CalcType.energy, CalcType.gradient, CalcType.hessian]
     program = "terachem"
-    padding = 20  # padding between keyword and value in tc.in
-    xyz_filename = "geom.xyz"
 
     def program_version(self, stdout: Optional[str] = None) -> str:
         """Get the program version.
@@ -33,56 +32,6 @@ class TeraChemAdapter(ProgramAdapter):
         else:
             # Cut out "TeraChem version " (17 chars) from the output
             return execute_subprocess(self.program, ["--version"])[17:]
-
-    def prepare_inputs(self, inp_obj: ProgramInput) -> str:
-        """Translate qcio objects into TeraChem inputs files. Write files to disk.
-
-        Args:
-            inp_obj: The qcio ProgramInput object for a computation.
-
-        Returns:
-            Filename of input file (tc.in).
-        """
-        # Write molecule to disk
-        inp_obj.molecule.save(self.xyz_filename)
-
-        # Write input file
-        inp_filename = "tc.in"
-
-        with open(inp_filename, "w") as f:
-            # calctype
-            if inp_obj.calctype.value == CalcType.hessian:
-                calctype = "frequencies"
-            else:
-                calctype = inp_obj.calctype.value
-            f.write(f"{'run':<{self.padding}} {calctype}\n")
-            # Molecule
-            f.write(f"{'coordinates':<{self.padding}} {self.xyz_filename}\n")
-            f.write(f"{'charge':<{self.padding}} {inp_obj.molecule.charge}\n")
-            f.write(f"{'spinmult':<{self.padding}} {inp_obj.molecule.multiplicity}\n")
-            # Model
-            f.write(f"{'method':<{self.padding}} {inp_obj.model.method}\n")
-            f.write(f"{'basis':<{self.padding}} {inp_obj.model.basis}\n")
-
-            # Keywords
-            non_keywords = {
-                "charge": ".molecule.charge",
-                "spinmult": ".molecule.multiplicity",
-                "run": ".calctype",
-                "basis": ".model.basis",
-                "method": ".model.method",
-            }
-            for key, value in inp_obj.keywords.items():
-                # Check for keywords that should be passed as structured data
-                if key in non_keywords:
-                    raise AdapterInputError(
-                        program=self.program,
-                        message=f"Keyword '{key}' should not be set as a keyword. It "
-                        f"should be set at '{non_keywords[key]}'",
-                    )
-                # Lowercase booleans
-                f.write(f"{key:<{self.padding}} {str(value).lower()}\n")
-        return inp_filename
 
     # TODO: Need command line options for TeraChem e.g., -g 1 for GPUs MAYBE?
     # Try using it for a while without and see what roadblocks we run into
@@ -104,8 +53,14 @@ class TeraChemAdapter(ProgramAdapter):
         Returns:
             A tuple of SinglePointComputedProps and the stdout str.
         """
-        tc_in = self.prepare_inputs(inp_obj)
-        stdout = execute_subprocess(self.program, [tc_in], update_func, update_interval)
+        input_filename = "tc.in"
+        native_input = encode(inp_obj, self.program)
+        Path(input_filename).write_text(native_input.input_file)
+        Path(native_input.geometry_filename).write_text(native_input.geometry_file)
+
+        stdout = execute_subprocess(
+            self.program, [input_filename], update_func, update_interval
+        )
         parsed_output = parse_results(stdout, self.program, "stdout")
         return parsed_output, stdout
 
@@ -120,7 +75,7 @@ class TeraChemAdapter(ProgramAdapter):
         """
 
         # Naming conventions from TeraChem uses xyz filename as scratch dir postfix
-        scr_postfix = self.xyz_filename.split(".")[0]
+        scr_postfix = XYZ_FILENAME.split(".")[0]
 
         # Wavefunction filenames
         wfn_filenames = ("c0", "ca0", "cb0")
@@ -146,7 +101,7 @@ class TeraChemAdapter(ProgramAdapter):
         """
 
         # Naming conventions from TeraChem uses xyz filename as scratch dir postfix
-        scr_postfix = self.xyz_filename.split(".")[0]
+        scr_postfix = XYZ_FILENAME.split(".")[0]
 
         # Wavefunction filenames
         c0, ca0, cb0 = "c0", "ca0", "cb0"
