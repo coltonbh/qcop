@@ -14,7 +14,7 @@ prog_input = ProgramInput(
     molecule=h2o,
     calctype=CalcType.energy,
     model={"method": "hf", "basis": "sto-3g"},
-    keywords={"purify": "no", "restricted": False},
+    keywords={"purify": "no"},
 )
 
 # Run the calculation
