@@ -15,7 +15,8 @@ from qcio import (
 
 from qcop.exceptions import (
     AdapterInputError,
-    ExternalProgramExecutionError,
+    ExternalSubprocessError,
+    GeometricError,
     ProgramNotFoundError,
 )
 from qcop.utils import get_adapter
@@ -94,11 +95,17 @@ class GeometricAdapter(ProgramAdapter):
             internal_coords_sys,
             qcio_adapter,
             propagate_wfn=propagate_wfn,
+            update_func=update_func,
+            update_interval=update_interval,
             **kwargs,
         )
 
-        with capture_logs("geometric") as (_, log_string):
-            optimizer.optimizeGeometry()
+        # Haven't update DualOutputHandler to send logs using arbitrary update funcs.
+        with capture_logs("geometric", update_func, update_interval) as (_, log_string):
+            try:
+                optimizer.optimizeGeometry()
+            except self.geometric.errors.Error as e:
+                raise GeometricError(inp_obj, self.program) from e
 
         return (
             OptimizationResults(
@@ -144,6 +151,8 @@ class GeometricAdapter(ProgramAdapter):
         internal_coords_sys,
         qcio_adapter,
         propagate_wfn: bool = False,
+        update_func: Optional[Callable] = None,
+        update_interval: Optional[float] = None,
         **kwargs,
     ):
         """Construct the geomeTRIC optimizer object
@@ -167,6 +176,8 @@ class GeometricAdapter(ProgramAdapter):
                 inp_obj.molecule,
                 geometric_molecule,
                 propagate_wfn,
+                update_func,
+                update_interval,
             ),
             dirname=Path.cwd(),
             # Must declare xyzout here to avoid a bug in geomeTRIC
@@ -235,6 +246,8 @@ class GeometricAdapter(ProgramAdapter):
                 qcio_molecule: Molecule,
                 geometric_molecule,
                 propagate_wfn: bool = False,
+                update_func: Optional[Callable] = None,
+                update_interval: Optional[float] = None,
             ):
                 super().__init__(geometric_molecule)
                 self.qcio_adapter = qcio_adapter
@@ -242,6 +255,8 @@ class GeometricAdapter(ProgramAdapter):
                 self.qcio_molecule = qcio_molecule
                 self.propagate_wfn = propagate_wfn
                 self.qcio_trajectory: List[SinglePointOutput] = []
+                self.update_func = update_func
+                self.update_interval = update_interval
 
             def calc_new(self, coords, *args) -> Dict[str, Union[float, np.ndarray]]:
                 """Calculate the energy and gradient for a given geometry.
@@ -279,8 +294,10 @@ class GeometricAdapter(ProgramAdapter):
                         prog_input,
                         raise_exc=True,
                         collect_wfn=self.propagate_wfn,
+                        update_func=self.update_func,
+                        update_interval=self.update_interval,
                     )
-                except ExternalProgramExecutionError as e:
+                except ExternalSubprocessError as e:
                     e.results = OptimizationResults(trajectory=self.qcio_trajectory)
                     raise e
 

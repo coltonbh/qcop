@@ -12,12 +12,12 @@ from contextlib import contextmanager
 from io import StringIO
 from pathlib import Path
 from time import time
-from typing import Callable, List, Optional
+from typing import Callable, List, Optional, Union
 
 from qcio import Provenance
 from qcio.helper_types import StrOrPath
 
-from qcop.exceptions import ExternalProgramExecutionError, ProgramNotFoundError
+from qcop.exceptions import ExternalSubprocessError, ProgramNotFoundError
 
 
 def execute_subprocess(
@@ -102,16 +102,50 @@ def execute_subprocess(
 
     # Check if program executed successfully
     if proc.returncode != 0:
-        raise ExternalProgramExecutionError(
+        raise ExternalSubprocessError(
             returncode=proc.returncode, cmd=" ".join(cmd), stdout=stdout
         )
 
     return stdout
 
 
+class DualOutputHandler(logging.Handler):
+    """A logging handler that writes to both a string buffer and the console.
+
+    To enable this handler to use arbitrary update_func like utils.execute_subprocess,
+    I should factor out the update_func logic in execute_subprocess into a
+    separate function and use it generically inside execute_subprocess and
+    DualOutputHandler. For now printing to stdout is fine.
+    """
+
+    def __init__(
+        self,
+        buffer,
+        update_func: Optional[Callable] = None,
+        update_interval: Optional[float] = None,
+    ):
+        super().__init__()
+        self.buffer = buffer
+        self.update_func = update_func
+        self.update_interval = update_interval
+
+    def emit(self, record):
+        # Write to the string buffer
+        msg = self.format(record)
+        self.buffer.write(msg + "\n")
+
+        # Run update func
+        if self.update_func:
+            self.update_func(None, msg)
+
+
 @contextmanager
-def capture_logs(logger_name: str):
-    """Capture logs from a program during execution."""
+def capture_logs(
+    logger_name: str,
+    update_func: Optional[Callable] = None,
+    update_interval: Optional[float] = None,
+):
+    """Capture logs from a program during execution and print them to the console."""
 
     # Create a logger
     logger = logging.getLogger(logger_name)
@@ -119,9 +153,14 @@ def capture_logs(logger_name: str):
     # Set the level to capture all logs
     logger.setLevel(logging.DEBUG)
 
-    # Create a string buffer and add a StreamHandler using the buffer
+    # Create a string buffer and add a DualOutputHandler using the buffer
     logs_string = StringIO()
-    handler = logging.StreamHandler(logs_string)
+    if update_func and update_interval:
+        handler: Union[DualOutputHandler, logging.StreamHandler] = DualOutputHandler(
+            logs_string, update_func, update_interval
+        )
+    else:
+        handler = logging.StreamHandler(logs_string)
 
     # Optional: set a format for the handler
     formatter = logging.Formatter(

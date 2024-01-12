@@ -51,16 +51,6 @@ class AdapterInputError(AdapterError):
         super().__init__(self.message)
 
 
-class QCEngineError(QCOPBaseError):
-    """Exception raised when any part of qcengine execution fails."""
-
-    def __init__(self, *args, **kwargs):
-        self.message = (
-            "Something went wrong with QCEngine. See the traceback above for details."
-        )
-        super().__init__(self.message)
-
-
 class ExternalProgramError(QCOPBaseError):
     """Base Exception raised for errors with an external program."""
 
@@ -85,9 +75,29 @@ class ProgramNotFoundError(ExternalProgramError):
         super().__init__(self.message)
 
 
-class ExternalProgramExecutionError(ExternalProgramError):
+class QCEngineError(ExternalProgramError):
+    """Exception raised when any part of qcengine execution fails."""
+
+    def __init__(self, *args, **kwargs):
+        self.message = (
+            "Something went wrong with QCEngine. See the traceback above for details."
+        )
+        super().__init__(self.message)
+
+
+class GeometricError(ExternalProgramError):
+    """Exception raised when any part of geomeTRIC execution fails."""
+
+    def __init__(self, *args, **kwargs):
+        self.message = (
+            "Something went wrong with geomeTRIC. See the traceback above for details."
+        )
+        super().__init__(self.message)
+
+
+class ExternalSubprocessError(ExternalProgramError):
     """
-    Exception raised when an external program fails.
+    Exception raised when an external subprocess fails.
 
     Args:
         returncode: Return code of the subprocess
