@@ -93,10 +93,10 @@ def test_compute_does_not_write_files_if_adaptor_write_files_set(prog_inp):
 
 def test_compute_raises_exception_if_program_fails_raise_exec_true(prog_inp):
     """Test that compute raises an exception if the program fails."""
-    grad_input = prog_inp("gradient")
+    opt_input = prog_inp("optimization")
 
     with pytest.raises(AdapterInputError):
-        compute("test", grad_input, raise_exc=True)
+        compute("test", opt_input, raise_exc=True)
 
 
 def test_compute_does_not_raise_exception_if_raise_exec_false(prog_inp, mocker):

@@ -6,6 +6,15 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## [unreleased]
 
+### Changed
+
+- `QCEngineError` now a subclass of `ExternalProgramError` instead of `QCOPBaseError`.
+- `ExternalProgramExecutionError` renamed to `ExternalSubprocessError` to better reflect its purpose.
+
+### Added
+
+- `GeometricError` to `qcop.exceptions` module. Without this when `geometric` raised an exception it wouldn't be caught by the `except QCOPBaseError` block in `adapter.compute()` and the `ProgramFailure` object wouldn't be returned to the user. This fixes a 500 error in ChemCloud Server when `geometric` fails to converge and raises an exception (a `geometric` exception) that isn't found by the server.
+
 ## [0.4.7] - 2023-09-27
 
 ### Changed

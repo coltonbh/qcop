@@ -103,7 +103,7 @@ def test_adapter():
     class TestAdapter(ProgramAdapter):
         # Both program and supported_driver defined
         program = "test"
-        supported_calctypes = [CalcType.energy]
+        supported_calctypes = [CalcType.energy, CalcType.gradient]
 
         def compute_results(
             self, inp_obj, update_func=None, update_interval=None, **kwargs

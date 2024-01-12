@@ -2,7 +2,7 @@ import pytest
 from qcio import CalcType, ProgramFailure
 
 from qcop.adapters import base, registry
-from qcop.exceptions import AdapterInputError, ExternalProgramExecutionError
+from qcop.exceptions import AdapterInputError, ExternalSubprocessError
 
 
 def test_adapter_subclasses_must_define_program():
@@ -86,7 +86,7 @@ def test_results_added_to_program_failure_object_if_exception_contains_them(
     test_adapter = registry["test"]()
 
     def raise_error(*args, **kwargs):
-        raise ExternalProgramExecutionError(
+        raise ExternalSubprocessError(
             1,
             "terachem tc.in",
             stdout="some stdout",
@@ -101,7 +101,7 @@ def test_results_added_to_program_failure_object_if_exception_contains_them(
     energy_input = prog_inp("energy")
 
     # Check that the exception object contains the results
-    with pytest.raises(ExternalProgramExecutionError) as excinfo:
+    with pytest.raises(ExternalSubprocessError) as excinfo:
         test_adapter.compute(energy_input, raise_exc=True)
     assert excinfo.value.results == sp_output.results
 
@@ -118,7 +118,7 @@ def test_program_failure_object_added_to_exception(
     test_adapter = registry["test"]()
 
     def raise_error(*args, **kwargs):
-        raise ExternalProgramExecutionError(
+        raise ExternalSubprocessError(
             1,
             "terachem tc.in",
             stdout="some stdout",
@@ -133,7 +133,7 @@ def test_program_failure_object_added_to_exception(
     energy_input = prog_inp("energy")
 
     # Check that the exception object contains the results
-    with pytest.raises(ExternalProgramExecutionError) as excinfo:
+    with pytest.raises(ExternalSubprocessError) as excinfo:
         test_adapter.compute(energy_input, raise_exc=True)
 
     assert isinstance(excinfo.value.program_failure, ProgramFailure)
@@ -147,7 +147,7 @@ def test_stdout_collected_with_failed_execution(
     test_adapter = registry["test"]()
 
     def raise_error(*args, **kwargs):
-        raise ExternalProgramExecutionError(
+        raise ExternalSubprocessError(
             1,
             "terachem tc.in",
             stdout="some stdout",
@@ -162,7 +162,7 @@ def test_stdout_collected_with_failed_execution(
     energy_input = prog_inp("energy")
 
     # Check that the exception object contains the results
-    with pytest.raises(ExternalProgramExecutionError) as excinfo:
+    with pytest.raises(ExternalSubprocessError) as excinfo:
         test_adapter.compute(energy_input, raise_exc=True)
 
     # Added to exception
