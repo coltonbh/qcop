@@ -6,6 +6,14 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## [unreleased]
 
+### Changed
+
+- Changed default `compute` behavior to `raise_exc=True` instead of `raise_exc=False`.
+
+### Removed
+
+- Non operational placeholder `psi4` integration test.
+
 ## [0.4.8] - 2024-01-12
 
 ### Changed

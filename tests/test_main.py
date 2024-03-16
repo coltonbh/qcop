@@ -1,6 +1,7 @@
 """Many of these tests are really testing the BaseAdapter.compute() method because I 
 refactored the compute() method to be in the BaseAdapter class. This works for now.
 """
+
 from pathlib import Path
 from typing import Callable
 
@@ -108,7 +109,7 @@ def test_compute_does_not_raise_exception_if_raise_exec_false(prog_inp, mocker):
         "compute_results",
         side_effect=QCOPBaseError("Something failed!"),
     )
-    assert isinstance(compute("test", grad_input), ProgramFailure)
+    assert isinstance(compute("test", grad_input, raise_exc=False), ProgramFailure)
 
 
 def test_qcengine_import_error(mocker, prog_inp):

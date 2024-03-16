@@ -2,6 +2,7 @@
 
 Constraints docs: https://geometric.readthedocs.io/en/latest/constraints.html
 """
+
 from qcio import CalcType, DualProgramInput, Molecule
 
 from qcop import compute

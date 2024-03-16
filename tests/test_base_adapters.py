@@ -106,7 +106,7 @@ def test_results_added_to_program_failure_object_if_exception_contains_them(
     assert excinfo.value.results == sp_output.results
 
     # If no raise_exc=False, the results are added to the ProgramFailure
-    prog_failure = test_adapter.compute(energy_input)
+    prog_failure = test_adapter.compute(energy_input, raise_exc=False)
     assert isinstance(prog_failure, ProgramFailure)
     assert prog_failure.results == sp_output.results
 
