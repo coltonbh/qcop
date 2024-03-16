@@ -2,6 +2,7 @@
 Utility functions for adapters. Avoids circular imports when these functions placed in
 top-level utils.py module.
 """
+
 import logging
 import os
 import platform

@@ -1,4 +1,5 @@
 """Top level compute functions for qcop."""
+
 from typing import Any, Callable, Dict, Optional, Union
 
 from qcio import CalcType, Files, Model, Molecule, ProgramInput
@@ -22,7 +23,7 @@ def compute(
     update_func: Optional[Callable] = None,
     update_interval: Optional[float] = None,
     print_stdout: bool = False,
-    raise_exc: bool = False,
+    raise_exc: bool = True,
     qcng_fallback: bool = True,
     propagate_wfn: bool = False,
     **kwargs,

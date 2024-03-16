@@ -66,7 +66,7 @@ class BaseAdapter(ABC):
         update_func: Optional[Callable] = None,
         update_interval: Optional[float] = None,
         print_stdout: bool = False,
-        raise_exc: bool = False,
+        raise_exc: bool = True,
         propagate_wfn: bool = False,
         **kwargs,
     ) -> OutputBase:

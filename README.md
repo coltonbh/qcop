@@ -34,6 +34,7 @@ The `compute` function is the main entry point for the library and is used to ru
 ```python
 from qcio import Molecule, ProgramInput
 from qcop import compute
+from qcop.exceptions import ExternalProgramError
 # Create the molecule
 h2o = Molecule.open("h2o.xyz")
 
@@ -45,20 +46,71 @@ prog_input = ProgramInput(
     keywords={"purify": "no", "restricted": False},
 )
 
-# Run the calculation
-output = compute("terachem", prog_input, collect_files=True)
+# Run the calculation; will return SinglePointOutput or raise an exception
+try:
+    output = compute("terachem", prog_input, collect_files=True)
+except ExternalProgramError as e:
+    # External QQ program failed in some way
+    prog_failure = e.program_failure
+    prog_failure.input_data # Input data used by the QC program
+    prog_failure.success # Will be False
+    prog_failure.results # Any half-computed results before the failure
+    prog_failure.traceback # Stack trace from the calculation
+    prog_failure.ptraceback # Shortcut to print out the traceback in human readable format
+    prog_failure.stdout # Stdout log from the calculation
+    raise e
+else:
+    # Calculation succeeded
+    output.input_data # Input data used by the QC program
+    output.success # Will be True
+    output.results # All structured results from the calculation
+    output.stdout # Stdout log from the calculation
+    output.pstdout # Shortcut to print out the stdout in human readable format
+    output.files # Any files returned by the calculation
+    output.provenance # Provenance information about the calculation
+    output.extras # Any extra information not in the schema
 
-# Inspect the output
-output.input_data # Input data used by the QC program
-output.success # Whether the calculation succeeded
-output.results # All structured results from the calculation
-output.stdout # Stdout log from the calculation
-output.pstdout # Shortcut to print out the stdout in human readable format
-output.files # Any files returned by the calculation
-output.provenance # Provenance information about the calculation
-output.extras # Any extra information not in the schema
-output.traceback # Stack trace if calculation failed
-output.ptraceback # Shortcut to print out the traceback in human readable format
+```
+
+One may also call `compute(..., raise_exc=False)` to return a `ProgramFailure` object rather than raising an exception when a calculation fails. This may allow easier handling of failures in some cases.
+
+```python
+from qcio import Molecule, ProgramInput
+from qcop import compute
+from qcop.exceptions import ExternalProgramError
+# Create the molecule
+h2o = Molecule.open("h2o.xyz")
+
+# Define the program input
+prog_input = ProgramInput(
+    molecule=h2o,
+    calctype="energy",
+    model={"method": "hf", "basis": "sto-3g"},
+    keywords={"purify": "no", "restricted": False},
+)
+
+# Run the calculation; will return either a SinglePointOutput or a ProgramFailure
+output = compute("terachem", prog_input, collect_files=True, raise_exc=False)
+if not output.success:
+    # External QQ program failed in some way
+    output.input_data # Input data used by the QC program
+    output.success # Will be False
+    output.results # Any half-computed results before the failure
+    output.traceback # Stack trace from the calculation
+    output.ptraceback # Shortcut to print out the traceback in human readable format
+    output.stdout # Stdout log from the calculation
+
+else:
+    # Calculation succeeded
+    output.input_data # Input data used by the QC program
+    output.success # Will be True
+    output.results # All structured results from the calculation
+    output.stdout # Stdout log from the calculation
+    output.pstdout # Shortcut to print out the stdout in human readable format
+    output.files # Any files returned by the calculation
+    output.provenance # Provenance information about the calculation
+    output.extras # Any extra information not in the schema
+
 ```
 
 Alternatively, the `compute_args` function can be used to run a calculation with the input data structures passed in as arguments rather than as a single `ProgramInput` object.

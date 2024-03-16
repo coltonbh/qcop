@@ -32,7 +32,11 @@ def test_qcng_fallback_tried_if_adapter_not_in_qcop(mocker, prog_inp):
     )
 
     energy_inp = prog_inp("energy")
-    compute("mrchem", energy_inp)  # Program not in qcop, but in qcng
+    # Program not in qcop, but in qcn
+    # Will raise qcengine.exceptions.ResourceError: Program mrchem is registered with
+    # QCEngine, but cannot be found. Test still demonstrates that qcng.compute() is
+    # called.
+    compute("mrchem", energy_inp, raise_exc=False)
 
     assert qcng_spy.call_count == 1
     assert compute_spy.call_count == 1
