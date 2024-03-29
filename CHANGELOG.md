@@ -6,6 +6,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## [unreleased]
 
+## [0.5.1] - 2024-03-29
+
 ### Changed
 
 - Upgraded to `qcio>=0.8.1` to fix QCElemental behavior that auto-rotates Molecules without user consent.
@@ -138,7 +140,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 - Created adapter for TeraChem.
 - Exposed general purpose computing for any subprocess with `FileAdaptor`
 
-[unreleased]: https://github.com/coltonbh/qcop/compare/0.5.0...HEAD
+[unreleased]: https://github.com/coltonbh/qcop/compare/0.5.1...HEAD
+[0.5.1]: https://github.com/coltonbh/qcop/releases/tag/0.5.1
 [0.5.0]: https://github.com/coltonbh/qcop/releases/tag/0.5.0
 [0.4.8]: https://github.com/coltonbh/qcop/releases/tag/0.4.8
 [0.4.7]: https://github.com/coltonbh/qcop/releases/tag/0.4.7
