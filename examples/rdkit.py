@@ -1,39 +1,48 @@
-from pathlib import Path
-
 from qcio import CalcType, Molecule, ProgramInput
 
-from qcop import compute
-
-current_dir = Path(__file__).resolve().parent
+from qcop import compute, exceptions
 
 # Create the molecule
-h2o_dict = Molecule.open(current_dir / "h2o.xyz").model_dump()
-# Must have explicit connectivity for for fields
-h2o_dict["connectivity"] = [[0, 1, 1], [0, 2, 1]]
-h2o = Molecule(**h2o_dict)
+# Can also open a molecule from a file
+# molecule = Molecule.open("path/to/h2o.xyz")
+molecule = Molecule(
+    symbols=["O", "H", "H"],
+    connectivity=[[0, 1, 1], [0, 2, 1]],  # Required for MM models
+    geometry=[
+        [0.0, 0.0, 0.0],
+        [0.52421003, 1.68733646, 0.48074633],
+        [1.14668581, -0.45032174, -1.35474466],
+    ],
+)
 
 # Define the program input
 prog_input = ProgramInput(
-    molecule=h2o,
+    molecule=molecule,
     calctype=CalcType.energy,
     model={"method": "UFF"},
 )
 
 # Run the calculation
-output = compute("rdkit", prog_input, collect_files=True)
+try:
+    output = compute("terachem", prog_input, collect_files=True)
+except exceptions.ExternalProgramError as e:
+    output = e.program_failure
+    print(output.stdout)  # or output.pstdout for short
+    # Input data used to generate the calculation
+    print(output.input_data)
+    # Provenance of generated calculation
+    print(output.provenance)
+    print(output.traceback)
+    raise
 
-# Stdout from the program
-print(output.stdout)  # or output.pstdout for short
-# Input data used to generate the calculation
-print(output.input_data)
-# Provenance of generated calculation
-print(output.provenance)
-
-# Check results
-if output.success is True:
+else:
+    # Check results
     print("output.results.energy:", output.results.energy)
     # The CalcType results will always be available at .return_result
     print("output.return_result:", output.return_result)
-
-else:  # output.success is False
-    print(output.traceback)  # See why the program failed; output.ptraceback for short
+    # Stdout from the program
+    print(output.stdout)  # or output.pstdout for short
+    # Input data used to generate the calculation
+    print(output.input_data)
+    # Provenance of generated calculation
+    print(output.provenance)

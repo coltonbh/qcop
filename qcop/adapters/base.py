@@ -1,10 +1,11 @@
 import traceback
 from abc import ABC, abstractmethod
 from time import time
-from typing import Callable, Dict, List, Optional, Tuple
+from typing import Callable, Dict, List, Optional, Tuple, Union
 
 from qcio import CalcType, FileInput, InputBase, OutputBase, ProgramFailure, ResultsBase
 from qcio.helper_types import StrOrPath
+from qcio.models.base_models import QCIOModelBase
 from qcio.models.inputs_base import StructuredInputBase
 from qcio.utils import calctype_to_output
 
@@ -135,11 +136,12 @@ class BaseAdapter(ABC):
             if self.write_files:  # Write non structured input files to disk.
                 inp_obj.save_files()
 
-            output_dict: Dict[str, Optional[str]] = {}
+            output_dict: Dict[str, Optional[Union[str, QCIOModelBase]]] = {}
             stdout: Optional[str]
 
             start = time()
             qcop_exception = None
+            results: Optional[ResultsBase]
             try:
                 # Execute the program; return results and stdout
                 results, stdout = self.compute_results(

@@ -6,6 +6,15 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## [unreleased]
 
+### Changed
+
+- Upgraded to `qcio>=0.8.1` to fix QCElemental behavior that auto-rotates Molecules without user consent.
+- Modified all example scripts to be standalone without referencing an external `.xyz` file and to use `try/except` statements now that `raise_exc=True` is the default.
+
+### Added
+
+- `py.typed` file to enable type checking in other projects that use `qcop`.
+
 ## [0.5.0] - 2024-03-16
 
 ### Changed
