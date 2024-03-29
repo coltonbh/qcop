@@ -5,7 +5,7 @@ Constraints docs: https://geometric.readthedocs.io/en/latest/constraints.html
 
 from qcio import CalcType, DualProgramInput, Molecule
 
-from qcop import compute
+from qcop import compute, exceptions
 
 # Create Molecule
 h2 = Molecule(
@@ -35,23 +35,27 @@ prog_inp = DualProgramInput(
 )
 
 # Run calculation
-output = compute("geometric", prog_inp, propagate_wfn=True, rm_scratch_dir=False)
+try:
+    output = compute("geometric", prog_inp, propagate_wfn=True, rm_scratch_dir=False)
+except exceptions.ExternalProgramError as e:
+    # Calculation failed
+    output = e.program_failure
+    print(output.stdout)  # or output.pstdout for short
+    # Input data used to generate the calculation
+    print(output.input_data)
+    # Provenance of generated calculation
+    print(output.provenance)
+    print(output.traceback)
+    raise
 
-### Accessing results ###
-# Stdout from the program
-print(output.stdout)  # or output.pstdout for short
-# Input data used to generate the calculation
-print(output.input_data)
-# Provenance of generated calculation
-print(output.provenance)
-
-# Check results
-if output.success:
+else:
+    # Check results
     print("Energies:", output.results.energies)
     print("Molecules:", output.results.molecules)
     print("Trajectory:", output.results.trajectory)
-
-else:  # output.success is False
-    print(output.traceback)  # See why the program failed; output.ptraceback for short
-
-print(output)
+    # Stdout from the program
+    print(output.stdout)  # or output.pstdout for short
+    # Input data used to generate the calculation
+    print(output.input_data)
+    # Provenance of generated calculation
+    print(output.provenance)
