@@ -17,7 +17,7 @@ molecule = Molecule(
 prog_input = ProgramInput(
     molecule=molecule,
     calctype=CalcType.gradient,
-    model={"method": "hf", "basis": "sto-3g"},
+    model={"method": "hf", "basis": "sto-3g"},  # type: ignore
     keywords={"purify": "no"},
 )
 

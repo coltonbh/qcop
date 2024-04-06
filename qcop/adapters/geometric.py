@@ -8,6 +8,7 @@ from qcio import (
     CalcType,
     DualProgramInput,
     Molecule,
+    OptimizationOutput,
     OptimizationResults,
     ProgramInput,
     QCProgramArgs,
@@ -26,7 +27,9 @@ from .base import ProgramAdapter
 from .utils import capture_logs
 
 
-class GeometricAdapter(ProgramAdapter):
+class GeometricAdapter(
+    ProgramAdapter[DualProgramInput, OptimizationOutput, OptimizationResults]
+):
     program = "geometric"
     supported_calctypes = [CalcType.optimization, CalcType.transition_state]
 

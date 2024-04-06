@@ -1,9 +1,18 @@
 import traceback
 from abc import ABC, abstractmethod
 from time import time
-from typing import Callable, Dict, List, Optional, Tuple, Union
+from typing import Callable, Dict, Generic, List, Optional, Tuple, TypeVar, Union
 
-from qcio import CalcType, FileInput, InputBase, OutputBase, ProgramFailure, ResultsBase
+from qcio import (
+    CalcType,
+    FileInput,
+    InputBase,
+    OptimizationOutput,
+    OutputBase,
+    ProgramFailure,
+    ResultsBase,
+    SinglePointOutput,
+)
 from qcio.helper_types import StrOrPath
 from qcio.models.base_models import QCIOModelBase
 from qcio.models.inputs_base import StructuredInputBase
@@ -21,8 +30,12 @@ __all__ = ["BaseAdapter", "registry"]
 # Or use the higher level qcop.utils.get_adapter() function.
 registry = {}
 
+InputType = TypeVar("InputType", bound=InputBase)
+OutputType = TypeVar("OutputType", bound=OutputBase)
+ResultsType = TypeVar("ResultsType", bound=ResultsBase)
 
-class BaseAdapter(ABC):
+
+class BaseAdapter(ABC, Generic[InputType, OutputType, ResultsType]):
     """Base class for all adapters."""
 
     # Whether to write files from inp_obj to disk before executing program.
@@ -39,7 +52,7 @@ class BaseAdapter(ABC):
         return None
 
     @abstractmethod
-    def validate_input(self, inp_obj: InputBase) -> None:
+    def validate_input(self, inp_obj: InputType) -> None:
         """Validate input object to ensure compatibility with adapter.
         Adapters should override this method.
         """
@@ -48,16 +61,17 @@ class BaseAdapter(ABC):
     @abstractmethod
     def compute_results(
         self,
-        inp_obj: InputBase,
+        inp_obj: InputType,
         update_func: Optional[Callable] = None,
         update_interval: Optional[float] = None,
         **kwargs,
-    ) -> Tuple[ResultsBase, str]:
+    ) -> Tuple[Optional[ResultsType], str]:
         """Subclasses should implement this method with custom compute logic."""
+        raise NotImplementedError
 
     def compute(
         self,
-        inp_obj: InputBase,
+        inp_obj: InputType,
         *,
         scratch_dir: Optional[StrOrPath] = None,
         rm_scratch_dir: bool = True,
@@ -70,7 +84,7 @@ class BaseAdapter(ABC):
         raise_exc: bool = True,
         propagate_wfn: bool = False,
         **kwargs,
-    ) -> OutputBase:
+    ) -> OutputType:
         """Compute the given input using the adapter's program.
 
         Args:
@@ -209,14 +223,14 @@ class BaseAdapter(ABC):
 
         return output_obj
 
-    def collect_wfn(self, output_obj: OutputBase) -> None:
+    def collect_wfn(self, output: SinglePointOutput) -> None:
         """Collect the wavefunction file(s) from the scratch_dir.
 
         Args:
-            output_obj: The output object to add the wavefunction file(s) to.
+            output: The output object to add the wavefunction file(s) to.
 
         Returns:
-            None. The output_obj is modified in place.
+            None. The output is modified in place.
 
         """
         # Collect wavefunction file from the calc_dir
@@ -226,7 +240,15 @@ class BaseAdapter(ABC):
         )
 
 
-class ProgramAdapter(BaseAdapter):
+StructuredInputType = TypeVar("StructuredInputType", bound=StructuredInputBase)
+
+
+class ProgramAdapter(
+    BaseAdapter[
+        StructuredInputType, Union[SinglePointOutput, OptimizationOutput], ResultsType
+    ],
+    Generic[StructuredInputType, OutputType, ResultsType],
+):
     """Base adapter for all program adapters (all but FileAdaptor)."""
 
     supported_calctypes: List[

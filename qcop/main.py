@@ -86,9 +86,9 @@ def compute_args(
         files = files.files
 
     inp_obj = ProgramInput(
-        calctype=calctype,
+        calctype=calctype,  # type: ignore
         molecule=molecule,
-        model=model,
+        model=model,  # type: ignore
         keywords=keywords or {},
         files=files or {},
         extras=extras or {},

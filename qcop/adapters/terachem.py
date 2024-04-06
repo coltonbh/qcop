@@ -12,7 +12,9 @@ from .base import ProgramAdapter
 from .utils import execute_subprocess
 
 
-class TeraChemAdapter(ProgramAdapter):
+class TeraChemAdapter(
+    ProgramAdapter[ProgramInput, SinglePointOutput, SinglePointResults]
+):
     """Adapter for TeraChem."""
 
     supported_calctypes = [CalcType.energy, CalcType.gradient, CalcType.hessian]
@@ -37,7 +39,7 @@ class TeraChemAdapter(ProgramAdapter):
     # Try using it for a while without and see what roadblocks we run into
     def compute_results(
         self,
-        inp_obj,
+        inp_obj: ProgramInput,
         update_func: Optional[Callable] = None,
         update_interval: Optional[float] = None,
         **kwargs,
@@ -110,7 +112,7 @@ class TeraChemAdapter(ProgramAdapter):
         ca0_bytes = output.files.get(f"scr.{scr_postfix}/{ca0}")
         cb0_bytes = output.files.get(f"scr.{scr_postfix}/{cb0}")
 
-        if not c0_bytes and not (ca0_bytes and cb0_bytes):
+        if c0_bytes is None and (ca0_bytes is None or cb0_bytes is None):
             raise AdapterInputError(
                 program=self.program,
                 message="Could not find c0 or ca/b0 files in output.",
@@ -119,10 +121,12 @@ class TeraChemAdapter(ProgramAdapter):
         # Load wavefunction data onto ProgramInput object
 
         if c0_bytes:
+            assert c0_bytes is not None  # for mypy
             prog_inp.files[c0] = c0_bytes
             prog_inp.keywords["guess"] = c0
 
         else:  # ca0_bytes and cb0_bytes
+            assert ca0_bytes is not None and cb0_bytes is not None  # for mypy
             prog_inp.files[ca0] = ca0_bytes
             prog_inp.files[cb0] = cb0_bytes
             prog_inp.keywords["guess"] = f"{ca0} {cb0}"

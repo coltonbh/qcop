@@ -7,7 +7,7 @@ from qcop import compute, exceptions
 # molecule = Molecule.open("path/to/h2o.xyz")
 molecule = Molecule(
     symbols=["O", "H", "H"],
-    connectivity=[[0, 1, 1], [0, 2, 1]],  # Required for MM models
+    connectivity=[(0, 1, 1.0), (0, 2, 1.0)],  # Required for MM models
     geometry=[
         [0.0, 0.0, 0.0],
         [0.52421003, 1.68733646, 0.48074633],
@@ -19,7 +19,7 @@ molecule = Molecule(
 prog_input = ProgramInput(
     molecule=molecule,
     calctype=CalcType.energy,
-    model={"method": "UFF"},
+    model={"method": "UFF"},  # type: ignore
 )
 
 # Run the calculation

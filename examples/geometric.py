@@ -19,7 +19,7 @@ prog_inp = DualProgramInput(
     molecule=h2,
     subprogram="terachem",
     subprogram_args={
-        "model": {"method": "HF", "basis": "6-31g"},
+        "model": {"method": "HF", "basis": "6-31g"},  # type: ignore
         "keywords": {"purify": "no"},
     },
     keywords={

@@ -18,7 +18,7 @@ molecule = Molecule(
 prog_input = ProgramInput(
     molecule=molecule,
     calctype=CalcType.hessian,
-    model={"method": "b3lyp", "basis": "6-31g"},
+    model={"method": "b3lyp", "basis": "6-31g"},  # type: ignore
     keywords={"purify": "no"},
 )
 
