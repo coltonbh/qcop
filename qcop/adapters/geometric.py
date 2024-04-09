@@ -294,12 +294,14 @@ class GeometricAdapter(
                 # Calculate energy and gradient
                 # raise_exc=True so ProgramFailure objects don't get returned
                 try:
-                    output = self.qcio_adapter.compute(
-                        prog_input,
-                        raise_exc=True,
-                        collect_wfn=self.propagate_wfn,
-                        update_func=self.update_func,
-                        update_interval=self.update_interval,
+                    output: SinglePointOutput = (
+                        self.qcio_adapter.compute(  # type: ignore
+                            prog_input,
+                            raise_exc=True,
+                            collect_wfn=self.propagate_wfn,
+                            update_func=self.update_func,
+                            update_interval=self.update_interval,
+                        )
                     )
                 except ExternalSubprocessError as e:
                     e.results = OptimizationResults(trajectory=self.qcio_trajectory)
@@ -309,9 +311,9 @@ class GeometricAdapter(
                     self.qcio_trajectory.append(output)
 
                 return {
-                    "energy": output.results.energy,
+                    "energy": output.results.energy,  # type: ignore
                     # geomeTRIC requires 1D array
-                    "gradient": output.results.gradient.flatten(),
+                    "gradient": output.results.gradient.flatten(),  # type: ignore
                 }
 
         return QCOPGeometricEngine

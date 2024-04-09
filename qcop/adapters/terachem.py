@@ -4,6 +4,7 @@ from typing import Callable, Optional, Tuple
 from qcio import CalcType, ProgramInput, SinglePointOutput, SinglePointResults
 from qcparse import encode, parse_results
 from qcparse.encoders.terachem import XYZ_FILENAME
+from qcparse.exceptions import MatchNotFoundError
 from qcparse.parsers.terachem import parse_version_string
 
 from qcop.exceptions import AdapterInputError
@@ -30,10 +31,13 @@ class TeraChemAdapter(
             The program version.
         """
         if stdout:
-            return parse_version_string(stdout)
-        else:
-            # Cut out "TeraChem version " (17 chars) from the output
-            return execute_subprocess(self.program, ["--version"])[17:]
+            try:
+                return parse_version_string(stdout)
+            except MatchNotFoundError:
+                # If the version string is not found in stdout, try the command line
+                pass
+        # Cut out "TeraChem version " (17 chars) from the output
+        return execute_subprocess(self.program, ["--version"])[17:]
 
     # TODO: Need command line options for TeraChem e.g., -g 1 for GPUs MAYBE?
     # Try using it for a while without and see what roadblocks we run into

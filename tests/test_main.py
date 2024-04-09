@@ -94,6 +94,7 @@ def test_compute_does_not_write_files_if_adaptor_write_files_set(prog_inp):
 
 def test_compute_raises_exception_if_program_fails_raise_exec_true(prog_inp):
     """Test that compute raises an exception if the program fails."""
+    # Because TestAdapter does not support optimization
     opt_input = prog_inp("optimization")
 
     with pytest.raises(AdapterInputError):

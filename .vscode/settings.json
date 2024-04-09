@@ -18,6 +18,7 @@
         "qcio",
         "qcop",
         "qcparse",
+        "rdkit",
         "spinmult",
         "terachem",
         "terachemd",

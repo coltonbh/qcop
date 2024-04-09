@@ -6,11 +6,12 @@ from typing import Callable, Dict, Generic, List, Optional, Tuple, TypeVar, Unio
 from qcio import (
     CalcType,
     FileInput,
-    InputBase,
+    InputType,
     OptimizationOutput,
     OutputBase,
     ProgramFailure,
     ResultsBase,
+    ResultsType,
     SinglePointOutput,
 )
 from qcio.helper_types import StrOrPath
@@ -30,9 +31,7 @@ __all__ = ["BaseAdapter", "registry"]
 # Or use the higher level qcop.utils.get_adapter() function.
 registry = {}
 
-InputType = TypeVar("InputType", bound=InputBase)
 OutputType = TypeVar("OutputType", bound=OutputBase)
-ResultsType = TypeVar("ResultsType", bound=ResultsBase)
 
 
 class BaseAdapter(ABC, Generic[InputType, OutputType, ResultsType]):
@@ -53,9 +52,7 @@ class BaseAdapter(ABC, Generic[InputType, OutputType, ResultsType]):
 
     @abstractmethod
     def validate_input(self, inp_obj: InputType) -> None:
-        """Validate input object to ensure compatibility with adapter.
-        Adapters should override this method.
-        """
+        """Validate input object to ensure compatibility with adapter."""
         raise NotImplementedError
 
     @abstractmethod
@@ -188,8 +185,6 @@ class BaseAdapter(ABC, Generic[InputType, OutputType, ResultsType]):
                 None if output_cls != ProgramFailure and not collect_stdout else stdout
             )
 
-            # Ensure results is not None to maintain interface
-            results = results if results is not None else ResultsBase()
             output_dict.update(
                 {
                     "input_data": inp_obj,
@@ -251,9 +246,8 @@ class ProgramAdapter(
 ):
     """Base adapter for all program adapters (all but FileAdaptor)."""
 
-    supported_calctypes: List[
-        CalcType
-    ]  # All subclasses must specify supported calctypes
+    # All subclasses must specify supported calctypes
+    supported_calctypes: List[CalcType]
 
     def __init_subclass__(cls, **kwargs):
         super().__init_subclass__(**kwargs)
