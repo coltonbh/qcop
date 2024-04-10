@@ -62,6 +62,7 @@ def check_qcng_support(program: str) -> None:
         ) from e
 
     try:
+        # NOTE: This call adds >1s of overhead to execution time!!!
         get_program(program)
     except InputError as e:  # Raised by QCEngine if program not registered
         raise AdapterNotFoundError(program) from e
