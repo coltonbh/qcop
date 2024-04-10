@@ -6,6 +6,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## [unreleased]
 
+## [0.5.2] - 2024-04-10
+
 ### Added
 
 - Added `xtb` adapter. `qcengine.get_program` adds almost >1 second of overhead to each call, which makes `xtb` unusable via `qcengine` since a single `xtb` execution make take only ~0.003 seconds.
@@ -144,7 +146,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 - Created adapter for TeraChem.
 - Exposed general purpose computing for any subprocess with `FileAdaptor`
 
-[unreleased]: https://github.com/coltonbh/qcop/compare/0.5.1...HEAD
+[unreleased]: https://github.com/coltonbh/qcop/compare/0.5.2...HEAD
+[0.5.2]: https://github.com/coltonbh/qcop/releases/tag/0.5.2
 [0.5.1]: https://github.com/coltonbh/qcop/releases/tag/0.5.1
 [0.5.0]: https://github.com/coltonbh/qcop/releases/tag/0.5.0
 [0.4.8]: https://github.com/coltonbh/qcop/releases/tag/0.4.8
