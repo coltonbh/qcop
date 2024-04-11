@@ -30,6 +30,7 @@ ruff = "^0.0.272"
 isort = "^5.12.0"
 pytest-mock = "^3.11.1"
 geometric = "^1.0.1"
+xtb = "^22.1"
 
 [build-system]
 requires = ["poetry-core"]

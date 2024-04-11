@@ -6,6 +6,16 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## [unreleased]
 
+### Added
+
+- `capture_sys_stdout` context manager to capture `stdout` from non-python libraries (e.g., C/C++). This is necessary for processes that do not write to Python's `sys.stdout` object, such as `xtb`.
+- `xtb` to developer dependencies and a `xtb` tests to the test suite.
+
+### Changed
+
+- `xtb` does not close file handles correctly so we'd get `OSError: [Errno 24] Too many open files` after running a few hundred jobs. `XTBAdapter` now uses the new `capture_sys_stdout` context manager to capture `stdout`.
+- `xtb.program_version` now returns `importlib.metadata('xtb')` because `xtb` incorrectly hardcodes the version in the `__init__.py` file. Issue [here](https://github.com/grimme-lab/xtb-python/issues/108).
+
 ## [0.5.2] - 2024-04-10
 
 ### Added

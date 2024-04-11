@@ -8,6 +8,7 @@ import os
 import platform
 import shutil
 import subprocess
+import sys
 import tempfile
 from contextlib import contextmanager
 from io import StringIO
@@ -177,6 +178,35 @@ def capture_logs(
     finally:
         # Remove the handler when done
         logger.removeHandler(handler)
+
+
+@contextmanager
+def capture_sys_stdout():
+    """Capture stdout from a program that bypasses the sys.stdout object.
+
+    Useful for capturing logs written by C/C++ libraries such as xtb.
+    """
+    # Create a pipe to capture output
+    r, w = os.pipe()
+
+    # Save the original stdout and stderr file descriptors
+    stdout_fd = sys.stdout.fileno()
+    old_stdout = os.dup(stdout_fd)
+
+    # Redirect stdout and stderr to the write end of the pipe
+    os.dup2(w, stdout_fd)
+    try:
+        yield r  # Allow code to be executed within the context manager block
+    finally:
+        # Restore stdout and stderr
+        os.dup2(old_stdout, stdout_fd)
+
+        # Close the duplicated fds
+        os.close(old_stdout)
+        os.close(w)
+
+        # Close the read ends of the pipe
+        os.close(r)
 
 
 def construct_provenance(
