@@ -5,7 +5,7 @@ https://github.com/grimme-lab/xtb-python/blob/main/xtb/qcschema/harness.py
 """
 
 import importlib
-from pathlib import Path
+import os
 from typing import Callable, Optional, Tuple
 
 import numpy as np
@@ -19,6 +19,7 @@ from qcop.exceptions import (
 )
 
 from .base import ProgramAdapter
+from .utils import capture_sys_stdout
 
 
 class XTBAdapter(ProgramAdapter):
@@ -53,7 +54,7 @@ class XTBAdapter(ProgramAdapter):
         Returns:
             The program version.
         """
-        return self.xtb.__version__
+        return importlib.metadata.version(self.program)
 
     @staticmethod
     def _ensure_xtb():
@@ -94,32 +95,36 @@ class XTBAdapter(ProgramAdapter):
                 getattr(self.xtb.interface.Param, inp_obj.model.method),
                 atomic_numbers,
                 inp_obj.molecule.geometry,
+                inp_obj.molecule.charge,
+                # From https://github.com/grimme-lab/xtb-python/blob/a32309a43e5a6572b033814eacf396328a2a36ed/xtb/qcschema/harness.py#L126 # noqa: E501
+                inp_obj.molecule.multiplicity - 1,
             )
+            calc.set_verbosity(self.xtb.libxtb.VERBOSITY_FULL)  # all logs
+
             # Set Keywords
             for key, value in inp_obj.keywords.items():
                 # TODO: Need to handle external_charges and solvent
                 getattr(calc, f"set_{key}")(value)
 
-            # Always set verbosity high
-            calc.set_verbosity(self.xtb.libxtb.VERBOSITY_FULL)
-            logs = "logs.out"
-            calc.set_output(logs)
+            # Capture logs
+            with capture_sys_stdout() as r_pipe:
+                res = calc.singlepoint()
+                # Not sure what this does but it's in the xtb-python docs
+                calc.release_output()
+                stdout = os.read(r_pipe, 100000).decode()
 
-            # Perform Calculation
-            res = calc.singlepoint()
-            # Collect logs
-            stdout = Path(logs).read_text()
         except self.xtb.interface.XTBException as e:
             raise ExternalProgramError("Something went wrong with xtb-python.") from e
-        else:
-            # Collect results
-            # TODO: Collect other results like
-            results = SinglePointResults(
-                energy=res.get_energy(),
-                gradient=res.get_gradient(),
-                scf_dipole_moment=res.get_dipole(),
-                wavefunction=Wavefunction(
-                    scf_eigenvalues_a=res.get_orbital_eigenvalues(),
-                ),
-            )
+
+        # Collect results
+        # TODO: Collect other results xtb produces
+        results = SinglePointResults(
+            energy=res.get_energy(),
+            gradient=res.get_gradient(),
+            scf_dipole_moment=res.get_dipole(),
+            wavefunction=Wavefunction(
+                scf_eigenvalues_a=res.get_orbital_eigenvalues(),
+            ),
+        )
+
         return results, stdout
