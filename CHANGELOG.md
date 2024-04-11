@@ -6,6 +6,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## [unreleased]
 
+## [0.5.3] - 2024-04-11
+
 ### Added
 
 - `capture_sys_stdout` context manager to capture `stdout` from non-python libraries (e.g., C/C++). This is necessary for processes that do not write to Python's `sys.stdout` object, such as `xtb`.
@@ -156,7 +158,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 - Created adapter for TeraChem.
 - Exposed general purpose computing for any subprocess with `FileAdaptor`
 
-[unreleased]: https://github.com/coltonbh/qcop/compare/0.5.2...HEAD
+[unreleased]: https://github.com/coltonbh/qcop/compare/0.5.3...HEAD
+[0.5.3]: https://github.com/coltonbh/qcop/releases/tag/0.5.3
 [0.5.2]: https://github.com/coltonbh/qcop/releases/tag/0.5.2
 [0.5.1]: https://github.com/coltonbh/qcop/releases/tag/0.5.1
 [0.5.0]: https://github.com/coltonbh/qcop/releases/tag/0.5.0
