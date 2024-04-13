@@ -24,8 +24,8 @@ prog_input = ProgramInput(
 
 # Run the calculation
 try:
-    output = compute("terachem", prog_input, collect_files=True)
-except exceptions.ExternalProgramError as e:
+    output = compute("rdkit", prog_input, collect_files=True)
+except exceptions.QCOPBaseError as e:
     output = e.program_failure
     print(output.stdout)  # or output.pstdout for short
     # Input data used to generate the calculation

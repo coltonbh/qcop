@@ -54,6 +54,7 @@ class BaseAdapter(ABC):
         **kwargs,
     ) -> Tuple[ResultsBase, str]:
         """Subclasses should implement this method with custom compute logic."""
+        raise NotImplementedError
 
     def compute(
         self,
@@ -94,8 +95,7 @@ class BaseAdapter(ABC):
             print_stdout: Whether to print stdout/stderr to the terminal in real time as
                 the program executes. Will be ignored if an update_func passed.
             raise_exc: If False, qcop will return a ProgramFailure object when the QC
-                program fails rather than raise an exception. qcop exceptions not
-                related to the external program failure will always be raised.
+                program fails rather than raise an exception.
             propagate_wfn: For any adapter performing a sequential task, such
                 as a geometry optimization, propagate the wavefunction from the previous
                 step to the next step. This is useful for accelerating convergence by
@@ -123,27 +123,32 @@ class BaseAdapter(ABC):
             QCEngineError: If QCEngine performed the computation, fails and
                 raise_exc=True.
         """
-        self.validate_input(inp_obj)
-        # Set update_func if print_stdout is True and update_func is None
+        # Print stdout to terminal in real time as program executes
         if print_stdout and update_func is None:
             update_func, update_interval = (
                 lambda _, stdout_new: print(stdout_new),
                 0.1,
             )
 
-        # Change cwd to a temporary directory to run the program.
+        # cd to a temporary directory to run the program.
         with tmpdir(scratch_dir, rm_scratch_dir) as final_scratch_dir:
             if self.write_files:  # Write non structured input files to disk.
                 inp_obj.save_files()
 
+            # Define outputs
             output_dict: Dict[str, Optional[Union[str, QCIOModelBase]]] = {}
-            stdout: Optional[str]
+            stdout: Optional[str] = None
+            # TODO: Update when qcio updates to allow None results
+            results: Optional[ResultsBase] = None
+            exc: Optional[QCOPBaseError] = None
+            program_version: Optional[str] = None
 
             start = time()
-            qcop_exception = None
-            results: Optional[ResultsBase]
             try:
-                # Execute the program; return results and stdout
+                # Validate input object
+                self.validate_input(inp_obj)
+
+                # Execute the program. results will be None if FileInput
                 results, stdout = self.compute_results(
                     inp_obj,
                     update_func,
@@ -152,29 +157,37 @@ class BaseAdapter(ABC):
                     **kwargs,
                 )
                 # None value covers FileInput case
+                # TODO: Update this to ProgramOutput[type(inp_obj), type(results)]
                 output_cls = calctype_to_output(getattr(inp_obj, "calctype", None))
+                program_version = self.program_version(stdout)
+
+                # Optionally collect wavefunction file
+                if collect_wfn and not collect_files:
+                    output_dict["files"] = self.collect_wfn()
+
             except QCOPBaseError as e:
-                qcop_exception = e
                 # Set variables to construct a ProgramFailure object.
-                output_cls = ProgramFailure
-                results = getattr(e, "results", None)  # Any half-completed results
-                stdout = getattr(e, "stdout", None)
+                exc, output_cls = e, ProgramFailure
+                results = getattr(e, "results", results)  # Any half-completed results
+                stdout = getattr(e, "stdout", stdout)
                 # For mypy because e.stdout is not of a known type
                 stdout = str(stdout) if stdout is not None else None
                 output_dict["traceback"] = traceback.format_exc()
 
-            # Construct Provenance object
             wall_time = time() - start
+
+            # Construct Provenance object
             provenance = construct_provenance(
-                self.program, self.program_version(stdout), final_scratch_dir, wall_time
+                self.program,
+                program_version,
+                final_scratch_dir,
+                wall_time,
             )
+
+            # Always collect for failures; otherwise obey collect_stdout
+            stdout = stdout if collect_stdout or output_cls == ProgramFailure else None
 
             # Construct output object
-            stdout = (  # Always collect for failures; otherwise obey collect_stdout
-                None if output_cls != ProgramFailure and not collect_stdout else stdout
-            )
-
-            # Ensure results is not None to maintain interface
             results = results if results is not None else ResultsBase()
             output_dict.update(
                 {
@@ -184,39 +197,29 @@ class BaseAdapter(ABC):
                     "provenance": provenance,
                 }
             )
-
             output_obj = output_cls(**output_dict)
 
-            # Optionally collect output files
+            # Collect files generated by the program
             if collect_files or isinstance(inp_obj, FileInput):
-                # Collect output files from the calc_dir
                 output_obj.open_files(
                     final_scratch_dir, recursive=True, exclude=inp_obj.files.keys()
                 )
 
-            # Optionally collect wavefunction file
-            if collect_wfn and not collect_files:
-                # Collect wavefunction file from the calc_dir
-                self.collect_wfn(output_obj)
-
         # Append ProgramFailures to exception and raise if raise_exc=True
-        # Helpful for BigChem exception handling
-        if raise_exc and qcop_exception:
-            qcop_exception.program_failure = output_obj
+        # Helpful for BigChem and ChemCloud exception handling
+        if raise_exc and exc:
+            exc.program_failure = output_obj
             # Updating .args is necessary for Celery to properly serialize the exception
-            qcop_exception.args = (*qcop_exception.args, output_obj)
-            raise qcop_exception
+            exc.args = (*exc.args, output_obj)
+            raise exc
 
         return output_obj
 
-    def collect_wfn(self, output_obj: OutputBase) -> None:
+    def collect_wfn(self) -> Dict[str, Union[str, bytes]]:
         """Collect the wavefunction file(s) from the scratch_dir.
 
-        Args:
-            output_obj: The output object to add the wavefunction file(s) to.
-
         Returns:
-            None. The output_obj is modified in place.
+            Dictionary of filenames and file data. E.g. {"c0": b"filedata"}
 
         """
         # Collect wavefunction file from the calc_dir

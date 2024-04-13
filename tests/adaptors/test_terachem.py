@@ -5,7 +5,7 @@ from qcparse.encoders.terachem import XYZ_FILENAME
 
 from qcop.adapters import TeraChemAdapter
 from qcop.adapters.utils import tmpdir
-from qcop.exceptions import AdapterInputError
+from qcop.exceptions import AdapterError, AdapterInputError
 
 
 def test_get_version_no_stdout(monkeypatch):
@@ -80,10 +80,10 @@ def test_propagate_wfn(prog_inp, sp_output):
 
 
 def test_collect_wfn(sp_output):
-    # Raises AdapterInputError if not wavefunction data in output
+    # Raises AdapterError if not wavefunction data in output
     adapter = TeraChemAdapter()
-    with pytest.raises(AdapterInputError):
-        adapter.collect_wfn(sp_output)
+    with pytest.raises(AdapterError):
+        adapter.collect_wfn()
 
     # Check collection of c0
     scr_dir_str = f"scr.{XYZ_FILENAME.split('.')[0]}"
@@ -91,15 +91,14 @@ def test_collect_wfn(sp_output):
         scr_dir = Path(scr_dir_str)
         scr_dir.mkdir()
         (scr_dir / "c0").write_bytes(b"some data")
-        adapter.collect_wfn(sp_output)
-        assert sp_output.files[f"{scr_dir_str}/c0"] == b"some data"
-        sp_output.files.pop(f"{scr_dir_str}/c0")
+        wfns = adapter.collect_wfn()
+        assert wfns[f"{scr_dir_str}/c0"] == b"some data"
 
     with tmpdir():
         scr_dir = Path(scr_dir_str)
         scr_dir.mkdir()
         (scr_dir / "ca0").write_bytes(b"some alpha data")
         (scr_dir / "cb0").write_bytes(b"some beta data")
-        adapter.collect_wfn(sp_output)
-        assert sp_output.files[f"{scr_dir_str}/ca0"] == b"some alpha data"
-        assert sp_output.files[f"{scr_dir_str}/cb0"] == b"some beta data"
+        wfns = adapter.collect_wfn()
+        assert wfns[f"{scr_dir_str}/ca0"] == b"some alpha data"
+        assert wfns[f"{scr_dir_str}/cb0"] == b"some beta data"

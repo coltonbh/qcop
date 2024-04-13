@@ -27,6 +27,7 @@ class XTBAdapter(ProgramAdapter):
 
     supported_calctypes = [CalcType.energy, CalcType.gradient]
     program = "xtb"
+    write_files = False  # xtb-python does not use files written to disk
 
     def __init__(self):
         super().__init__()

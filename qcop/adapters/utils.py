@@ -247,11 +247,13 @@ def tmpdir(directory: Optional[StrOrPath] = None, rmdir: bool = True):
             created in the system default temporary directory.
         rmdir: Whether to remove the temporary directory when the context manager exits.
     """
+    cwd = Path.cwd()  # Save current working directory
     temp_dir = Path(directory or tempfile.mkdtemp())  # Set path to directory
     temp_dir.mkdir(parents=True, exist_ok=True)  # Create directory
-    cwd = Path.cwd()  # Save current working directory
-    os.chdir(temp_dir)  # Change to temporary directory
-    yield temp_dir  # Execute code in context manager
-    if rmdir:  # After exiting context manager
-        shutil.rmtree(temp_dir)
-    os.chdir(cwd)
+    try:
+        os.chdir(temp_dir)  # Change to temporary directory
+        yield temp_dir  # Execute code in context manager
+    finally:
+        if rmdir:  # After exiting context manager
+            shutil.rmtree(temp_dir)
+        os.chdir(cwd)
