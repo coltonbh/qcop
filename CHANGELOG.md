@@ -6,6 +6,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## [unreleased]
 
+### Added
+
+- `AttributeError` check to `capture_sys_stdout` so that when running inside celery and `sys.stdout` is `LoggingProxy` object, we can still capture the stdout correctly.
+
 ## [0.5.4] - 2024-04-12
 
 ### Added
