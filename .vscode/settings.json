@@ -23,6 +23,7 @@
         "spinmult",
         "terachem",
         "terachemd",
+        "tmpdir",
         "wfns",
         "xyzout"
     ]

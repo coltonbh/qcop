@@ -6,6 +6,16 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## [unreleased]
 
+### Added
+
+- `try/finally` blocks to `tmpdir` context managers to ensure that temporary directories are always cleaned up and the original `cwd` is restored, even if an exception is raised.
+- Properly capture `qcparse` encoder/parser exceptions in `TeraChemAdapter` and raise `qcop.AdapterInputError`.
+
+### Changed
+
+- Moved `self.validate_input(inp_obj)`, `self.program_version(stdout)`, and `self.collect_wfn(...)` inside of `try/except`block in`BaseAdapter.compute()`. This is more correct by catching all possible qcop exceptions and returning a `ProgramFailure` object on the raised exception. This helps eliminate 500 errors in ChemCloud when a user passes an invalid input object to a program adapter or requests a wavefunction from a program that doesn't support it.
+- Redefined signature to `collect_wfn` to `collect_wfn() -> Dict[str: Union[str, bytes]]` so that it can run before constructing the `ProgramFailure` object in `BaseAdapter.compute()`.
+
 ## [0.5.3] - 2024-04-11
 
 ### Added

@@ -37,7 +37,7 @@ prog_inp = DualProgramInput(
 # Run calculation
 try:
     output = compute("geometric", prog_inp, propagate_wfn=True, rm_scratch_dir=False)
-except exceptions.ExternalProgramError as e:
+except exceptions.QCOPBaseError as e:
     # Calculation failed
     output = e.program_failure
     print(output.stdout)  # or output.pstdout for short

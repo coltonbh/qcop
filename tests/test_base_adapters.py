@@ -169,9 +169,11 @@ def test_stdout_collected_with_failed_execution(
     assert excinfo.value.stdout == "some stdout"
     # Added to ProgramFailure
     assert excinfo.value.program_failure.stdout == "some stdout"
+    # Added to exception
+    assert excinfo.value.results == sp_output.results
 
 
 def test_collect_wfn_raises_adapter_input_error_if_not_implemented(test_adapter):
     """Test that collect_wfn raises an AdapterInputError if not implemented."""
     with pytest.raises(AdapterInputError):
-        test_adapter.collect_wfn(None)
+        test_adapter.collect_wfn()

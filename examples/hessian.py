@@ -25,7 +25,7 @@ prog_input = ProgramInput(
 # Run the calculation
 try:
     output = compute("terachem", prog_input)
-except exceptions.ExternalProgramError as e:
+except exceptions.QCOPBaseError as e:
     output = e.program_failure
     print(output.traceback)  # See why the program failed; output.ptraceback for short
     raise
