@@ -190,7 +190,10 @@ def capture_sys_stdout():
     r, w = os.pipe()
 
     # Save the original stdout and stderr file descriptors
-    stdout_fd = sys.stdout.fileno()
+    try:
+        stdout_fd = sys.stdout.fileno()
+    except AttributeError:  # Handles case where celery LoggingProxy is sys.stdout
+        stdout_fd = sys.__stdout__.fileno()
     old_stdout = os.dup(stdout_fd)
 
     # Redirect stdout and stderr to the write end of the pipe
