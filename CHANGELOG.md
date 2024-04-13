@@ -6,6 +6,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## [unreleased]
 
+## [0.5.5] - 2024-04-12
+
 ### Added
 
 - `AttributeError` check to `capture_sys_stdout` so that when running inside celery and `sys.stdout` is `LoggingProxy` object, we can still capture the stdout correctly.
@@ -174,7 +176,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 - Created adapter for TeraChem.
 - Exposed general purpose computing for any subprocess with `FileAdaptor`
 
-[unreleased]: https://github.com/coltonbh/qcop/compare/0.5.4...HEAD
+[unreleased]: https://github.com/coltonbh/qcop/compare/0.5.5...HEAD
+[0.5.5]: https://github.com/coltonbh/qcop/releases/tag/0.5.5
 [0.5.4]: https://github.com/coltonbh/qcop/releases/tag/0.5.4
 [0.5.3]: https://github.com/coltonbh/qcop/releases/tag/0.5.3
 [0.5.2]: https://github.com/coltonbh/qcop/releases/tag/0.5.2
