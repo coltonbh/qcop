@@ -1,8 +1,9 @@
 """Experimental exception hierarchy. This may be too complex and unhelpful for now"""
 
+import warnings
 from typing import Optional
 
-from qcio import ProgramFailure, ResultsBase
+from qcio import ProgramOutput, Results
 
 
 class QCOPBaseError(Exception):
@@ -10,10 +11,26 @@ class QCOPBaseError(Exception):
     this class."""
 
     def __init__(
-        self, *args, program_failure: Optional[ProgramFailure] = None, **kwargs
+        self,
+        *args,
+        program_output: Optional[ProgramOutput] = None,
+        results: Optional[Results] = None,
+        **kwargs,
     ):
         super().__init__(*args, **kwargs)
-        self.program_failure = program_failure
+        self.program_output = program_output
+        self.results = results
+
+    @property
+    def program_failure(self):
+        """Maintain backwards compatibility."""
+        warnings.warn(
+            "The 'program_failure' attribute is deprecated and will be removed in a "
+            "future release. Use 'program_output' instead.",
+            FutureWarning,
+            stacklevel=2,
+        )
+        return self.program_output
 
 
 class AdapterError(QCOPBaseError):
@@ -113,14 +130,14 @@ class ExternalSubprocessError(ExternalProgramError):
         returncode: int,
         cmd: str,
         stdout: Optional[str] = None,
-        results: Optional[ResultsBase] = None,
+        **kwargs,
     ):
         self.returncode = returncode
         self.cmd = cmd
         self.stdout = stdout
-        self.results = results
+        self.results = kwargs.get("results", None)
         self.message = (
             f"External program failed with return code {self.returncode}. "
             f"Command: '{self.cmd}'"
         )
-        super().__init__(self.message)
+        super().__init__(self.message, **kwargs)

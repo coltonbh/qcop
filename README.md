@@ -46,33 +46,33 @@ prog_input = ProgramInput(
     keywords={"purify": "no", "restricted": False},
 )
 
-# Run the calculation; will return SinglePointOutput or raise an exception
+# Run the calculation; will return ProgramOutput or raise an exception
 try:
-    output = compute("terachem", prog_input, collect_files=True)
+    po = compute("terachem", prog_input, collect_files=True)
 except ExternalProgramError as e:
     # External QQ program failed in some way
-    prog_failure = e.program_failure
-    prog_failure.input_data # Input data used by the QC program
-    prog_failure.success # Will be False
-    prog_failure.results # Any half-computed results before the failure
-    prog_failure.traceback # Stack trace from the calculation
-    prog_failure.ptraceback # Shortcut to print out the traceback in human readable format
-    prog_failure.stdout # Stdout log from the calculation
+    po = e.program_output
+    po.input_data # Input data used by the QC program
+    po.success # Will be False
+    po.results # Any half-computed results before the failure
+    po.traceback # Stack trace from the calculation
+    po.ptraceback # Shortcut to print out the traceback in human readable format
+    po.stdout # Stdout log from the calculation
     raise e
 else:
     # Calculation succeeded
-    output.input_data # Input data used by the QC program
-    output.success # Will be True
-    output.results # All structured results from the calculation
-    output.stdout # Stdout log from the calculation
-    output.pstdout # Shortcut to print out the stdout in human readable format
-    output.files # Any files returned by the calculation
-    output.provenance # Provenance information about the calculation
-    output.extras # Any extra information not in the schema
+    po.input_data # Input data used by the QC program
+    po.success # Will be True
+    po.results # All structured results from the calculation
+    po.stdout # Stdout log from the calculation
+    po.pstdout # Shortcut to print out the stdout in human readable format
+    po.files # Any files returned by the calculation
+    po.provenance # Provenance information about the calculation
+    po.extras # Any extra information not in the schema
 
 ```
 
-One may also call `compute(..., raise_exc=False)` to return a `ProgramFailure` object rather than raising an exception when a calculation fails. This may allow easier handling of failures in some cases.
+One may also call `compute(..., raise_exc=False)` to return a `ProgramOutput` object rather than raising an exception when a calculation fails. This may allow easier handling of failures in some cases.
 
 ```python
 from qcio import Molecule, ProgramInput
@@ -89,27 +89,27 @@ prog_input = ProgramInput(
     keywords={"purify": "no", "restricted": False},
 )
 
-# Run the calculation; will return either a SinglePointOutput or a ProgramFailure
-output = compute("terachem", prog_input, collect_files=True, raise_exc=False)
-if not output.success:
+# Run the calculation; will return a ProgramOutput objects
+po = compute("terachem", prog_input, collect_files=True, raise_exc=False)
+if not po.success:
     # External QQ program failed in some way
-    output.input_data # Input data used by the QC program
-    output.success # Will be False
-    output.results # Any half-computed results before the failure
-    output.traceback # Stack trace from the calculation
-    output.ptraceback # Shortcut to print out the traceback in human readable format
-    output.stdout # Stdout log from the calculation
+    po.input_data # Input data used by the QC program
+    po.success # Will be False
+    po.results # Any half-computed results before the failure
+    po.traceback # Stack trace from the calculation
+    po.ptraceback # Shortcut to print out the traceback in human readable format
+    po.stdout # Stdout log from the calculation
 
 else:
     # Calculation succeeded
-    output.input_data # Input data used by the QC program
-    output.success # Will be True
-    output.results # All structured results from the calculation
-    output.stdout # Stdout log from the calculation
-    output.pstdout # Shortcut to print out the stdout in human readable format
-    output.files # Any files returned by the calculation
-    output.provenance # Provenance information about the calculation
-    output.extras # Any extra information not in the schema
+    po.input_data # Input data used by the QC program
+    po.success # Will be True
+    po.results # All structured results from the calculation
+    po.stdout # Stdout log from the calculation
+    po.pstdout # Shortcut to print out the stdout in human readable format
+    po.files # Any files returned by the calculation
+    po.provenance # Provenance information about the calculation
+    po.extras # Any extra information not in the schema
 
 ```
 

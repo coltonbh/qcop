@@ -1,20 +1,20 @@
 from typing import Callable, Optional, Tuple
 
-from qcio import FileInput, FileOutput, InputBase
+from qcio import FileInput, NoResults
 
 from qcop.adapters.base import BaseAdapter
 
 from .utils import execute_subprocess
 
 
-class FileAdapter(BaseAdapter):
+class FileAdapter(BaseAdapter[FileInput, NoResults]):
     """adapter for running a program on files."""
 
     def __init__(self, program: str) -> None:
         super().__init__()
         self.program = program
 
-    def validate_input(self, inp_obj: InputBase) -> None:
+    def validate_input(self, inp_obj: FileInput) -> None:
         """No validation checks performed for FileAdapter"""
         pass
 
@@ -24,7 +24,7 @@ class FileAdapter(BaseAdapter):
         update_func: Optional[Callable] = None,
         update_interval: Optional[float] = None,
         **kwargs,
-    ) -> Tuple[FileOutput, str]:
+    ) -> Tuple[NoResults, str]:
         """Compute the given program on the given files.
 
         Args:
@@ -34,7 +34,7 @@ class FileAdapter(BaseAdapter):
             update_func.
 
         Returns:
-            Tuple of None and FileOutput object for a computation. None is
+            Tuple of None and ProgramOutput object for a computation. None is
                 returned because no computed properties are returned for a file
                 computation.
 
@@ -45,4 +45,4 @@ class FileAdapter(BaseAdapter):
         stdout = execute_subprocess(
             self.program, inp_obj.cmdline_args, update_func, update_interval
         )
-        return None, stdout
+        return NoResults(), stdout

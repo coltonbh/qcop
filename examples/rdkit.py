@@ -1,4 +1,4 @@
-from qcio import CalcType, Molecule, ProgramInput
+from qcio import Molecule, ProgramInput
 
 from qcop import compute, exceptions
 
@@ -7,8 +7,8 @@ from qcop import compute, exceptions
 # molecule = Molecule.open("path/to/h2o.xyz")
 molecule = Molecule(
     symbols=["O", "H", "H"],
-    connectivity=[[0, 1, 1], [0, 2, 1]],  # Required for MM models
-    geometry=[
+    connectivity=[(0, 1, 1), (0, 2, 1)],  # Required for MM models
+    geometry=[  # type: ignore
         [0.0, 0.0, 0.0],
         [0.52421003, 1.68733646, 0.48074633],
         [1.14668581, -0.45032174, -1.35474466],
@@ -16,33 +16,30 @@ molecule = Molecule(
 )
 
 # Define the program input
-prog_input = ProgramInput(
+pi = ProgramInput(
     molecule=molecule,
-    calctype=CalcType.energy,
-    model={"method": "UFF"},
+    calctype="energy",  # type: ignore
+    model={"method": "UFF"},  # type: ignore
 )
 
 # Run the calculation
 try:
-    output = compute("rdkit", prog_input, collect_files=True)
+    # po is instance of ProgramOutput
+    po = compute("terachem", pi, collect_files=True)
 except exceptions.QCOPBaseError as e:
-    output = e.program_failure
-    print(output.stdout)  # or output.pstdout for short
-    # Input data used to generate the calculation
-    print(output.input_data)
-    # Provenance of generated calculation
-    print(output.provenance)
-    print(output.traceback)
+    po = e.program_output
+    print(po.stdout)  # or output.pstdout for short
+    print(f"Success: {po.success}")  # False
+    print(po.input_data)  # Input data used to generate the calculation
+    print(po.provenance)  # Provenance of generated calculation
+    print(po.traceback)  # or output.ptraceback for short
     raise
 
 else:
     # Check results
-    print("output.results.energy:", output.results.energy)
-    # The CalcType results will always be available at .return_result
-    print("output.return_result:", output.return_result)
-    # Stdout from the program
-    print(output.stdout)  # or output.pstdout for short
-    # Input data used to generate the calculation
-    print(output.input_data)
-    # Provenance of generated calculation
-    print(output.provenance)
+    print(po.stdout)  # or output.pstdout for short
+    print(f"Success: {po.success}")  # True
+    print("output.results: ", po.results)
+    print("output.results.energy:", po.results.energy)
+    print(po.input_data)  # Input data used to generate the calculation
+    print(po.provenance)  # Provenance of generated calculation

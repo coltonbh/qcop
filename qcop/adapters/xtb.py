@@ -10,7 +10,6 @@ from typing import Callable, Optional, Tuple
 
 import numpy as np
 from qcio import CalcType, ProgramInput, SinglePointResults, Wavefunction
-from qcio.constants import ELEMENTS
 
 from qcop.exceptions import (
     AdapterInputError,
@@ -22,7 +21,7 @@ from .base import ProgramAdapter
 from .utils import capture_sys_stdout
 
 
-class XTBAdapter(ProgramAdapter):
+class XTBAdapter(ProgramAdapter[ProgramInput, SinglePointResults]):
     """Adapter for xtb-python."""
 
     supported_calctypes = [CalcType.energy, CalcType.gradient]
@@ -89,12 +88,9 @@ class XTBAdapter(ProgramAdapter):
         """
         try:
             # Create Calculator
-            atomic_numbers = np.array(
-                [ELEMENTS[sym] for sym in inp_obj.molecule.symbols]
-            )
             calc = self.xtb.interface.Calculator(
                 getattr(self.xtb.interface.Param, inp_obj.model.method),
-                atomic_numbers,
+                np.array(inp_obj.molecule.atomic_numbers),
                 inp_obj.molecule.geometry,
                 inp_obj.molecule.charge,
                 # From https://github.com/grimme-lab/xtb-python/blob/a32309a43e5a6572b033814eacf396328a2a36ed/xtb/qcschema/harness.py#L126 # noqa: E501

@@ -9,16 +9,17 @@ from qcio import (
     DualProgramInput,
     Molecule,
     OptimizationResults,
+    ProgramArgs,
     ProgramInput,
-    QCProgramArgs,
-    SinglePointOutput,
+    ProgramOutput,
+    SinglePointResults,
 )
 
 from qcop.exceptions import (
     AdapterInputError,
-    ExternalSubprocessError,
     GeometricError,
     ProgramNotFoundError,
+    QCOPBaseError,
 )
 from qcop.utils import get_adapter
 
@@ -26,7 +27,7 @@ from .base import ProgramAdapter
 from .utils import capture_logs
 
 
-class GeometricAdapter(ProgramAdapter):
+class GeometricAdapter(ProgramAdapter[DualProgramInput, OptimizationResults]):
     program = "geometric"
     supported_calctypes = [CalcType.optimization, CalcType.transition_state]
 
@@ -243,7 +244,7 @@ class GeometricAdapter(ProgramAdapter):
             def __init__(
                 self,
                 qcio_adapter: ProgramAdapter,
-                qcio_program_args: QCProgramArgs,
+                qcio_program_args: ProgramArgs,
                 qcio_molecule: Molecule,
                 geometric_molecule,
                 propagate_wfn: bool = False,
@@ -255,7 +256,7 @@ class GeometricAdapter(ProgramAdapter):
                 self.qcio_program_args = qcio_program_args
                 self.qcio_molecule = qcio_molecule
                 self.propagate_wfn = propagate_wfn
-                self.qcio_trajectory: List[SinglePointOutput] = []
+                self.qcio_trajectory: List[ProgramOutput] = []
                 self.update_func = update_func
                 self.update_interval = update_interval
 
@@ -289,22 +290,36 @@ class GeometricAdapter(ProgramAdapter):
                     )
 
                 # Calculate energy and gradient
-                # raise_exc=True so ProgramFailure objects don't get returned
                 try:
-                    output = self.qcio_adapter.compute(
-                        prog_input,
-                        raise_exc=True,
-                        collect_wfn=self.propagate_wfn,
-                        update_func=self.update_func,
-                        update_interval=self.update_interval,
+                    output: ProgramOutput[ProgramInput, SinglePointResults] = (
+                        self.qcio_adapter.compute(
+                            prog_input,
+                            raise_exc=True,
+                            collect_wfn=self.propagate_wfn,
+                            update_func=self.update_func,
+                            update_interval=self.update_interval,
+                        )
                     )
-                except ExternalSubprocessError as e:
-                    e.results = OptimizationResults(trajectory=self.qcio_trajectory)
+                except QCOPBaseError as e:
+                    if e.program_output:  # For mypy
+                        # Append error output
+                        self.qcio_trajectory.append(e.program_output)
+                    results = OptimizationResults(trajectory=self.qcio_trajectory)
+                    e.results = results
+                    # TODO: Add args/kwargs update for Celery serialization?
+                    # Maybe not because .results is folded into e.program_output in
+                    # BaseAdapter.compute()?
                     raise e
 
                 else:
                     self.qcio_trajectory.append(output)
 
+                assert (  # for mypy
+                    output.results is not None
+                    and output.results.energy is not None
+                    and output.results.gradient is not None
+                    and isinstance(output.results.gradient, np.ndarray)
+                )
                 return {
                     "energy": output.results.energy,
                     # geomeTRIC requires 1D array

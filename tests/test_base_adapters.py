@@ -1,5 +1,5 @@
 import pytest
-from qcio import CalcType, ProgramFailure
+from qcio import CalcType, ProgramOutput
 
 from qcop.adapters import base, registry
 from qcop.exceptions import AdapterInputError, ExternalSubprocessError
@@ -78,10 +78,10 @@ def test_adapters_raise_error_if_calctype_not_supported(prog_inp):
         TestAdapter().compute(gradient_input)
 
 
-def test_results_added_to_program_failure_object_if_exception_contains_them(
-    prog_inp, mocker, sp_output, test_adapter
+def test_results_added_to_program_output_object_if_exception_contains_them(
+    prog_inp, mocker, prog_output, test_adapter
 ):
-    """Test that results are added to the ProgramFailure object if the exception
+    """Test that results are added to the ProgramOutput object if the exception
     contains them."""
     test_adapter = registry["test"]()
 
@@ -90,7 +90,7 @@ def test_results_added_to_program_failure_object_if_exception_contains_them(
             1,
             "terachem tc.in",
             stdout="some stdout",
-            results=sp_output.results,
+            results=prog_output.results,
         )
 
     mocker.patch.object(
@@ -103,18 +103,18 @@ def test_results_added_to_program_failure_object_if_exception_contains_them(
     # Check that the exception object contains the results
     with pytest.raises(ExternalSubprocessError) as excinfo:
         test_adapter.compute(energy_input, raise_exc=True)
-    assert excinfo.value.results == sp_output.results
+    assert excinfo.value.results == prog_output.results
 
-    # If no raise_exc=False, the results are added to the ProgramFailure
+    # If no raise_exc=False, the results are added to the ProgramOutput
     prog_failure = test_adapter.compute(energy_input, raise_exc=False)
-    assert isinstance(prog_failure, ProgramFailure)
-    assert prog_failure.results == sp_output.results
+    assert isinstance(prog_failure, ProgramOutput)
+    assert prog_failure.results == prog_output.results
 
 
-def test_program_failure_object_added_to_exception(
-    prog_inp, mocker, sp_output, test_adapter
+def test_program_output_object_added_to_exception(
+    prog_inp, mocker, prog_output, test_adapter
 ):
-    """Test that exceptions contain the ProgramFailure object."""
+    """Test that exceptions contain the ProgramOutput object."""
     test_adapter = registry["test"]()
 
     def raise_error(*args, **kwargs):
@@ -122,7 +122,7 @@ def test_program_failure_object_added_to_exception(
             1,
             "terachem tc.in",
             stdout="some stdout",
-            results=sp_output.results,
+            results=prog_output.results,
         )
 
     mocker.patch.object(
@@ -136,12 +136,13 @@ def test_program_failure_object_added_to_exception(
     with pytest.raises(ExternalSubprocessError) as excinfo:
         test_adapter.compute(energy_input, raise_exc=True)
 
-    assert isinstance(excinfo.value.program_failure, ProgramFailure)
-    assert isinstance(excinfo.value.args[-1], ProgramFailure)
+    assert isinstance(excinfo.value.program_output, ProgramOutput)
+    assert excinfo.value.program_output.success is False
+    assert isinstance(excinfo.value.args[-1], ProgramOutput)
 
 
 def test_stdout_collected_with_failed_execution(
-    prog_inp, mocker, sp_output, test_adapter
+    prog_inp, mocker, prog_output, test_adapter
 ):
     """Test that stdout is collected even if the execution fails."""
     test_adapter = registry["test"]()
@@ -151,7 +152,7 @@ def test_stdout_collected_with_failed_execution(
             1,
             "terachem tc.in",
             stdout="some stdout",
-            results=sp_output.results,
+            results=prog_output.results,
         )
 
     mocker.patch.object(
@@ -167,10 +168,10 @@ def test_stdout_collected_with_failed_execution(
 
     # Added to exception
     assert excinfo.value.stdout == "some stdout"
-    # Added to ProgramFailure
-    assert excinfo.value.program_failure.stdout == "some stdout"
+    # Added to ProgramOutput
+    assert excinfo.value.program_output.stdout == "some stdout"
     # Added to exception
-    assert excinfo.value.results == sp_output.results
+    assert excinfo.value.results == prog_output.results
 
 
 def test_collect_wfn_raises_adapter_input_error_if_not_implemented(test_adapter):

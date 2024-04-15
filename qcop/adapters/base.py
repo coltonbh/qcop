@@ -1,13 +1,19 @@
 import traceback
 from abc import ABC, abstractmethod
 from time import time
-from typing import Callable, Dict, List, Optional, Tuple, Union
+from typing import Any, Callable, Dict, Generic, List, Optional, Tuple, Union
 
-from qcio import CalcType, FileInput, InputBase, OutputBase, ProgramFailure, ResultsBase
+from qcio import (
+    CalcType,
+    FileInput,
+    InputType,
+    NoResults,
+    ProgramOutput,
+    Results,
+    ResultsType,
+    StructuredInputs,
+)
 from qcio.helper_types import StrOrPath
-from qcio.models.base_models import QCIOModelBase
-from qcio.models.inputs_base import StructuredInputBase
-from qcio.utils import calctype_to_output
 
 from qcop.exceptions import AdapterInputError, QCOPBaseError
 
@@ -22,7 +28,7 @@ __all__ = ["BaseAdapter", "registry"]
 registry = {}
 
 
-class BaseAdapter(ABC):
+class BaseAdapter(ABC, Generic[InputType, ResultsType]):
     """Base class for all adapters."""
 
     # Whether to write files from inp_obj to disk before executing program.
@@ -35,11 +41,19 @@ class BaseAdapter(ABC):
     program: str  # All subclasses must define this attribute.
 
     def program_version(self, stdout: Optional[str]) -> Optional[str]:
-        """Return program version. Adapters should override this method."""
+        """Return program version. Adapters should override this method.
+
+        Args:
+            stdout: The stdout from the program. Because running "program --version"
+                can be extremely slow for some programs, the stdout from the program
+                is passed in here so that the version can be extracted from it if
+                possible. If the version cannot be extracted from the stdout, then
+                this function should return the program version in some other way.
+        """
         return None
 
     @abstractmethod
-    def validate_input(self, inp_obj: InputBase) -> None:
+    def validate_input(self, inp_obj: InputType) -> None:
         """Validate input object to ensure compatibility with adapter.
         Adapters should override this method.
         """
@@ -48,17 +62,17 @@ class BaseAdapter(ABC):
     @abstractmethod
     def compute_results(
         self,
-        inp_obj: InputBase,
+        inp_obj: InputType,
         update_func: Optional[Callable] = None,
         update_interval: Optional[float] = None,
         **kwargs,
-    ) -> Tuple[ResultsBase, str]:
+    ) -> Tuple[ResultsType, str]:
         """Subclasses should implement this method with custom compute logic."""
         raise NotImplementedError
 
     def compute(
         self,
-        inp_obj: InputBase,
+        inp_obj: InputType,
         *,
         scratch_dir: Optional[StrOrPath] = None,
         rm_scratch_dir: bool = True,
@@ -71,12 +85,12 @@ class BaseAdapter(ABC):
         raise_exc: bool = True,
         propagate_wfn: bool = False,
         **kwargs,
-    ) -> OutputBase:
+    ) -> ProgramOutput[InputType, ResultsType]:
         """Compute the given input using the adapter's program.
 
         Args:
-            inp_obj: A qcio input object for a computation. A subclass of InputBase.
-                E.g. FileInput, FileInput, DualProgramInput.
+            inp_obj: A qcio input object for a computation. E.g. A FileInput,
+                ProgramInput or DualProgramInput.
             scratch_dir: The scratch directory for the program. If None, a new directory
                 is created in the system default temporary directory. If rm_scratch_dir
                 is True this directory will be deleted after the program finishes.
@@ -94,7 +108,7 @@ class BaseAdapter(ABC):
                 update_func.
             print_stdout: Whether to print stdout/stderr to the terminal in real time as
                 the program executes. Will be ignored if an update_func passed.
-            raise_exc: If False, qcop will return a ProgramFailure object when the QC
+            raise_exc: If False, qcop will return a ProgramOutput object when the QC
                 program fails rather than raise an exception.
             propagate_wfn: For any adapter performing a sequential task, such
                 as a geometry optimization, propagate the wavefunction from the previous
@@ -106,22 +120,17 @@ class BaseAdapter(ABC):
                 qcng.compute().
 
         Returns:
-            The qcio output object for a calctype. A subclass of OutputBase. Will either
-            be a ProgramFailure object or the corresponding output object for the
-            calctype type. E.g., "energy" -> SinglePointOutput. "optimization" ->
-            OptimizationOutput.
+            A ProgramOutput object containing the results of the computation.
 
         Raises:
             AdapterNotFoundError: If the program is not supported (i.e., no Adapter
-                is implemented for it in qcop or qcengine).
+                is implemented for the program in qcop or qcengine).
             ProgramNotFoundError: If the program executable is not found on the
                 system at execution time. This likely means the program is not installed
-                on the system.
+                or not available on the $PATH.
             AdapterInputError: If the input is invalid for the adapter.
-            ExternalProgramExecutionError: If the program fails during execution and
-                raise_exc=True.
-            QCEngineError: If QCEngine performed the computation, fails and
-                raise_exc=True.
+            ExternalProgramExecutionError: If the QC program fails during execution.
+            QCEngineError: If QCEngine performs the computation raises an error.
         """
         # Print stdout to terminal in real time as program executes
         if print_stdout and update_func is None:
@@ -136,10 +145,10 @@ class BaseAdapter(ABC):
                 inp_obj.save_files()
 
             # Define outputs
-            output_dict: Dict[str, Optional[Union[str, QCIOModelBase]]] = {}
+            output_dict: Dict[str, Any] = {}
             stdout: Optional[str] = None
             # TODO: Update when qcio updates to allow None results
-            results: Optional[ResultsBase] = None
+            results: Results = NoResults()
             exc: Optional[QCOPBaseError] = None
             program_version: Optional[str] = None
 
@@ -157,8 +166,8 @@ class BaseAdapter(ABC):
                     **kwargs,
                 )
                 # None value covers FileInput case
-                # TODO: Update this to ProgramOutput[type(inp_obj), type(results)]
-                output_cls = calctype_to_output(getattr(inp_obj, "calctype", None))
+                # TODO: Is there a type safe way to handle this??
+                output_dict["success"] = True
                 program_version = self.program_version(stdout)
 
                 # Optionally collect wavefunction file
@@ -166,9 +175,11 @@ class BaseAdapter(ABC):
                     output_dict["files"] = self.collect_wfn()
 
             except QCOPBaseError as e:
-                # Set variables to construct a ProgramFailure object.
-                exc, output_cls = e, ProgramFailure
-                results = getattr(e, "results", results)  # Any half-completed results
+                # TODO: Is there a type safe way to handle this??
+                exc = e
+                output_dict["success"] = False
+                # Any half-completed results
+                results = getattr(e, "results") or NoResults()
                 stdout = getattr(e, "stdout", stdout)
                 # For mypy because e.stdout is not of a known type
                 stdout = str(stdout) if stdout is not None else None
@@ -185,10 +196,9 @@ class BaseAdapter(ABC):
             )
 
             # Always collect for failures; otherwise obey collect_stdout
-            stdout = stdout if collect_stdout or output_cls == ProgramFailure else None
+            stdout = stdout if not output_dict["success"] or collect_stdout else None
 
             # Construct output object
-            results = results if results is not None else ResultsBase()
             output_dict.update(
                 {
                     "input_data": inp_obj,
@@ -197,18 +207,22 @@ class BaseAdapter(ABC):
                     "provenance": provenance,
                 }
             )
-            output_obj = output_cls(**output_dict)
+
+            output_obj = ProgramOutput[InputType, ResultsType](**output_dict)
 
             # Collect files generated by the program
             if collect_files or isinstance(inp_obj, FileInput):
-                output_obj.open_files(
-                    final_scratch_dir, recursive=True, exclude=inp_obj.files.keys()
+                output_obj.add_files(
+                    final_scratch_dir,
+                    recursive=True,
+                    exclude=list(inp_obj.files.keys()),
                 )
 
-        # Append ProgramFailures to exception and raise if raise_exc=True
+        # Append ProgramOutput to exception and raise if raise_exc=True
         # Helpful for BigChem and ChemCloud exception handling
+
         if raise_exc and exc:
-            exc.program_failure = output_obj
+            exc.program_output = output_obj
             # Updating .args is necessary for Celery to properly serialize the exception
             exc.args = (*exc.args, output_obj)
             raise exc
@@ -229,7 +243,7 @@ class BaseAdapter(ABC):
         )
 
 
-class ProgramAdapter(BaseAdapter):
+class ProgramAdapter(BaseAdapter, Generic[InputType, ResultsType]):
     """Base adapter for all program adapters (all but FileAdaptor)."""
 
     supported_calctypes: List[
@@ -267,7 +281,18 @@ class ProgramAdapter(BaseAdapter):
                 this function should return the program version in some other way.
         """
 
-    def validate_input(self, inp_obj: StructuredInputBase) -> None:
+    @abstractmethod
+    def compute_results(
+        self,
+        inp_obj: InputType,
+        update_func: Optional[Callable] = None,
+        update_interval: Optional[float] = None,
+        **kwargs,
+    ) -> Tuple[ResultsType, str]:
+        """All ProgramAdapters must return a ResultsType."""
+        raise NotImplementedError
+
+    def validate_input(self, inp_obj: StructuredInputs) -> None:
         """Validate the input object for compatibility with the adapter.
 
         Args:

@@ -2,9 +2,16 @@
 
 from typing import Any, Callable, Dict, Optional, Union
 
-from qcio import CalcType, Files, Model, Molecule, ProgramInput
+from qcio import (
+    CalcType,
+    Files,
+    InputType,
+    Model,
+    Molecule,
+    ProgramInput,
+    ProgramOutput,
+)
 from qcio.helper_types import StrOrPath
-from qcio.models import InputBase, OutputBase
 
 from .adapters import BaseAdapter
 from .utils import get_adapter, inherit_docstring_from
@@ -13,7 +20,7 @@ from .utils import get_adapter, inherit_docstring_from
 @inherit_docstring_from(BaseAdapter.compute)
 def compute(
     program: str,
-    inp_obj: InputBase,
+    inp_obj: InputType,
     *,
     scratch_dir: Optional[StrOrPath] = None,
     rm_scratch_dir: bool = True,
@@ -27,7 +34,7 @@ def compute(
     qcng_fallback: bool = True,
     propagate_wfn: bool = False,
     **kwargs,
-) -> OutputBase:
+) -> ProgramOutput:
     """Use the given program to compute on the given input.
 
     See BaseAdapter.compute for more details.
@@ -59,7 +66,7 @@ def compute_args(
     files: Optional[Union[Dict[str, Union[str, bytes]], Files]] = None,
     extras: Optional[Dict[str, Any]] = None,
     **kwargs,
-) -> OutputBase:
+) -> ProgramOutput:
     """Compute function that accepts independent argument for a ProgramInput.
 
     Args:
@@ -77,18 +84,15 @@ def compute_args(
         The output of the computation.
 
     Raises:
-        AdapterNotFoundError: If no adapter is found for the given program.
-        AdapterInputError: If the adapter raises an exception when generating input
-            files.
-        QCEngineError: If the adapter raises an exception when running the program.
+        See compute function for details.
     """
     if isinstance(files, Files):  # Check in case Files object is passed instead of dict
         files = files.files
 
     inp_obj = ProgramInput(
-        calctype=calctype,
+        calctype=calctype,  # type: ignore
         molecule=molecule,
-        model=model,
+        model=model,  # type: ignore
         keywords=keywords or {},
         files=files or {},
         extras=extras or {},

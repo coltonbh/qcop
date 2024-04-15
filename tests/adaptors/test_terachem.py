@@ -39,47 +39,47 @@ def test_get_version_stdout(mocker):
     mock_parse_version_string.assert_called_once()
 
 
-def test_propagate_wfn(prog_inp, sp_output):
+def test_propagate_wfn(prog_inp, prog_output):
     """Test propagate_wavefunction method."""
-    new_inp = prog_inp("energy")
+    prog_input = prog_inp("energy")
     adapter = TeraChemAdapter()
 
     # Raises error if output does not contain wavefunction data
     with pytest.raises(AdapterInputError):
-        adapter.propagate_wfn(sp_output, new_inp)
+        adapter.propagate_wfn(prog_output, prog_input)
 
     # TeraChem Output conventions
     scr_postfix = XYZ_FILENAME.split(".")[0]
     scr_dir = f"scr.{scr_postfix}"
 
     # Add restricted wavefunction data to output
-    sp_output.files[f"{scr_dir}/c0"] = "some file"
-    adapter.propagate_wfn(sp_output, new_inp)
-    assert new_inp.files["c0"] == "some file"
-    assert new_inp.keywords["guess"] == "c0"
-    sp_output.files.pop(f"{scr_dir}/c0")  # Remove c0 from output
+    prog_output.files[f"{scr_dir}/c0"] = "some file"
+    adapter.propagate_wfn(prog_output, prog_input)
+    assert prog_input.files["c0"] == "some file"
+    assert prog_input.keywords["guess"] == "c0"
+    prog_output.files.pop(f"{scr_dir}/c0")  # Remove c0 from output
 
     # Add unrestricted wavefunction data to output
-    new_inp = prog_inp("energy")
-    sp_output.files[f"{scr_dir}/ca0"] = "some alpha file"
-    sp_output.files[f"{scr_dir}/cb0"] = "some beta file"
-    adapter.propagate_wfn(sp_output, new_inp)
-    assert new_inp.files["ca0"] == "some alpha file"
-    assert new_inp.files["cb0"] == "some beta file"
-    assert new_inp.keywords["guess"] == "ca0 cb0"
+    prog_input = prog_inp("energy")
+    prog_output.files[f"{scr_dir}/ca0"] = "some alpha file"
+    prog_output.files[f"{scr_dir}/cb0"] = "some beta file"
+    adapter.propagate_wfn(prog_output, prog_input)
+    assert prog_input.files["ca0"] == "some alpha file"
+    assert prog_input.files["cb0"] == "some beta file"
+    assert prog_input.keywords["guess"] == "ca0 cb0"
 
     # Assert error raised if only alpha or beta wavefunction data is present
-    sp_output.files.pop(f"{scr_dir}/cb0")
+    prog_output.files.pop(f"{scr_dir}/cb0")
     with pytest.raises(AdapterInputError):
-        adapter.propagate_wfn(sp_output, new_inp)
+        adapter.propagate_wfn(prog_output, prog_input)
 
-    sp_output.files.pop(f"{scr_dir}/ca0")
-    sp_output.files[f"{scr_dir}/cb0"] = "some beta file"
+    prog_output.files.pop(f"{scr_dir}/ca0")
+    prog_output.files[f"{scr_dir}/cb0"] = "some beta file"
     with pytest.raises(AdapterInputError):
-        adapter.propagate_wfn(sp_output, new_inp)
+        adapter.propagate_wfn(prog_output, prog_input)
 
 
-def test_collect_wfn(sp_output):
+def test_collect_wfn(prog_output):
     # Raises AdapterError if not wavefunction data in output
     adapter = TeraChemAdapter()
     with pytest.raises(AdapterError):

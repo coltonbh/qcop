@@ -27,10 +27,10 @@ class QCEngineAdapter(ProgramAdapter):
         try:
             adapter = get_program(self.external_program)
             return adapter.get_version()
-        except QCEngineException:
+        except QCEngineException as e:
             raise QCEngineError(
                 f"Could not get version for program {self.external_program}."
-            )
+            ) from e
 
     def compute_results(
         self, inp_obj, *args, propagate_wfn=False, **kwargs
