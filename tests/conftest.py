@@ -6,9 +6,9 @@ from qcio import (
     CalcType,
     DualProgramInput,
     Molecule,
+    ProgramArgs,
     ProgramInput,
-    QCProgramArgs,
-    SinglePointOutput,
+    ProgramOutput,
     SinglePointResults,
 )
 
@@ -68,7 +68,7 @@ def dual_prog_inp(hydrogen):
             calctype=calctype,
             molecule=hydrogen,
             subprogram="test",
-            subprogram_args=QCProgramArgs(
+            subprogram_args=ProgramArgs(
                 model={"method": "hf", "basis": "sto-3g"},
             ),
         )
@@ -77,16 +77,17 @@ def dual_prog_inp(hydrogen):
 
 
 @pytest.fixture
-def sp_output(prog_inp):
-    """Create SinglePointOutput object"""
+def prog_output(prog_inp):
+    """Create ProgramOutput object"""
     sp_inp_energy = prog_inp("energy")
     energy = 1.0
     n_atoms = len(sp_inp_energy.molecule.symbols)
     gradient = np.arange(n_atoms * 3).reshape(n_atoms, 3)
     hessian = np.arange(n_atoms**2 * 3**2).reshape(n_atoms * 3, n_atoms * 3)
 
-    return SinglePointOutput(
+    return ProgramOutput[ProgramInput, SinglePointResults](
         input_data=sp_inp_energy,
+        success=True,
         stdout="program standard out...",
         results={
             "energy": energy,

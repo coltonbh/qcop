@@ -1,7 +1,7 @@
 import shutil
 from functools import lru_cache
 
-from qcio.models import FileInput, InputBase
+from qcio import FileInput, Inputs
 
 from .adapters import BaseAdapter, FileAdapter, registry
 from .exceptions import AdapterNotFoundError, ProgramNotFoundError
@@ -73,7 +73,7 @@ def check_qcng_support(program: str) -> None:
 
 
 def get_adapter(
-    program: str, inp_obj: InputBase, qcng_fallback: bool = False
+    program: str, inp_obj: Inputs, qcng_fallback: bool = False
 ) -> BaseAdapter:
     """Get the adapter for a program.
 
@@ -88,7 +88,8 @@ def get_adapter(
     Raises:
         AdapterNotFoundError: If the adapter is not found.
     """
-    if isinstance(inp_obj, FileInput):
+
+    if type(inp_obj) is FileInput:
         return FileAdapter(program)
     try:
         return registry[program]()

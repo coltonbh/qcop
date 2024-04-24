@@ -6,6 +6,18 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## [unreleased]
 
+### Fixed
+
+- Fixed all mypy errors that were previously not raised because `qcio` did not contain a `py.types` file.
+
+### Changed
+
+- Updated to latest `qcio` data structures eliminating `SinglePointOutput`, `OptimizationOutput`, and `ProgramFailure` in favor of a Generic `ProgramOutput` object. Backwards compatibility is maintained by `qcio` so that old `SinglePointOutput`, `OptimizationOutput`, and `ProgramFailure` objects are still accepted in end user code with `FutureWarning` messages.
+- `BaseAdapter` is generic over `InputType` and `ResultsType`.
+- `ProgramAdapter` is generic over `StructuredInputType` and `ResultsType`.
+- Adapters now inherit from these Generic classes and specify compatible types explicitly.
+- Updated examples and tests to reflect the new `qcio` data structures nomenclature, emphasizing `pi` for `ProgramInput` and `po` for `ProgramOutput` objects.
+
 ## [0.5.5] - 2024-04-12
 
 ### Added
@@ -65,14 +77,14 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## [0.4.8] - 2024-01-12
 
+### Added
+
+- `GeometricError` to `qcop.exceptions` module. Without this when `geometric` raised an exception it wouldn't be caught by the `except QCOPBaseError` block in `adapter.compute()` and the `ProgramFailure` object wouldn't be returned to the user. This fixes a 500 error in ChemCloud Server when `geometric` fails to converge and raises an exception (a `geometric` exception) that isn't found by the server.
+
 ### Changed
 
 - `QCEngineError` now a subclass of `ExternalProgramError` instead of `QCOPBaseError`.
 - `ExternalProgramExecutionError` renamed to `ExternalSubprocessError` to better reflect its purpose.
-
-### Added
-
-- `GeometricError` to `qcop.exceptions` module. Without this when `geometric` raised an exception it wouldn't be caught by the `except QCOPBaseError` block in `adapter.compute()` and the `ProgramFailure` object wouldn't be returned to the user. This fixes a 500 error in ChemCloud Server when `geometric` fails to converge and raises an exception (a `geometric` exception) that isn't found by the server.
 
 ## [0.4.7] - 2023-09-27
 
@@ -101,14 +113,14 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## [0.4.4] - 2023-09-08
 
+### Added
+
+- Added `ProgramFailure` object to `exception.args` in `BaseAdapter.compute()` method so that Celery will correctly serialize the object and pass the `exception.program_failure` object from workers to clients.
+
 ### Changed
 
 - Updated `qcio` from `>=0.5.0` to `>=0.6.0`.
 - Dropped multiple inheritance on `ExternalProgramExecutionError` by removing `CalledProcessError`. Retained the original attributes.
-
-### Added
-
-- Added `ProgramFailure` object to `exception.args` in `BaseAdapter.compute()` method so that Celery will correctly serialize the object and pass the `exception.program_failure` object from workers to clients.
 
 ## [0.4.3] - 2023-09-03
 
@@ -140,7 +152,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## [0.3.2] - 2023-08-18
 
-### Addedp
+### Added
 
 - `GeometricEngine` now appends all computed trajectory results to the raised exception if subprogram crashes so a user can inspect the failed results.
 

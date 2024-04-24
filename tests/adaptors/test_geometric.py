@@ -1,5 +1,12 @@
 import pytest
-from qcio import CalcType, OptimizationResults, QCProgramArgs
+from qcio import (
+    CalcType,
+    OptimizationResults,
+    ProgramArgs,
+    ProgramInput,
+    ProgramOutput,
+    SinglePointResults,
+)
 
 from qcop.adapters import GeometricAdapter
 from qcop.adapters.utils import tmpdir
@@ -55,7 +62,7 @@ def test_create_geometric_molecule(hydrogen):
 
 
 def test_qcio_geometric_engine_exception_handling(
-    test_adapter, hydrogen, sp_output, mocker
+    test_adapter, hydrogen, prog_output, mocker
 ):
     adapter = GeometricAdapter()  # Just for using helper methods below
     QCIOGeometricEngine = adapter._geometric_engine()
@@ -63,19 +70,29 @@ def test_qcio_geometric_engine_exception_handling(
 
     engine = QCIOGeometricEngine(
         test_adapter,
-        QCProgramArgs(**{"model": {"method": "hf", "basis": "sto-3g"}}),
+        ProgramArgs(**{"model": {"method": "hf", "basis": "sto-3g"}}),
         hydrogen,
         geometric_hydrogen,
     )
 
     # Set trajectory
-    engine.qcio_trajectory = [sp_output]
+    engine.qcio_trajectory = [prog_output]
+
+    # Create a failed ProgramOutput object
+    po_dict = prog_output.model_dump()
+    po_dict.update({"success": False, "traceback": "fake traceback"})
+    po_failure = ProgramOutput[ProgramInput, SinglePointResults](**po_dict)
 
     # Mock adapter to raise ExternalProgramExecutionError
     mocker.patch.object(
         test_adapter,
         "compute",
-        side_effect=ExternalSubprocessError(1, "terachem tc.in", stdout="some stdout"),
+        side_effect=ExternalSubprocessError(
+            1,
+            "terachem tc.in",
+            stdout="some stdout",
+            program_output=po_failure,
+        ),
     )
 
     with pytest.raises(ExternalSubprocessError) as excinfo:
@@ -83,7 +100,9 @@ def test_qcio_geometric_engine_exception_handling(
         coords = hydrogen.geometry
         engine.calc_new(coords)
 
-    assert excinfo.value.results == OptimizationResults(trajectory=[sp_output])
+    assert excinfo.value.results == OptimizationResults(
+        trajectory=[prog_output, po_failure]
+    )
 
 
 def test_geometric_exceptions_converted_to_qcop_exceptions(mocker, dual_prog_inp):

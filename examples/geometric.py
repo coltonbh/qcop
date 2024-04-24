@@ -3,22 +3,22 @@
 Constraints docs: https://geometric.readthedocs.io/en/latest/constraints.html
 """
 
-from qcio import CalcType, DualProgramInput, Molecule
+from qcio import DualProgramInput, Molecule
 
 from qcop import compute, exceptions
 
 # Create Molecule
 h2 = Molecule(
     symbols=["H", "H"],
-    geometry=[[0, 0.0, 0.0], [0, 0, 1.4]],
+    geometry=[[0, 0.0, 0.0], [0, 0, 1.4]],  # type: ignore
 )
 
 # Define the program input
 prog_inp = DualProgramInput(
-    calctype=CalcType.optimization,
+    calctype="optimization",  # type: ignore
     molecule=h2,
     subprogram="terachem",
-    subprogram_args={
+    subprogram_args={  # type: ignore
         "model": {"method": "HF", "basis": "6-31g"},
         "keywords": {"purify": "no"},
     },
@@ -39,7 +39,7 @@ try:
     output = compute("geometric", prog_inp, propagate_wfn=True, rm_scratch_dir=False)
 except exceptions.QCOPBaseError as e:
     # Calculation failed
-    output = e.program_failure
+    output = e.program_output
     print(output.stdout)  # or output.pstdout for short
     # Input data used to generate the calculation
     print(output.input_data)

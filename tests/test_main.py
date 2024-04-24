@@ -6,7 +6,7 @@ from pathlib import Path
 from typing import Callable
 
 import pytest
-from qcio import FileInput, FileOutput, Files, ProgramFailure, ProgramInput
+from qcio import FileInput, Files, ProgramInput, ProgramOutput
 
 from qcop.adapters import registry
 from qcop.exceptions import AdapterInputError, AdapterNotFoundError, QCOPBaseError
@@ -18,7 +18,7 @@ def test_file_adapter_works_inside_top_level_compute_function():
     file_inp = FileInput(cmdline_args=["hello_world.py"])
     file_inp.files["hello_world.py"] = "print('hello world')"
     result = compute("python", file_inp)
-    isinstance(result, FileOutput)
+    isinstance(result, ProgramOutput)
     assert result.stdout == "hello world\n"
 
 
@@ -109,7 +109,8 @@ def test_compute_does_not_raise_exception_if_raise_exec_false(prog_inp, mocker):
         "compute_results",
         side_effect=QCOPBaseError("Something failed!"),
     )
-    assert isinstance(compute("test", grad_input, raise_exc=False), ProgramFailure)
+    po = compute("test", grad_input, raise_exc=False)
+    assert po.success is False
 
 
 def test_qcengine_import_error(mocker, prog_inp):

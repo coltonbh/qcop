@@ -2,7 +2,7 @@ from pathlib import Path
 from typing import Callable, Dict, Optional, Tuple, Union
 
 import qcparse
-from qcio import CalcType, ProgramInput, SinglePointOutput, SinglePointResults
+from qcio import CalcType, ProgramInput, ProgramOutput, SinglePointResults
 from qcparse.encoders.terachem import XYZ_FILENAME
 from qcparse.parsers.terachem import parse_version_string
 
@@ -12,7 +12,7 @@ from .base import ProgramAdapter
 from .utils import execute_subprocess
 
 
-class TeraChemAdapter(ProgramAdapter):
+class TeraChemAdapter(ProgramAdapter[ProgramInput, SinglePointResults]):
     """Adapter for TeraChem."""
 
     supported_calctypes = [CalcType.energy, CalcType.gradient, CalcType.hessian]
@@ -37,7 +37,7 @@ class TeraChemAdapter(ProgramAdapter):
     # Try using it for a while without and see what roadblocks we run into
     def compute_results(
         self,
-        inp_obj,
+        inp_obj: ProgramInput,
         update_func: Optional[Callable] = None,
         update_interval: Optional[float] = None,
         **kwargs,
@@ -85,7 +85,7 @@ class TeraChemAdapter(ProgramAdapter):
                 wfns[str(wfn_path)] = wfn_path.read_bytes()
         return wfns
 
-    def propagate_wfn(self, output: SinglePointOutput, prog_inp: ProgramInput) -> None:
+    def propagate_wfn(self, output: ProgramOutput, prog_inp: ProgramInput) -> None:
         """Propagate the wavefunction from the previous calculation.
 
         Args:
@@ -119,6 +119,7 @@ class TeraChemAdapter(ProgramAdapter):
             prog_inp.keywords["guess"] = c0
 
         else:  # ca0_bytes and cb0_bytes
+            assert ca0_bytes and cb0_bytes  # for mypy
             prog_inp.files[ca0] = ca0_bytes
             prog_inp.files[cb0] = cb0_bytes
             prog_inp.keywords["guess"] = f"{ca0} {cb0}"
