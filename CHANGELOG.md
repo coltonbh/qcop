@@ -6,6 +6,14 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## [unreleased]
 
+### Fixed
+
+- `*args` and `**kwargs` passing to parent classes in `AdapterError` and subclasses to fix celery serialization issues in BigChem.
+
+### Changed
+
+- 🚨 Changed `compute` kwarg `collect_wavefunction` to `collect_wfn` to match `BaseAdapter` nomenclature. (Cheating in this breaking change since I don't think this feature is used by outsiders yet...)
+
 ## [0.6.0] - 2024-04-23
 
 ### Fixed

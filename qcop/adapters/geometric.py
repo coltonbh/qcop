@@ -84,7 +84,6 @@ class GeometricAdapter(ProgramAdapter[DualProgramInput, OptimizationResults]):
             propagate_wfn: Whether to propagate the wavefunction between steps of the
                 optimization.
         """
-
         # Update the input object based on its calctype
         self._update_inp_obj(inp_obj)
         geometric_molecule = self._create_geometric_molecule(inp_obj.molecule)
