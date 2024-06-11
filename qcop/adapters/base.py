@@ -220,7 +220,6 @@ class BaseAdapter(ABC, Generic[InputType, ResultsType]):
 
         # Append ProgramOutput to exception and raise if raise_exc=True
         # Helpful for BigChem and ChemCloud exception handling
-
         if raise_exc and exc:
             exc.program_output = output_obj
             # Updating .args is necessary for Celery to properly serialize the exception

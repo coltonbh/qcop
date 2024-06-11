@@ -21,6 +21,7 @@ prog_input = ProgramInput(
     molecule=molecule,
     calctype=CalcType.energy,
     model={"method": "GFN2xTB"},  # type: ignore
+    keywords={"max_iterations": 150},
 )
 
 

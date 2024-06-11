@@ -17,9 +17,9 @@ class QCOPBaseError(Exception):
         results: Optional[Results] = None,
         **kwargs,
     ):
-        super().__init__(*args, **kwargs)
         self.program_output = program_output
         self.results = results
+        super().__init__(*args, **kwargs)
 
     @property
     def program_failure(self):
@@ -47,10 +47,10 @@ class AdapterNotFoundError(AdapterError):
         program: Program for which no adapter was found
     """
 
-    def __init__(self, program: str):
+    def __init__(self, program: str, *args, **kwargs):
         self.program = program
         self.message = f"No adapter found for program '{program}'."
-        super().__init__(self.message)
+        super().__init__(self.message, *args, **kwargs)
 
 
 class AdapterInputError(AdapterError):
@@ -62,7 +62,7 @@ class AdapterInputError(AdapterError):
         message: explanation of the error
     """
 
-    def __init__(self, program: str, message: str):
+    def __init__(self, program: str, message: str, *args, **kwargs):
         self.program = program
         self.message = message
         super().__init__(self.message)
@@ -80,7 +80,6 @@ class ProgramNotFoundError(ExternalProgramError):
 
     Args:
         program: program which was not found
-        message: explanation of the error
     """
 
     def __init__(self, program: str):
@@ -99,7 +98,7 @@ class QCEngineError(ExternalProgramError):
         self.message = (
             "Something went wrong with QCEngine. See the traceback above for details."
         )
-        super().__init__(self.message)
+        super().__init__(self.message, *args, **kwargs)
 
 
 class GeometricError(ExternalProgramError):
@@ -109,7 +108,7 @@ class GeometricError(ExternalProgramError):
         self.message = (
             "Something went wrong with geomeTRIC. See the traceback above for details."
         )
-        super().__init__(self.message)
+        super().__init__(self.message, *args, **kwargs)
 
 
 class ExternalSubprocessError(ExternalProgramError):
@@ -119,10 +118,7 @@ class ExternalSubprocessError(ExternalProgramError):
     Args:
         returncode: Return code of the subprocess
         cmd: Command which failed
-        results: Any computed results from the subprocess or previous steps in the
-            workflow. Used to pass trajectory results e.g., from a geometry optimization
         stdout: Standard output of the subprocess
-        stderr: Standard error of the subprocess
     """
 
     def __init__(
