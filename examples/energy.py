@@ -18,7 +18,7 @@ molecule = Molecule(
 pi = ProgramInput(
     molecule=molecule,
     calctype="energy",  # type: ignore
-    model={"method": "hf", "basis": "so-3g"},  # type: ignore
+    model={"method": "hf", "basis": "sto-3g"},  # type: ignore
     keywords={"purify": "no"},
 )
 

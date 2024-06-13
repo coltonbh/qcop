@@ -6,6 +6,16 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## [unreleased]
 
+### Added
+
+- `try/except` to top-level `compute` function that will append the `.program_output` to the exception if the `get_adapter` function raises an exception.
+
+
+### Changed
+
+- Modified exception hierarchy to include fewer **kwarg arguments, use mostly `args` instead, and fixed issue where some exceptions still didn't have `.program_output` set on them.
+
+
 ## [0.6.1] - 2024-06-10
 
 ### Fixed

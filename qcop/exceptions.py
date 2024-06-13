@@ -12,14 +12,14 @@ class QCOPBaseError(Exception):
 
     def __init__(
         self,
-        *args,
+        message: str,
         program_output: Optional[ProgramOutput] = None,
+        *,
         results: Optional[Results] = None,
-        **kwargs,
     ):
         self.program_output = program_output
         self.results = results
-        super().__init__(*args, **kwargs)
+        super().__init__(message)
 
     @property
     def program_failure(self):
@@ -47,10 +47,8 @@ class AdapterNotFoundError(AdapterError):
         program: Program for which no adapter was found
     """
 
-    def __init__(self, program: str, *args, **kwargs):
-        self.program = program
-        self.message = f"No adapter found for program '{program}'."
-        super().__init__(self.message, *args, **kwargs)
+    def __init__(self, program: str, *args):
+        super().__init__(f"No adapter found for program '{program}'.", *args)
 
 
 class AdapterInputError(AdapterError):
@@ -62,10 +60,10 @@ class AdapterInputError(AdapterError):
         message: explanation of the error
     """
 
-    def __init__(self, program: str, message: str, *args, **kwargs):
+    def __init__(self, program: str, message: str, *args):
         self.program = program
         self.message = message
-        super().__init__(self.message)
+        super().__init__(self.message, *args)
 
 
 class ExternalProgramError(QCOPBaseError):
@@ -82,33 +80,34 @@ class ProgramNotFoundError(ExternalProgramError):
         program: program which was not found
     """
 
-    def __init__(self, program: str):
+    def __init__(self, program: str, *args):
         self.program = program
         self.message = (
             f"Program not found: '{self.program}'. To use {self.program} please "
             f"install it on your system and ensure that it is on your PATH."
         )
-        super().__init__(self.message)
+        super().__init__(self.message, *args)
 
 
 class QCEngineError(ExternalProgramError):
     """Exception raised when any part of qcengine execution fails."""
 
-    def __init__(self, *args, **kwargs):
+    def __init__(self, external_program: str, *args):
         self.message = (
-            "Something went wrong with QCEngine. See the traceback above for details."
+            f"Something went wrong with QCEngine trying to run {external_program}. See "
+            "the traceback above for details."
         )
-        super().__init__(self.message, *args, **kwargs)
+        super().__init__(self.message, *args)
 
 
 class GeometricError(ExternalProgramError):
     """Exception raised when any part of geomeTRIC execution fails."""
 
-    def __init__(self, *args, **kwargs):
+    def __init__(self, *args):
         self.message = (
             "Something went wrong with geomeTRIC. See the traceback above for details."
         )
-        super().__init__(self.message, *args, **kwargs)
+        super().__init__(self.message, *args)
 
 
 class ExternalSubprocessError(ExternalProgramError):
@@ -126,14 +125,14 @@ class ExternalSubprocessError(ExternalProgramError):
         returncode: int,
         cmd: str,
         stdout: Optional[str] = None,
+        *args,
         **kwargs,
     ):
         self.returncode = returncode
         self.cmd = cmd
         self.stdout = stdout
-        self.results = kwargs.get("results", None)
         self.message = (
             f"External program failed with return code {self.returncode}. "
             f"Command: '{self.cmd}'"
         )
-        super().__init__(self.message, **kwargs)
+        super().__init__(self.message, *args, **kwargs)

@@ -87,10 +87,7 @@ def test_results_added_to_program_output_object_if_exception_contains_them(
 
     def raise_error(*args, **kwargs):
         raise ExternalSubprocessError(
-            1,
-            "terachem tc.in",
-            stdout="some stdout",
-            results=prog_output.results,
+            1, "terachem tc.in", "some stdout", results=prog_output.results
         )
 
     mocker.patch.object(
@@ -121,7 +118,7 @@ def test_program_output_object_added_to_exception(
         raise ExternalSubprocessError(
             1,
             "terachem tc.in",
-            stdout="some stdout",
+            "some stdout",
             results=prog_output.results,
         )
 
@@ -151,7 +148,7 @@ def test_stdout_collected_with_failed_execution(
         raise ExternalSubprocessError(
             1,
             "terachem tc.in",
-            stdout="some stdout",
+            "some stdout",
             results=prog_output.results,
         )
 
