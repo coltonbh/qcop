@@ -106,7 +106,7 @@ class GeometricAdapter(ProgramAdapter[DualProgramInput, OptimizationResults]):
             try:
                 optimizer.optimizeGeometry()
             except self.geometric.errors.Error as e:
-                raise GeometricError(inp_obj, self.program) from e
+                raise GeometricError() from e
 
         return (
             OptimizationResults(

@@ -36,12 +36,12 @@ class XTBAdapter(ProgramAdapter[ProgramInput, SinglePointResults]):
     def validate_input(self, inp_obj: ProgramInput) -> None:
         """Validate the input for xtb-python."""
         super().validate_input(inp_obj)
-        # Check that xtb supports the model.
+        # Check that xtb supports the method.
         supported_methods = self.xtb.interface.Param.__members__.keys()
         if inp_obj.model.method not in supported_methods:
             raise AdapterInputError(
                 self.program,
-                f"Unsupported model '{inp_obj.model.method}'. "
+                f"Unsupported method '{inp_obj.model.method}'. "
                 f"Supported methods include: {supported_methods}",
             )
 

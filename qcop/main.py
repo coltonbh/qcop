@@ -1,5 +1,6 @@
 """Top level compute functions for qcop."""
 
+import traceback
 from typing import Any, Callable, Dict, Optional, Union
 
 from qcio import (
@@ -8,12 +9,14 @@ from qcio import (
     InputType,
     Model,
     Molecule,
+    NoResults,
     ProgramInput,
     ProgramOutput,
 )
 from qcio.helper_types import StrOrPath
 
 from .adapters import BaseAdapter
+from .exceptions import AdapterNotFoundError, ProgramNotFoundError
 from .utils import get_adapter, inherit_docstring_from
 
 
@@ -39,21 +42,35 @@ def compute(
 
     See BaseAdapter.compute for more details.
     """
-    adapter = get_adapter(program, inp_obj, qcng_fallback)
-    return adapter.compute(
-        inp_obj,
-        scratch_dir=scratch_dir,
-        rm_scratch_dir=rm_scratch_dir,
-        collect_stdout=collect_stdout,
-        collect_files=collect_files,
-        collect_wfn=collect_wfn,
-        update_func=update_func,
-        update_interval=update_interval,
-        print_stdout=print_stdout,
-        raise_exc=raise_exc,
-        propagate_wfn=propagate_wfn,
-        **kwargs,
-    )
+    try:
+        adapter = get_adapter(program, inp_obj, qcng_fallback)
+    except (AdapterNotFoundError, ProgramNotFoundError) as e:
+        # Add program_output to the exception
+        output_obj = ProgramOutput[type(inp_obj), NoResults](  # type: ignore
+            input_data=inp_obj,
+            success=False,
+            provenance={"program": program},
+            traceback=traceback.format_exc(),
+        )
+        e.program_output = output_obj
+        e.args = (*e.args, output_obj)
+        raise e
+
+    else:
+        return adapter.compute(
+            inp_obj,
+            scratch_dir=scratch_dir,
+            rm_scratch_dir=rm_scratch_dir,
+            collect_stdout=collect_stdout,
+            collect_files=collect_files,
+            collect_wfn=collect_wfn,
+            update_func=update_func,
+            update_interval=update_interval,
+            print_stdout=print_stdout,
+            raise_exc=raise_exc,
+            propagate_wfn=propagate_wfn,
+            **kwargs,
+        )
 
 
 def compute_args(

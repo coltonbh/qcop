@@ -87,6 +87,9 @@ def get_adapter(
 
     Raises:
         AdapterNotFoundError: If the adapter is not found.
+        ProgramNotFoundError: If an adapter is found but the program is not found.
+            Raised by check_qcng_support if qcng_fallback is True because QCEngine
+            checks for the adapter and the program.
     """
 
     if type(inp_obj) is FileInput:

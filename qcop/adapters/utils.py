@@ -104,9 +104,7 @@ def execute_subprocess(
 
     # Check if program executed successfully
     if proc.returncode != 0:
-        raise ExternalSubprocessError(
-            returncode=proc.returncode, cmd=" ".join(cmd), stdout=stdout
-        )
+        raise ExternalSubprocessError(proc.returncode, " ".join(cmd), stdout)
 
     return stdout
 

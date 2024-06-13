@@ -88,10 +88,7 @@ def test_qcio_geometric_engine_exception_handling(
         test_adapter,
         "compute",
         side_effect=ExternalSubprocessError(
-            1,
-            "terachem tc.in",
-            stdout="some stdout",
-            program_output=po_failure,
+            1, "terachem tc.in", "some stdout", po_failure
         ),
     )
 

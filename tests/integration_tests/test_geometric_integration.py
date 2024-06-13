@@ -1,5 +1,5 @@
 import pytest
-from qcio import CalcType, DualProgramInput, OptimizationOutput
+from qcio import CalcType, DualProgramInput, OptimizationResults, ProgramOutput
 
 from qcop.adapters import GeometricAdapter
 from tests.conftest import skipif_program_not_available
@@ -15,7 +15,9 @@ def test_full_optimization(dual_prog_inp):
 
     adapter = GeometricAdapter()
     output = adapter.compute(prog_inp, propagate_wfn=True)
-    assert isinstance(output, OptimizationOutput)
+    assert isinstance(output, ProgramOutput)
+    assert isinstance(output.input_data, DualProgramInput)
+    assert isinstance(output.results, OptimizationResults)
     # Ensure wavefunction was propagated
     assert (
         "Initial guess will be loaded from c0" in output.results.trajectory[-1].stdout
@@ -40,7 +42,9 @@ def test_full_transition_state(dual_prog_inp, water):
     adapter = GeometricAdapter()
     # Ensure output was produced
     output = adapter.compute(prog_inp, propagate_wfn=True)
-    assert isinstance(output, OptimizationOutput)
+    assert isinstance(output, ProgramOutput)
+    assert isinstance(output.input_data, DualProgramInput)
+    assert isinstance(output.results, OptimizationResults)
     # Ensure wavefunction was propagated
     assert (
         "Initial guess will be loaded from c0" in output.results.trajectory[-1].stdout

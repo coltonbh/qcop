@@ -55,7 +55,7 @@ class QCEngineAdapter(ProgramAdapter):
             )
 
         except QCEngineException as e:  # Base exception for all QCEngine
-            raise QCEngineError(inp_obj, self.external_program) from e
+            raise QCEngineError(self.external_program) from e
 
         else:
             return from_qcel_output_results(qcng_output), qcng_output["stdout"]
