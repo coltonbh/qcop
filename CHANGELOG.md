@@ -6,15 +6,15 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## [unreleased]
 
+## [0.6.2] - 2024-06-13
+
 ### Added
 
 - `try/except` to top-level `compute` function that will append the `.program_output` to the exception if the `get_adapter` function raises an exception.
 
-
 ### Changed
 
-- Modified exception hierarchy to include fewer **kwarg arguments, use mostly `args` instead, and fixed issue where some exceptions still didn't have `.program_output` set on them.
-
+- Modified exception hierarchy to include fewer `**kwarg` arguments, use mostly `args` instead, and fixed issue where some exceptions still didn't have `.program_output` set on them.
 
 ## [0.6.1] - 2024-06-10
 
@@ -210,7 +210,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 - Created adapter for TeraChem.
 - Exposed general purpose computing for any subprocess with `FileAdaptor`
 
-[unreleased]: https://github.com/coltonbh/qcop/compare/0.6.1...HEAD
+[unreleased]: https://github.com/coltonbh/qcop/compare/0.6.2...HEAD
+[0.6.2]: https://github.com/coltonbh/qcop/releases/tag/0.6.2
 [0.6.1]: https://github.com/coltonbh/qcop/releases/tag/0.6.1
 [0.6.0]: https://github.com/coltonbh/qcop/releases/tag/0.6.0
 [0.5.5]: https://github.com/coltonbh/qcop/releases/tag/0.5.5
