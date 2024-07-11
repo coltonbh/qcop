@@ -6,13 +6,15 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## [unreleased]
 
+## [0.7.0] - 2024-07-10
+
 ### Added
 
 - Added validation check for programs that do not support file inputs if files are passed as an input.
 
 ### Changed
 
-- Updated to `qcio 0.10.1` which uses `Structure` in place of `Molecule`.
+- 🚨 Updated to `qcio 0.10.1` which uses `Structure` in place of `Molecule`.
 - Changed `Adapter.write_files` to `Adapter.uses_files` to more clearly define purpose of this variable.
 - `tmpdir` context manager only creates a temporary directory if `mkdir` is passed as the first argument. This works in conjunction with `Adapter.uses_files` so that adapters that do not use file I/O (e.g., pure Python programs) do not have the additional overhead of creating and removing temporary directories for their calculations.
 
@@ -220,7 +222,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 - Created adapter for TeraChem.
 - Exposed general purpose computing for any subprocess with `FileAdaptor`
 
-[unreleased]: https://github.com/coltonbh/qcop/compare/0.6.2...HEAD
+[unreleased]: https://github.com/coltonbh/qcop/compare/0.7.0...HEAD
+[0.7.0]: https://github.com/coltonbh/qcop/releases/tag/0.7.0
 [0.6.2]: https://github.com/coltonbh/qcop/releases/tag/0.6.2
 [0.6.1]: https://github.com/coltonbh/qcop/releases/tag/0.6.1
 [0.6.0]: https://github.com/coltonbh/qcop/releases/tag/0.6.0
