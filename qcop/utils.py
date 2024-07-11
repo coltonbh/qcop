@@ -1,5 +1,6 @@
 import shutil
 from functools import lru_cache
+from typing import Optional
 
 from qcio import FileInput, Inputs
 
@@ -73,13 +74,13 @@ def check_qcng_support(program: str) -> None:
 
 
 def get_adapter(
-    program: str, inp_obj: Inputs, qcng_fallback: bool = False
+    program: str, inp_obj: Optional[Inputs] = None, qcng_fallback: bool = False
 ) -> BaseAdapter:
     """Get the adapter for a program.
 
     Args:
         program: The program to get the adapter for.
-        inp_obj: The input object for the calculation.
+        inp_obj: The input object for the calculation. Required only for FileInput.
         qcng_fallback: Fallback to use QCEngine if the adapter is not in qcop.
 
     Returns:

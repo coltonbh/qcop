@@ -7,12 +7,12 @@ import numpy as np
 from qcio import (
     CalcType,
     DualProgramInput,
-    Molecule,
     OptimizationResults,
     ProgramArgs,
     ProgramInput,
     ProgramOutput,
     SinglePointResults,
+    Structure,
 )
 
 from qcop.exceptions import (
@@ -34,7 +34,7 @@ class GeometricAdapter(ProgramAdapter[DualProgramInput, OptimizationResults]):
     def __init__(self):
         super().__init__()
         # Check that geomeTRIC is installed
-        self.geometric = self._ensure_geometric()
+        self.geometric = self._ensure_geometric_installed()
         # Dictionary from geometric.run_json; copying QCSchema workflow
         self.coordsys_params = {
             "cart": (self.geometric.internal.CartesianCoordinates, False, False),
@@ -57,13 +57,13 @@ class GeometricAdapter(ProgramAdapter[DualProgramInput, OptimizationResults]):
         }
 
     @staticmethod
-    def _ensure_geometric():
+    def _ensure_geometric_installed():
         try:
             import geometric
-
+        except ModuleNotFoundError as e:
+            raise ProgramNotFoundError("geometric") from e
+        else:
             return geometric
-        except ModuleNotFoundError:
-            raise ProgramNotFoundError("geometric")
 
     def program_version(self, *args) -> str:
         """Get the program version."""
@@ -86,7 +86,7 @@ class GeometricAdapter(ProgramAdapter[DualProgramInput, OptimizationResults]):
         """
         # Update the input object based on its calctype
         self._update_inp_obj(inp_obj)
-        geometric_molecule = self._create_geometric_molecule(inp_obj.molecule)
+        geometric_molecule = self._create_geometric_molecule(inp_obj.structure)
         internal_coords_sys = self._setup_coords(inp_obj, geometric_molecule)
 
         qcio_adapter = get_adapter(inp_obj.subprogram, inp_obj, qcng_fallback=True)
@@ -129,21 +129,21 @@ class GeometricAdapter(ProgramAdapter[DualProgramInput, OptimizationResults]):
         else:
             inp_obj.keywords["transition"] = False
 
-    def _create_geometric_molecule(self, molecule: Molecule):
-        """Create a geomeTRIC Molecule from the input object.
+    def _create_geometric_molecule(self, structure: Structure):
+        """Create a geomeTRIC Structure from the input object.
 
         Args:
-            molecule: The qcio Molecule object for a computation.
+            structure: The qcio Structure object for a computation.
 
         Returns:
-            The geomeTRIC Molecule object.
+            The geomeTRIC Structure object.
         """
         xyz_path = "initial_geometry.xyz"
-        molecule.save(xyz_path)
-        geometric_molecule = self.geometric.molecule.Molecule(fnm=xyz_path)
+        structure.save(xyz_path)
+        geometric_structure = self.geometric.molecule.Molecule(fnm=xyz_path)
         # Delete file
         Path(xyz_path).unlink()
-        return geometric_molecule
+        return geometric_structure
 
     def _construct_optimizer(
         self,
@@ -168,13 +168,13 @@ class GeometricAdapter(ProgramAdapter[DualProgramInput, OptimizationResults]):
             The geomeTRIC optimizer object.
         """
         return self.geometric.optimize.Optimizer(
-            inp_obj.molecule.geometry.flatten(),
+            inp_obj.structure.geometry.flatten(),
             geometric_molecule,
             internal_coords_sys,
             engine=self._geometric_engine()(
                 qcio_adapter,
                 inp_obj.subprogram_args,
-                inp_obj.molecule,
+                inp_obj.structure,
                 geometric_molecule,
                 propagate_wfn,
                 update_func,
@@ -189,12 +189,12 @@ class GeometricAdapter(ProgramAdapter[DualProgramInput, OptimizationResults]):
             ),
         )
 
-    def _setup_coords(self, inp_obj, geometric_molecule):
+    def _setup_coords(self, inp_obj, geometric_structure):
         """Setup the internal coordinate system.
 
         Args:
             inp_obj: The qcio DualProgramInput object for a computation.
-            geometric_molecule: The geomeTRIC Molecule object.
+            geometric_structure: The geomeTRIC Structure object.
 
         Returns:
             The geomeTRIC internal coordinate system with constraints applied.
@@ -221,11 +221,11 @@ class GeometricAdapter(ProgramAdapter[DualProgramInput, OptimizationResults]):
             )
 
             constraints, constraint_vals = self.geometric.prepare.parse_constraints(
-                geometric_molecule, constraints_string
+                geometric_structure, constraints_string
             )
 
         return coords_cls(
-            geometric_molecule,
+            geometric_structure,
             build=True,
             connect=connect,
             addcart=addcart,
@@ -244,16 +244,16 @@ class GeometricAdapter(ProgramAdapter[DualProgramInput, OptimizationResults]):
                 self,
                 qcio_adapter: ProgramAdapter,
                 qcio_program_args: ProgramArgs,
-                qcio_molecule: Molecule,
-                geometric_molecule,
+                qcio_structure: Structure,
+                geometric_structure,
                 propagate_wfn: bool = False,
                 update_func: Optional[Callable] = None,
                 update_interval: Optional[float] = None,
             ):
-                super().__init__(geometric_molecule)
+                super().__init__(geometric_structure)
                 self.qcio_adapter = qcio_adapter
                 self.qcio_program_args = qcio_program_args
-                self.qcio_molecule = qcio_molecule
+                self.qcio_structure = qcio_structure
                 self.propagate_wfn = propagate_wfn
                 self.qcio_trajectory: List[ProgramOutput] = []
                 self.update_func = update_func
@@ -268,13 +268,13 @@ class GeometricAdapter(ProgramAdapter[DualProgramInput, OptimizationResults]):
                 Returns:
                     A dictionary of {"energy": float, "gradient": ndarray}.
                 """
-                # Merge new coordinates into molecule
-                molecule = Molecule(
-                    **{**self.qcio_molecule.model_dump(), "geometry": coords}
+                # Merge new coordinates into structure
+                structure = Structure(
+                    **{**self.qcio_structure.model_dump(), "geometry": coords}
                 )
                 prog_input = ProgramInput(
                     calctype=CalcType.gradient,
-                    molecule=molecule,
+                    structure=structure,
                     **self.qcio_program_args.model_dump(),
                 )
 

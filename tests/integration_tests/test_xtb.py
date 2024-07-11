@@ -1,6 +1,6 @@
 import numpy as np
 import pytest
-from qcio import Molecule, ProgramInput
+from qcio import ProgramInput, Structure
 
 from qcop import compute
 from tests.conftest import skipif_program_not_available
@@ -10,7 +10,7 @@ from tests.conftest import skipif_program_not_available
 @skipif_program_not_available("xtb")
 def test_xtb():
     inp_obj = ProgramInput(
-        molecule=Molecule(
+        structure=Structure(
             symbols=["O", "H", "H"],
             # Integration test depend upon this geometry; do not change
             geometry=[

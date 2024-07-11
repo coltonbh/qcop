@@ -8,10 +8,10 @@ from qcio import (
     Files,
     InputType,
     Model,
-    Molecule,
     NoResults,
     ProgramInput,
     ProgramOutput,
+    Structure,
 )
 from qcio.helper_types import StrOrPath
 
@@ -75,7 +75,7 @@ def compute(
 
 def compute_args(
     program: str,
-    molecule: Molecule,
+    structure: Structure,
     *,
     calctype: Union[str, CalcType],
     model: Union[Dict[str, str], Model],
@@ -88,7 +88,7 @@ def compute_args(
 
     Args:
         program: The program to run.
-        molecule: The molecule to use.
+        structure: The structure to use.
         calctype: The type of calculation to run.
         model: The model to use for the calculation.
         keywords: The keywords to use for the calculation.
@@ -108,7 +108,7 @@ def compute_args(
 
     inp_obj = ProgramInput(
         calctype=calctype,  # type: ignore
-        molecule=molecule,
+        structure=structure,
         model=model,  # type: ignore
         keywords=keywords or {},
         files=files or {},

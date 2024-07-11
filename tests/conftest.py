@@ -5,11 +5,11 @@ import pytest
 from qcio import (
     CalcType,
     DualProgramInput,
-    Molecule,
     ProgramArgs,
     ProgramInput,
     ProgramOutput,
     SinglePointResults,
+    Structure,
 )
 
 from qcop.adapters.base import ProgramAdapter
@@ -18,8 +18,8 @@ from qcop.utils import prog_available
 
 @pytest.fixture(scope="session")
 def hydrogen():
-    """Create a Hydrogen molecule object."""
-    return Molecule(
+    """Create a Hydrogen structure object."""
+    return Structure(
         symbols=["H", "H"],
         # Integration test depend upon this geometry; do not change
         geometry=[[0, 0, 0], [0, 0, 1.4]],
@@ -28,8 +28,8 @@ def hydrogen():
 
 @pytest.fixture(scope="session")
 def water():
-    """Create a water molecule object."""
-    return Molecule(
+    """Create a water structure object."""
+    return Structure(
         symbols=["O", "H", "H"],
         # Integration test depend upon this geometry; do not change
         geometry=[
@@ -47,7 +47,7 @@ def prog_inp(hydrogen):
 
     def create_prog_input(calctype):
         return ProgramInput(
-            molecule=hydrogen,
+            structure=hydrogen,
             calctype=calctype,
             # Integration tests depend up this model; do not change
             model={"method": "hf", "basis": "sto-3g"},
@@ -66,7 +66,7 @@ def dual_prog_inp(hydrogen):
     def create_prog_input(calctype):
         return DualProgramInput(
             calctype=calctype,
-            molecule=hydrogen,
+            structure=hydrogen,
             subprogram="test",
             subprogram_args=ProgramArgs(
                 model={"method": "hf", "basis": "sto-3g"},
@@ -81,7 +81,7 @@ def prog_output(prog_inp):
     """Create ProgramOutput object"""
     sp_inp_energy = prog_inp("energy")
     energy = 1.0
-    n_atoms = len(sp_inp_energy.molecule.symbols)
+    n_atoms = len(sp_inp_energy.structure.symbols)
     gradient = np.arange(n_atoms * 3).reshape(n_atoms, 3)
     hessian = np.arange(n_atoms**2 * 3**2).reshape(n_atoms * 3, n_atoms * 3)
 

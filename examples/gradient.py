@@ -1,11 +1,11 @@
-from qcio import CalcType, Molecule, ProgramInput
+from qcio import CalcType, ProgramInput, Structure
 
 from qcop import compute, exceptions
 
-# Create the molecule
-# Can also open a molecule from a file
-# molecule = Molecule.open("path/to/h2o.xyz")
-molecule = Molecule(
+# Create the structure
+# Can also open a structure from a file
+# structure = Structure.open("path/to/h2o.xyz")
+structure = Structure(
     symbols=["O", "H", "H"],
     geometry=[  # type: ignore
         [0.0, 0.0, 0.0],
@@ -15,7 +15,7 @@ molecule = Molecule(
 )
 # Define the program input
 pi = ProgramInput(
-    molecule=molecule,
+    structure=structure,
     calctype=CalcType.gradient,
     model={"method": "hf", "basis": "sto-3g"},  # type: ignore
     keywords={"purify": "no"},

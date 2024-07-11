@@ -783,13 +783,13 @@ tests = ["pytest", "pytest-cov"]
 
 [[package]]
 name = "qcio"
-version = "0.9.0"
+version = "0.10.1"
 description = "Beautiful and user friendly data structures for quantum chemistry."
 optional = false
 python-versions = "<4.0,>=3.8"
 files = [
-    {file = "qcio-0.9.0-py3-none-any.whl", hash = "sha256:a136d279766df1e7fae5d1f74636130dc7d8f65318c3989ae614caaffcba39c9"},
-    {file = "qcio-0.9.0.tar.gz", hash = "sha256:4f644009a6132fa883d0cdf0075e0a194a913763b41ea217bc4988f113105a41"},
+    {file = "qcio-0.10.1-py3-none-any.whl", hash = "sha256:70abf1c323d88f2807d6d82d6f1b88ceca39e0f4197e09ed6fca43c29d248297"},
+    {file = "qcio-0.10.1.tar.gz", hash = "sha256:831d5971ee3df9e5abc268f8e78c7b89979d29c3d91da7723b31bc41bf60250d"},
 ]
 
 [package.dependencies]
@@ -799,20 +799,23 @@ pyyaml = ">=6.0,<7.0"
 toml = ">=0.10.2,<0.11.0"
 typing-extensions = ">=4.7.1,<5.0.0"
 
+[package.extras]
+rdkit = ["rdkit (>=2022.3.3)"]
+
 [[package]]
 name = "qcparse"
-version = "0.5.3"
+version = "0.6.0"
 description = "A package for parsing Quantum Chemistry program file outputs into structured qcio data objects."
 optional = false
 python-versions = "<4.0,>=3.8"
 files = [
-    {file = "qcparse-0.5.3-py3-none-any.whl", hash = "sha256:c399e94f03983259c94bb6e99aa64b1d20392cfcf325321bea3d5da1a649a530"},
-    {file = "qcparse-0.5.3.tar.gz", hash = "sha256:6449dc31d9349791e44fe19c18b1b0eb0c50a2f104bc3ad7348d5fb203efcd0c"},
+    {file = "qcparse-0.6.0-py3-none-any.whl", hash = "sha256:5637e9e7417cf22f93d1378e0802b602a00d085f129ab76ae67558e2cfcf46ba"},
+    {file = "qcparse-0.6.0.tar.gz", hash = "sha256:d5d166a0d58518e8664bbf11df517d2d00483488dd8815f52aa8bf824d510b05"},
 ]
 
 [package.dependencies]
 pydantic = ">=2.0.0"
-qcio = ">=0.7.1"
+qcio = ">=0.10.0"
 
 [[package]]
 name = "ruff"
@@ -915,4 +918,4 @@ qcengine = ["qcelemental", "qcengine"]
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.8"
-content-hash = "8cdf89e7e7f6ebc913201d97fc5d8c9d57da7fe58f8682af11268fd8a71dad86"
+content-hash = "01beb85402509f9fd531eebdbd6e854be483bf5297e36084a38c6e021f5d1aa4"

@@ -27,12 +27,12 @@ def test_ensure_geometric():
         is_geometric_available = False
 
     if is_geometric_available:
-        result = GeometricAdapter()._ensure_geometric()
+        result = GeometricAdapter()._ensure_geometric_installed()
         assert result == geometric
     else:
         # Test when geometric is not available
         with pytest.raises(ProgramNotFoundError) as excinfo:
-            GeometricAdapter()._ensure_geometric()
+            GeometricAdapter()._ensure_geometric_installed()
         assert "geometric" in str(excinfo.value)
 
 

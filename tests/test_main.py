@@ -64,10 +64,10 @@ def test_update_func_preferred_over_print_stdout(test_adapter, prog_inp, mocker)
     assert spy.call_args.args[3] is None
 
 
-def test_compute_write_files_if_adaptor_write_files_set(prog_inp):
-    """Test that compute writes files if the adaptor has write_files set to True."""
+def test_compute_uses_files_if_adaptor_uses_files_set(prog_inp):
+    """Test that compute writes files if the adaptor has uses_files set to True."""
 
-    # Set adapter.write_files is True by default
+    # Set adapter.uses_files is True by default
     energy_inp = prog_inp("energy")
     filename, contents = "hello_world.py", "print('hello world')"
     energy_inp.files[filename] = contents
@@ -77,19 +77,18 @@ def test_compute_write_files_if_adaptor_write_files_set(prog_inp):
         assert f.read() == contents
 
 
-def test_compute_does_not_write_files_if_adaptor_write_files_set(prog_inp):
-    """Test that compute writes files if the adaptor has write_files set to True."""
+def test_compute_does_not_uses_files_if_adaptor_uses_files_set(prog_inp):
+    """Test that compute writes files if the adaptor has uses_files set to True."""
 
-    # Set adapter.write_files to False
+    # Set adapter.uses_files to False
     adapter = registry["test"]
-    adapter.write_files = False
+    adapter.uses_files = False
 
     energy_inp = prog_inp("energy")
     filename, contents = "hello_world.py", "print('hello world')"
     energy_inp.files[filename] = contents
-
-    result = compute("test", energy_inp, rm_scratch_dir=False)
-    assert not (Path(result.provenance.scratch_dir) / filename).exists()
+    with pytest.raises(AdapterInputError):
+        compute("test", energy_inp, rm_scratch_dir=False)
 
 
 def test_compute_raises_exception_if_program_fails_raise_exec_true(prog_inp):
@@ -129,7 +128,7 @@ def test_compute_args(hydrogen, mocker):
     # Spy on top level compute function
     compute_spy = mocker.patch("qcop.main.compute")
     values_dict = {
-        "molecule": hydrogen,
+        "structure": hydrogen,
         "calctype": "energy",
         "model": {"method": "HF", "basis": "sto-3g"},
         "keywords": {"fake": "things"},
@@ -147,7 +146,7 @@ def test_compute_args_file_object_passed(hydrogen, mocker):
     # Spy on top level compute function
     compute_spy = mocker.patch("qcop.main.compute")
     values_dict = {
-        "molecule": hydrogen,
+        "structure": hydrogen,
         "calctype": "energy",
         "model": {"method": "HF", "basis": "sto-3g"},
         "keywords": {"fake": "things"},

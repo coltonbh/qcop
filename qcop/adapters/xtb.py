@@ -26,7 +26,7 @@ class XTBAdapter(ProgramAdapter[ProgramInput, SinglePointResults]):
 
     supported_calctypes = [CalcType.energy, CalcType.gradient]
     program = "xtb"
-    write_files = False  # xtb-python does not use files written to disk
+    uses_files = False  # xtb-python does not use files written to disk
 
     def __init__(self):
         super().__init__()
@@ -90,11 +90,11 @@ class XTBAdapter(ProgramAdapter[ProgramInput, SinglePointResults]):
             # Create Calculator
             calc = self.xtb.interface.Calculator(
                 getattr(self.xtb.interface.Param, inp_obj.model.method),
-                np.array(inp_obj.molecule.atomic_numbers),
-                inp_obj.molecule.geometry,
-                inp_obj.molecule.charge,
+                np.array(inp_obj.structure.atomic_numbers),
+                inp_obj.structure.geometry,
+                inp_obj.structure.charge,
                 # From https://github.com/grimme-lab/xtb-python/blob/a32309a43e5a6572b033814eacf396328a2a36ed/xtb/qcschema/harness.py#L126 # noqa: E501
-                inp_obj.molecule.multiplicity - 1,
+                inp_obj.structure.multiplicity - 1,
             )
             calc.set_verbosity(self.xtb.libxtb.VERBOSITY_FULL)  # all logs
 
