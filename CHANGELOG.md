@@ -6,6 +6,12 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## [unreleased]
 
+## [0.7.1] - 2024-07-10
+
+### Fixed
+
+- Incorrect check in `BaseAdapter.compute()` using `isinstance(inp_obj, FileInput)`. Updated to `type(inp_obj) is FileInput` to work with updated `qcio` inheritance hierarchy.
+
 ## [0.7.0] - 2024-07-10
 
 ### Added
@@ -222,7 +228,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 - Created adapter for TeraChem.
 - Exposed general purpose computing for any subprocess with `FileAdaptor`
 
-[unreleased]: https://github.com/coltonbh/qcop/compare/0.7.0...HEAD
+[unreleased]: https://github.com/coltonbh/qcop/compare/0.7.1...HEAD
+[0.7.1]: https://github.com/coltonbh/qcop/releases/tag/0.7.1
 [0.7.0]: https://github.com/coltonbh/qcop/releases/tag/0.7.0
 [0.6.2]: https://github.com/coltonbh/qcop/releases/tag/0.6.2
 [0.6.1]: https://github.com/coltonbh/qcop/releases/tag/0.6.1
