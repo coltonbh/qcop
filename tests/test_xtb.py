@@ -1,6 +1,6 @@
 import numpy as np
 import pytest
-from qcio import CalcType, Molecule, ProgramInput
+from qcio import CalcType, ProgramInput, Structure
 
 from qcop import compute
 from qcop.adapters import XTBAdapter
@@ -28,7 +28,7 @@ def test_validate_input(mocker, prog_inp):
 @skipif_program_not_available("xtb")
 def test_xtb():
     inp_obj = ProgramInput(
-        molecule=Molecule(
+        structure=Structure(
             symbols=["O", "H", "H"],
             # Integration test depend upon this geometry; do not change
             geometry=[

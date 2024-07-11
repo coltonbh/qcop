@@ -2,16 +2,16 @@
 
 from pathlib import Path
 
-from qcio import FileInput, Molecule
+from qcio import FileInput, Structure
 
 from qcop import compute
 
 # Input files for QC Program
 qc_inp = Path("path/to/tc.in").read_text()  # Or your own function to create tc.in
 
-# Molecule object to XYZ file
-molecule = Molecule.open("path/to/my/mol.xyz")
-mol_xyz = molecule.to_xyz()
+# Structure object to XYZ file
+structure = Structure.open("path/to/my/mol.xyz")
+mol_xyz = structure.to_xyz()
 
 # Create a FileInput object for TeraChem
 file_inp = FileInput(

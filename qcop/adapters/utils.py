@@ -240,21 +240,28 @@ def construct_provenance(
 
 
 @contextmanager
-def tmpdir(directory: Optional[StrOrPath] = None, rmdir: bool = True):
+def tmpdir(
+    mkdir: bool = True, directory: Optional[StrOrPath] = None, rmdir: bool = True
+):
     """Context manager for a temporary directory.
 
     Args:
+        mkdir: Whether to create the temporary directory. If False, the current working
+            directory is used.
         directory: Where to create the temporary directory. If None, a new directory is
             created in the system default temporary directory.
         rmdir: Whether to remove the temporary directory when the context manager exits.
     """
-    cwd = Path.cwd()  # Save current working directory
-    temp_dir = Path(directory or tempfile.mkdtemp())  # Set path to directory
-    temp_dir.mkdir(parents=True, exist_ok=True)  # Create directory
-    try:
-        os.chdir(temp_dir)  # Change to temporary directory
-        yield temp_dir  # Execute code in context manager
-    finally:
-        if rmdir:  # After exiting context manager
-            shutil.rmtree(temp_dir)
-        os.chdir(cwd)
+    if not mkdir:
+        yield Path.cwd()
+    else:
+        cwd = Path.cwd()  # Save current working directory
+        temp_dir = Path(directory or tempfile.mkdtemp())  # Set path to directory
+        temp_dir.mkdir(parents=True, exist_ok=True)  # Create directory
+        try:
+            os.chdir(temp_dir)  # Change to temporary directory
+            yield temp_dir  # Execute code in context manager
+        finally:
+            if rmdir:  # After exiting context manager
+                shutil.rmtree(temp_dir)
+            os.chdir(cwd)

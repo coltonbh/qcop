@@ -1,6 +1,6 @@
 import numpy as np
 import pytest
-from qcio import CalcType, Molecule, ProgramInput
+from qcio import CalcType, ProgramInput, Structure
 
 from qcop.main import compute
 from tests.conftest import skipif_program_not_available
@@ -11,7 +11,7 @@ from tests.conftest import skipif_program_not_available
 def test_terachem_energy(hydrogen):
     # Modify keywords
     energy_inp = ProgramInput(
-        molecule=hydrogen,
+        structure=hydrogen,
         calctype=CalcType.energy,
         model={"method": "hf", "basis": "sto-3g"},
         keywords={"purify": "no"},
@@ -28,7 +28,7 @@ def test_terachem_energy(hydrogen):
 def test_terachem_gradient(hydrogen):
     # Modify keywords
     energy_inp = ProgramInput(
-        molecule=hydrogen,
+        structure=hydrogen,
         calctype=CalcType.gradient,
         model={"method": "hf", "basis": "sto-3g"},
         keywords={"purify": "no"},
@@ -51,7 +51,7 @@ def test_terachem_gradient(hydrogen):
 def test_terachem_hessian():
     # Modify keywords
     # This H2O converges in TeraChem
-    h2o = Molecule(
+    h2o = Structure(
         symbols=["O", "H", "H"],
         geometry=[
             [0.022531001997713594, 0.017650541231852297, -0.012249224534705398],
@@ -60,7 +60,7 @@ def test_terachem_hessian():
         ],
     )
     energy_inp = ProgramInput(
-        molecule=h2o,
+        structure=h2o,
         calctype=CalcType.hessian,
         model={"method": "b3lyp", "basis": "6-31g"},
         keywords={"purify": "no"},

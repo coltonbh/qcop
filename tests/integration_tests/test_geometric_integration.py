@@ -36,7 +36,7 @@ def test_full_transition_state(dual_prog_inp, water):
     prog_inp = dual_prog_inp(CalcType.transition_state)
     prog_inp_dict = prog_inp.model_dump()
     prog_inp_dict["subprogram"] = "terachem"
-    prog_inp_dict["molecule"] = water
+    prog_inp_dict["structure"] = water
     prog_inp = DualProgramInput(**prog_inp_dict)
 
     adapter = GeometricAdapter()

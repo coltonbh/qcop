@@ -32,15 +32,15 @@ pip install qcop
 The `compute` function is the main entry point for the library and is used to run a calculation.
 
 ```python
-from qcio import Molecule, ProgramInput
+from qcio import Structure, ProgramInput
 from qcop import compute
 from qcop.exceptions import ExternalProgramError
-# Create the molecule
-h2o = Molecule.open("h2o.xyz")
+# Create the Structure
+h2o = Structure.open("h2o.xyz")
 
 # Define the program input
 prog_input = ProgramInput(
-    molecule=h2o,
+    structure=h2o,
     calctype="energy",
     model={"method": "hf", "basis": "sto-3g"},
     keywords={"purify": "no", "restricted": False},
@@ -75,15 +75,15 @@ else:
 One may also call `compute(..., raise_exc=False)` to return a `ProgramOutput` object rather than raising an exception when a calculation fails. This may allow easier handling of failures in some cases.
 
 ```python
-from qcio import Molecule, ProgramInput
+from qcio import Structure, ProgramInput
 from qcop import compute
 from qcop.exceptions import ExternalProgramError
-# Create the molecule
-h2o = Molecule.open("h2o.xyz")
+# Create the Structure
+h2o = Structure.open("h2o.xyz")
 
 # Define the program input
 prog_input = ProgramInput(
-    molecule=h2o,
+    structure=h2o,
     calctype="energy",
     model={"method": "hf", "basis": "sto-3g"},
     keywords={"purify": "no", "restricted": False},
@@ -116,10 +116,10 @@ else:
 Alternatively, the `compute_args` function can be used to run a calculation with the input data structures passed in as arguments rather than as a single `ProgramInput` object.
 
 ```python
-from qcio import Molecule
+from qcio import Structure
 from qcop import compute_args
-# Create the molecule
-h2o = Molecule.open("h2o.xyz")
+# Create the Structure
+h2o = Structure.open("h2o.xyz")
 
 # Run the calculation
 output = compute_args(

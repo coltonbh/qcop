@@ -11,7 +11,7 @@
 
 ## Future Work
 
-- Could avoid creating temporary directories for adapters that do not use disk. Could set `AdapterBase.disk = False` and then skip the `with tmpdir(...)` block in `BaseAdapter.compute()`. This would save at most < a few milliseconds per calculation. Not critical. _Might_ be useful for super fast calls like `xtb` or `rdkit` on super small molecules?
+- Could avoid creating temporary directories for adapters that do not use disk. Could set `AdapterBase.disk = False` and then skip the `with tmpdir(...)` block in `BaseAdapter.compute()`. This would save at most < a few milliseconds per calculation. Not critical. _Might_ be useful for super fast calls like `xtb` or `rdkit` on super small structures?
 - I think I need a generic wrapper for capturing stdout logs from subprograms, `xtb`-like programs, `geomeTRIC`, etc. and then work with the object in the `BaseAdapter.compute()` level with the `update_func` rather than passing this all the way down the stack, which is messy and each program requires log capture in different ways. Starting a `Thread` only adds about `0.0002` seconds of overhead (on my laptop). Something like this (basically copy logic from `execute_subprocess` into `BaseAdapter.compute()`):
 
 ```python
@@ -25,7 +25,7 @@ with capture_logs(...) as logs_io:
     # Continue with the rest of the calculation
 ```
 
-- Because the numpy arrays (e.g., `Molecule.geometry` or `SinglePointResults.hessian`) are only typeable down to `np.typing.NDarray[dtype]` their shapes cannot be statically type checked. For importantly, because SinglePointResults.results is `Optional` and so are the `.energy`, `.gradient.` and `.hessian` values, I have to add assert statements like this to make this code type safe. I may want to consider using Generics or TypeVars to make this more type safe by having `SinglePointResult` be generic over the type of results it contains to guarantee that the results are not `None` and that the values are not `None`. For now I'll live with the assert statements and the `SinglePointResult`/`ProgramOutput` validators to guarantee the data is correct. Going with `# type: ignore` for now since I know these values will exist due to `Pydantic` validation.
+- Because the numpy arrays (e.g., `Structure.geometry` or `SinglePointResults.hessian`) are only typeable down to `np.typing.NDarray[dtype]` their shapes cannot be statically type checked. For importantly, because SinglePointResults.results is `Optional` and so are the `.energy`, `.gradient.` and `.hessian` values, I have to add assert statements like this to make this code type safe. I may want to consider using Generics or TypeVars to make this more type safe by having `SinglePointResult` be generic over the type of results it contains to guarantee that the results are not `None` and that the values are not `None`. For now I'll live with the assert statements and the `SinglePointResult`/`ProgramOutput` validators to guarantee the data is correct. Going with `# type: ignore` for now since I know these values will exist due to `Pydantic` validation.
 
   ```python
   for i, (forward, backward) in enumerate(zip_longest(*[iter(gradients)] * 2)):

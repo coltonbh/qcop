@@ -31,13 +31,13 @@ registry = {}
 class BaseAdapter(ABC, Generic[InputType, ResultsType]):
     """Base class for all adapters."""
 
-    # Whether to write files from inp_obj to disk before executing program.
-    # If True, the adapter will write all files from inp_obj to disk before executing
+    # Whether to this program reads or writes files to disk.
+    # If True, the adapter will write all files from inp_obj to a disk before executing
     # the program. If False, the adapter must handle input files itself in some other
     # way. Generally this should be True for most adapters unless the program can
     # handle input files directly from memory, stdin, or some other mechanism that is
     # more efficient than writing to disk.
-    write_files = True
+    uses_files = True
     program: str  # All subclasses must define this attribute.
 
     def program_version(self, stdout: Optional[str]) -> Optional[str]:
@@ -140,8 +140,8 @@ class BaseAdapter(ABC, Generic[InputType, ResultsType]):
             )
 
         # cd to a temporary directory to run the program.
-        with tmpdir(scratch_dir, rm_scratch_dir) as final_scratch_dir:
-            if self.write_files:  # Write non structured input files to disk.
+        with tmpdir(self.uses_files, scratch_dir, rm_scratch_dir) as final_scratch_dir:
+            if self.uses_files:  # Write non structured input files to disk.
                 inp_obj.save_files()
 
             # Define outputs
@@ -307,5 +307,13 @@ class ProgramAdapter(BaseAdapter, Generic[InputType, ResultsType]):
                     f"The {self.program} adapter does not yet support "
                     f"'{inp_obj.calctype.value}' calculations. This adaptor can "
                     f"compute: {[ct.value for ct in self.supported_calctypes]}"
+                ),
+            )
+        if inp_obj.files and not self.uses_files:
+            raise AdapterInputError(
+                program=self.program,
+                message=(
+                    f"The {self.program} adapter does not support files as additional "
+                    "inputs. Remove the files from your input."
                 ),
             )

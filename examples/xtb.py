@@ -1,13 +1,13 @@
 """Must run script like this: python -m examples.xtb"""
 
-from qcio import CalcType, Molecule, ProgramInput
+from qcio import CalcType, ProgramInput, Structure
 
 from qcop import compute
 
-# Create the molecule
-# Can also open a molecule from a file
-# molecule = Molecule.open("path/to/h2o.xyz")
-molecule = Molecule(
+# Create the structure
+# Can also open a structure from a file
+# structure = Structure.open("path/to/h2o.xyz")
+structure = Structure(
     symbols=["O", "H", "H"],
     geometry=[  # type: ignore
         [0.0, 0.0, 0.0],
@@ -18,7 +18,7 @@ molecule = Molecule(
 
 # Define the program input
 prog_input = ProgramInput(
-    molecule=molecule,
+    structure=structure,
     calctype=CalcType.energy,
     model={"method": "GFN2xTB"},  # type: ignore
     keywords={"max_iterations": 150},

@@ -1,11 +1,11 @@
-from qcio import Molecule, ProgramInput
+from qcio import ProgramInput, Structure
 
 from qcop import compute, exceptions
 
-# Create the molecule
-# Can also open a molecule from a file
-# molecule = Molecule.open("path/to/h2o.xyz")
-molecule = Molecule(
+# Create the structure
+# Can also open a structure from a file
+# structure = Structure.open("path/to/h2o.xyz")
+structure = Structure(
     symbols=["O", "H", "H"],
     connectivity=[(0, 1, 1), (0, 2, 1)],  # Required for MM models
     geometry=[  # type: ignore
@@ -17,7 +17,7 @@ molecule = Molecule(
 
 # Define the program input
 pi = ProgramInput(
-    molecule=molecule,
+    structure=structure,
     calctype="energy",  # type: ignore
     model={"method": "UFF"},  # type: ignore
 )

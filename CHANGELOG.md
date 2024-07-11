@@ -6,6 +6,16 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## [unreleased]
 
+### Added
+
+- Added validation check for programs that do not support file inputs if files are passed as an input.
+
+### Changed
+
+- Updated to `qcio 0.10.1` which uses `Structure` in place of `Molecule`.
+- Changed `Adapter.write_files` to `Adapter.uses_files` to more clearly define purpose of this variable.
+- `tmpdir` context manager only creates a temporary directory if `mkdir` is passed as the first argument. This works in conjunction with `Adapter.uses_files` so that adapters that do not use file I/O (e.g., pure Python programs) do not have the additional overhead of creating and removing temporary directories for their calculations.
+
 ## [0.6.2] - 2024-06-13
 
 ### Added
@@ -80,7 +90,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ### Changed
 
-- Upgraded to `qcio>=0.8.1` to fix QCElemental behavior that auto-rotates Molecules without user consent.
+- Upgraded to `qcio>=0.8.1` to fix QCElemental behavior that auto-rotates Structures without user consent.
 - Modified all example scripts to be standalone without referencing an external `.xyz` file and to use `try/except` statements now that `raise_exc=True` is the default.
 
 ### Added
