@@ -6,6 +6,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## [unreleased]
 
+### Added
+
+- `xtb` to optional installs and error message for `XtbAdapter` to indicate it can be installed with `pip install qcop[xtb]`.
+
 ## [0.7.1] - 2024-07-10
 
 ### Fixed

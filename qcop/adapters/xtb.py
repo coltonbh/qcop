@@ -66,7 +66,14 @@ class XTBAdapter(ProgramAdapter[ProgramInput, SinglePointResults]):
 
             return xtb
         except ModuleNotFoundError:
-            raise ProgramNotFoundError("xtb")
+            raise ProgramNotFoundError(
+                "xtb",
+                install_msg=(
+                    "Program not found: 'xtb'. To use xtb please install it with pip "
+                    "install qcop[xtb] or add '' if your shell requires it. e.g., "
+                    "pip install 'qcop[xtb]'."
+                ),
+            )
 
     def compute_results(
         self,
