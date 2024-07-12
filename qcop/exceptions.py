@@ -32,6 +32,10 @@ class QCOPBaseError(Exception):
         )
         return self.program_output
 
+    def __str__(self):
+        """Omits the program_output attribute from the string representation."""
+        return self.message
+
 
 class AdapterError(QCOPBaseError):
     """Base class for exceptions thrown by adapters."""
@@ -80,9 +84,9 @@ class ProgramNotFoundError(ExternalProgramError):
         program: program which was not found
     """
 
-    def __init__(self, program: str, *args):
+    def __init__(self, program: str, *args, install_msg: Optional[str] = None):
         self.program = program
-        self.message = (
+        self.message = install_msg or (
             f"Program not found: '{self.program}'. To use {self.program} please "
             f"install it on your system and ensure that it is on your PATH."
         )
