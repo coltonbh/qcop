@@ -5,12 +5,13 @@ description = "A package for operating Quantum Chemistry programs using qcio sta
 authors = ["Colton Hicks <github@coltonhicks.com>"]
 license = "MIT"
 readme = "README.md"
+repository = "https://github.com/coltonbh/qcop"
 homepage = "https://github.com/coltonbh/qcop"
 
 [tool.poetry.dependencies]
 python = "^3.8"
 qcparse = "^0.6.0"
-qcio = "^0.10.1"
+qcio = "^0.10.2"
 
 # A list of all of the optional dependencies, some of which are included in the below
 # `extras`. They can be opted into by apps.
@@ -36,6 +37,7 @@ geometric = "^1.0.1"
 qcelemental = "^0.26.0"
 qcengine = "^0.27.0"
 xtb = "^22.1"
+types-toml = "^0.10.8.20240310"
 
 [build-system]
 requires = ["poetry-core"]
