@@ -6,6 +6,15 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## [unreleased]
 
+### Added
+
+- `release.py` script for automated releases.
+
+### Changed
+
+- Upgraded to `qcio 0.10.2` which reverts back to the default of `Structure.identifiers` instead of `Structure.ids`.
+- Fix depreciated call to `qcparse.parse_results` for the TeraChem adapter.
+
 ## [0.7.2] - 2024-07-12
 
 ### Added

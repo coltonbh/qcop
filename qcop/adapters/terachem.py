@@ -64,7 +64,7 @@ class TeraChemAdapter(ProgramAdapter[ProgramInput, SinglePointResults]):
         stdout = execute_subprocess(
             self.program, [input_filename], update_func, update_interval
         )
-        parsed_output = qcparse.parse_results(stdout, self.program, "stdout")
+        parsed_output = qcparse.parse(stdout, self.program, "stdout")
         return parsed_output, stdout
 
     def collect_wfn(self) -> Dict[str, Union[str, bytes]]:
