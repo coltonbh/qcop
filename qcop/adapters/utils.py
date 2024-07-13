@@ -265,3 +265,22 @@ def tmpdir(
             if rmdir:  # After exiting context manager
                 shutil.rmtree(temp_dir)
             os.chdir(cwd)
+
+
+@contextmanager
+def set_env_variable(var_name, value):
+    """Context manager to set an environment variable temporarily.
+
+    Args:
+        var_name: The name of the environment variable.
+        value: The value to set the environment variable to.
+    """
+    original_value = os.environ.get(var_name)
+    try:
+        os.environ[var_name] = str(value)
+        yield
+    finally:
+        if original_value:
+            os.environ[var_name] = original_value
+        else:
+            del os.environ[var_name]
