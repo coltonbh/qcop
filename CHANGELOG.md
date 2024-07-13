@@ -9,6 +9,19 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 ### Added
 
 - `xtb` to optional installs and error message for `XtbAdapter` to indicate it can be installed with `pip install qcop[xtb]`.
+- `qcop.adapters.utils.set_env_variable` context manager to address the fact that one must set the env var `OMP_NUM_THREADS=1` _before_ importing any of the `xtb` library or else performance is severely impacted (around 10x). They spawn threads within threads so if you leave the default value (which is the number of cores on your machine) you get way more threads than this! E.g., on my 16 core machine I'll get 47 threads spawned for a single calculation. If I set this to `1` I actually get the correct number of threads, which is `16`. One must set this value _before_ importing any piece of the `xtb` library, so if your script imports anything from `xtb` before calling `qcop.compute("xtb", ...)` wrap this import with the `qcop.adapters.utils.set_env_variable` wrapper like this:
+
+  ```python
+  from qcop.adapters.utils.set_env_variable
+
+  with set_env_variable("OMP_NUM_THREADS", "1"):
+      import xtb
+      import xtb.interface
+      import xtb.libxtb
+      from xtb.utils import Solvent
+
+  ### The rest of your script
+  ```
 
 ## [0.7.1] - 2024-07-10
 

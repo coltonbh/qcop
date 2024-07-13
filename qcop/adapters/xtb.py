@@ -18,7 +18,7 @@ from qcop.exceptions import (
 )
 
 from .base import ProgramAdapter
-from .utils import capture_sys_stdout
+from .utils import capture_sys_stdout, set_env_variable
 
 
 class XTBAdapter(ProgramAdapter[ProgramInput, SinglePointResults]):
@@ -58,22 +58,34 @@ class XTBAdapter(ProgramAdapter[ProgramInput, SinglePointResults]):
 
     @staticmethod
     def _ensure_xtb():
-        try:
-            xtb = importlib.import_module("xtb")
-            # xtb import structure is screwed up so I have to do this too
-            importlib.import_module("xtb.interface")
-            importlib.import_module("xtb.libxtb")
+        # NOTE: xtb-python is 10x slower with the default number of OpenMP threads,
+        # which I think is the number of CPUs on the machine. The xtb library reads in
+        # this env variable upon import so I have to set it before importing xtb. If you
+        # import any other xtb module in your code, e.g.,
+        # `from xtb.utils import Solvent` you have to set this env variable before
+        # importing that module or xtb will use the default number of threads which will
+        # be a 10x slower calculation despite the context manager used here. Strangely,
+        # setting this to one still results in spawning of a thread per logical core on
+        # your machine. And if you set this to the number of cores on your machine (in
+        # my case 16), xtb spawns 47!!! threads. So they are spawning threads within
+        # threads or some other insanity.
+        with set_env_variable("OMP_NUM_THREADS", "1"):
+            try:
+                xtb = importlib.import_module("xtb")
+                # xtb import structure is screwed up so I have to do this too
+                importlib.import_module("xtb.interface")
+                importlib.import_module("xtb.libxtb")
 
-            return xtb
-        except ModuleNotFoundError:
-            raise ProgramNotFoundError(
-                "xtb",
-                install_msg=(
-                    "Program not found: 'xtb'. To use xtb please install it with pip "
-                    "install qcop[xtb] or add '' if your shell requires it. e.g., "
-                    "pip install 'qcop[xtb]'."
-                ),
-            )
+                return xtb
+            except ModuleNotFoundError:
+                raise ProgramNotFoundError(
+                    "xtb",
+                    install_msg=(
+                        "Program not found: 'xtb'. To use xtb please install it with "
+                        "pip install qcop[xtb] or add '' if your shell requires it. "
+                        "e.g., pip install 'qcop[xtb]'."
+                    ),
+                )
 
     def compute_results(
         self,
