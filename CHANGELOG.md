@@ -6,6 +6,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## [unreleased]
 
+## [0.7.2] - 2024-07-12
+
 ### Added
 
 - `xtb` to optional installs and error message for `XtbAdapter` to indicate it can be installed with `pip install qcop[xtb]`.
@@ -245,7 +247,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 - Created adapter for TeraChem.
 - Exposed general purpose computing for any subprocess with `FileAdaptor`
 
-[unreleased]: https://github.com/coltonbh/qcop/compare/0.7.1...HEAD
+[unreleased]: https://github.com/coltonbh/qcop/compare/0.7.2...HEAD
+[0.7.2]: https://github.com/coltonbh/qcop/releases/tag/0.7.2
 [0.7.1]: https://github.com/coltonbh/qcop/releases/tag/0.7.1
 [0.7.0]: https://github.com/coltonbh/qcop/releases/tag/0.7.0
 [0.6.2]: https://github.com/coltonbh/qcop/releases/tag/0.6.2
