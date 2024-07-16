@@ -10,6 +10,7 @@ import shutil
 import subprocess
 import sys
 import tempfile
+import threading
 from contextlib import contextmanager
 from io import StringIO
 from pathlib import Path
@@ -178,36 +179,44 @@ def capture_logs(
         logger.removeHandler(handler)
 
 
+lock = threading.Lock()
+
+
 @contextmanager
 def capture_sys_stdout():
     """Capture stdout from a program that bypasses the sys.stdout object.
 
     Useful for capturing logs written by C/C++ libraries such as xtb.
+
+    The lock is necessary since we are modifying a global resource, the stdout file
+    descriptor, which is shared between threads. Without this lock race conditions
+    cause random output to be printed to the console and may freeze the program.
     """
-    # Create a pipe to capture output
-    r, w = os.pipe()
+    with lock:
+        # Create a pipe to capture output
+        r, w = os.pipe()
 
-    # Save the original stdout and stderr file descriptors
-    try:
-        stdout_fd = sys.stdout.fileno()
-    except AttributeError:  # Handles case where celery LoggingProxy is sys.stdout
-        stdout_fd = sys.__stdout__.fileno()
-    old_stdout = os.dup(stdout_fd)
+        # Save the original stdout and stderr file descriptors
+        try:
+            stdout_fd = sys.stdout.fileno()
+        except AttributeError:  # Handles case where celery LoggingProxy is sys.stdout
+            stdout_fd = sys.__stdout__.fileno()
+        old_stdout = os.dup(stdout_fd)
 
-    # Redirect stdout and stderr to the write end of the pipe
-    os.dup2(w, stdout_fd)
-    try:
-        yield r  # Allow code to be executed within the context manager block
-    finally:
-        # Restore stdout and stderr
-        os.dup2(old_stdout, stdout_fd)
+        # Redirect stdout and stderr to the write end of the pipe
+        os.dup2(w, stdout_fd)
+        try:
+            yield r  # Allow code to be executed within the context manager block
+        finally:
+            # Restore stdout and stderr
+            os.dup2(old_stdout, stdout_fd)
 
-        # Close the duplicated fds
-        os.close(old_stdout)
-        os.close(w)
+            # Close the duplicated fds
+            os.close(old_stdout)
+            os.close(w)
 
-        # Close the read ends of the pipe
-        os.close(r)
+            # Close the read ends of the pipe
+            os.close(r)
 
 
 def construct_provenance(

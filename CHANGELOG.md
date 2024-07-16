@@ -6,6 +6,11 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## [unreleased]
 
+### Changed
+
+- Added `threading.Lock()` to `capture_sys_stdout` so that it is thread safe.
+- Cached `XTBAdapter.program_version` result since calls to `importlib.metadata.version(...)` call `os.listdir()` and when doing very many `xtb` calls these became substantial (almost 1/2 the execution time). We have to use `importlib.metadata.version` rather than `xtb.__version__` directly because their `__version__` string is wrong.
+
 ## [0.7.3] - 2024-07-12
 
 ### Added
