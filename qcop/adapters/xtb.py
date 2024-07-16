@@ -61,11 +61,9 @@ class XTBAdapter(ProgramAdapter[ProgramInput, SinglePointResults]):
             The program version.
         """
         global CACHED_XTB_VERSION
-        if CACHED_XTB_VERSION:
-            return CACHED_XTB_VERSION
-        else:
+        if not CACHED_XTB_VERSION:
             CACHED_XTB_VERSION = importlib.metadata.version(self.program)
-            return CACHED_XTB_VERSION
+        return CACHED_XTB_VERSION
 
     @staticmethod
     def _ensure_xtb():
