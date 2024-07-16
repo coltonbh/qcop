@@ -20,6 +20,12 @@ from qcop.exceptions import (
 from .base import ProgramAdapter
 from .utils import capture_sys_stdout, set_env_variable
 
+# NOTE: Calls to importlib.metadata.version("xtb") are slow due to underlying calls to
+# os.listdir(), so we cache the version number here. This is necessary because the
+# __version__ string in xtb.__init__.py is wrong so we have to look this up dynamically
+# in the program_version method.
+CACHED_XTB_VERSION = None
+
 
 class XTBAdapter(ProgramAdapter[ProgramInput, SinglePointResults]):
     """Adapter for xtb-python."""
@@ -54,7 +60,12 @@ class XTBAdapter(ProgramAdapter[ProgramInput, SinglePointResults]):
         Returns:
             The program version.
         """
-        return importlib.metadata.version(self.program)
+        global CACHED_XTB_VERSION
+        if CACHED_XTB_VERSION:
+            return CACHED_XTB_VERSION
+        else:
+            CACHED_XTB_VERSION = importlib.metadata.version(self.program)
+            return CACHED_XTB_VERSION
 
     @staticmethod
     def _ensure_xtb():
