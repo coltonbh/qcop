@@ -6,6 +6,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## [unreleased]
 
+### Changed
+
+- Only respect `collect_file` for for `Adapter.compute` if the adapter has `.uses_files=True`.
+
 ## [0.7.4] - 2024-07-16
 
 ### Changed
