@@ -65,6 +65,27 @@ def run_git_commands(version):
     subprocess.run(["git", "push"], check=True)
 
 
+def confirm_version(version: str):
+    """Ask the user to confirm the version number before proceeding."""
+    while True:
+        response = (
+            input(f"Are you sure you want to release {version}? (Y/N): ")
+            .strip()
+            .lower()
+        )
+        if response == "y":
+            print("Proceeding with the release...")
+            return
+        elif response == "n":
+            print(
+                "Release cancelled. Please manually revert pyproject.toml and "
+                "CHANGELOG.md."
+            )
+            sys.exit(0)
+        else:
+            print("Invalid input. Please enter 'Y' or 'N'.")
+
+
 def main():
     """Main entry point for the script."""
     if len(sys.argv) != 2:
@@ -76,6 +97,7 @@ def main():
     repo_url = get_repo_url()
     update_version_with_poetry(version)
     update_changelog(version, repo_url)
+    confirm_version(version)
     run_git_commands(version)
 
 

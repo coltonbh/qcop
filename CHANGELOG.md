@@ -9,6 +9,9 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 ### Changed
 
 - Only respect `collect_file` for for `Adapter.compute` if the adapter has `.uses_files=True`.
+- Moved the `program_version = self.program_version(stdout)` call from `BaseAdapter.compute(...)` to outside the `try` block so that program version is collected even if the calculation fails.
+- Cleaned up `xtb` cached version implementation.
+- Added `confirm_version` check to `release.py`.
 
 ## [0.7.4] - 2024-07-16
 

@@ -168,7 +168,6 @@ class BaseAdapter(ABC, Generic[InputType, ResultsType]):
                 # None value covers FileInput case
                 # TODO: Is there a type safe way to handle this??
                 output_dict["success"] = True
-                program_version = self.program_version(stdout)
 
                 # Optionally collect wavefunction file
                 if collect_wfn and not collect_files:
@@ -186,6 +185,7 @@ class BaseAdapter(ABC, Generic[InputType, ResultsType]):
                 output_dict["traceback"] = traceback.format_exc()
 
             wall_time = time() - start
+            program_version = self.program_version(stdout)
 
             # Construct Provenance object
             provenance = construct_provenance(
