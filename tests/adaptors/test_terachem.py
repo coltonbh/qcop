@@ -53,28 +53,28 @@ def test_propagate_wfn(prog_inp, prog_output):
     scr_dir = f"scr.{scr_postfix}"
 
     # Add restricted wavefunction data to output
-    prog_output.files[f"{scr_dir}/c0"] = "some file"
+    prog_output.results.files[f"{scr_dir}/c0"] = "some file"
     adapter.propagate_wfn(prog_output, prog_input)
     assert prog_input.files["c0"] == "some file"
     assert prog_input.keywords["guess"] == "c0"
-    prog_output.files.pop(f"{scr_dir}/c0")  # Remove c0 from output
+    prog_output.results.files.pop(f"{scr_dir}/c0")  # Remove c0 from output
 
     # Add unrestricted wavefunction data to output
     prog_input = prog_inp("energy")
-    prog_output.files[f"{scr_dir}/ca0"] = "some alpha file"
-    prog_output.files[f"{scr_dir}/cb0"] = "some beta file"
+    prog_output.results.files[f"{scr_dir}/ca0"] = "some alpha file"
+    prog_output.results.files[f"{scr_dir}/cb0"] = "some beta file"
     adapter.propagate_wfn(prog_output, prog_input)
     assert prog_input.files["ca0"] == "some alpha file"
     assert prog_input.files["cb0"] == "some beta file"
     assert prog_input.keywords["guess"] == "ca0 cb0"
 
     # Assert error raised if only alpha or beta wavefunction data is present
-    prog_output.files.pop(f"{scr_dir}/cb0")
+    prog_output.results.files.pop(f"{scr_dir}/cb0")
     with pytest.raises(AdapterInputError):
         adapter.propagate_wfn(prog_output, prog_input)
 
-    prog_output.files.pop(f"{scr_dir}/ca0")
-    prog_output.files[f"{scr_dir}/cb0"] = "some beta file"
+    prog_output.results.files.pop(f"{scr_dir}/ca0")
+    prog_output.results.files[f"{scr_dir}/cb0"] = "some beta file"
     with pytest.raises(AdapterInputError):
         adapter.propagate_wfn(prog_output, prog_input)
 

@@ -73,31 +73,35 @@ def confirm_version(version: str):
             .strip()
             .lower()
         )
-        if response == "y":
-            print("Proceeding with the release...")
-            return
-        elif response == "n":
-            print(
-                "Release cancelled. Please manually revert pyproject.toml and "
-                "CHANGELOG.md."
-            )
-            sys.exit(0)
+        if response in ["y", "n"]:
+            return response == "y"
         else:
             print("Invalid input. Please enter 'Y' or 'N'.")
 
 
 def main():
     """Main entry point for the script."""
+    from pathlib import Path
+
     if len(sys.argv) != 2:
         print("Usage: release.py <version>")
         sys.exit(1)
 
     version = sys.argv[1]
 
+    original_pyproject = Path("pyproject.toml").read_text()
+    original_changelog = Path("CHANGELOG.md").read_text()
+
     repo_url = get_repo_url()
     update_version_with_poetry(version)
     update_changelog(version, repo_url)
-    confirm_version(version)
+    if confirm_version(version):
+        print("Proceeding with the release...")
+    else:
+        print("Reverting changes...")
+        Path("pyproject.toml").write_text(original_pyproject)
+        Path("CHANGELOG.md").write_text(original_changelog)
+        sys.exit(1)
     run_git_commands(version)
 
 
