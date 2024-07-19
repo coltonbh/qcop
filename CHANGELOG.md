@@ -6,6 +6,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## [unreleased]
 
+## [0.8.0] - 2024-07-19
+
 ### Changed
 
 - Updated to [qcio 0.11.0](https://github.com/coltonbh/qcio/releases/tag/0.10.5) which removed `NoResults` and requires explicit passing of a `.results` value to `ProgramOutput` rather than implicitly passing `None` and having `qcio` set `.results = NoResult`. It also moved `.files` from `ProgramOutput` to the `results` objects.
@@ -278,7 +280,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 - Created adapter for TeraChem.
 - Exposed general purpose computing for any subprocess with `FileAdaptor`
 
-[unreleased]: https://github.com/coltonbh/qcop/compare/0.7.5...HEAD
+[unreleased]: https://github.com/coltonbh/qcop/compare/0.8.0...HEAD
+[0.8.0]: https://github.com/coltonbh/qcop/releases/tag/0.8.0
 [0.7.5]: https://github.com/coltonbh/qcop/releases/tag/0.7.5
 [0.7.4]: https://github.com/coltonbh/qcop/releases/tag/0.7.4
 [0.7.3]: https://github.com/coltonbh/qcop/releases/tag/0.7.3
