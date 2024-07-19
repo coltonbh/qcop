@@ -23,7 +23,7 @@ output = compute("terachem", file_inp, print_stdout=True)
 # Data
 output.stdout
 output.input_data
-output.files  # Has all the files terachem creates
-output.files.keys()  # Print out file names
+output.results.files  # Has all the files terachem creates
+output.results.files.keys()  # Print out file names
 # Saves all outputs with the exact structure produced by the QC program
 output.save_files("where")

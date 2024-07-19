@@ -772,13 +772,13 @@ tests = ["pytest", "pytest-cov"]
 
 [[package]]
 name = "qcio"
-version = "0.10.2"
+version = "0.11.0"
 description = "Beautiful and user friendly data structures for quantum chemistry."
 optional = false
 python-versions = "<4.0,>=3.8"
 files = [
-    {file = "qcio-0.10.2-py3-none-any.whl", hash = "sha256:26b170447dce209a3a1ea344c2b3e9f234de3c2a1010479ad470b31a6e5eda7d"},
-    {file = "qcio-0.10.2.tar.gz", hash = "sha256:27649fa3022fe575a5d5460768b2e0bfeedd7adb86d8945d084f757d7c098132"},
+    {file = "qcio-0.11.0-py3-none-any.whl", hash = "sha256:fecc984cb7a6af58956b9025d9043bdb62fb3c86041ae0fc2bd380c4448f39c9"},
+    {file = "qcio-0.11.0.tar.gz", hash = "sha256:084f31b4241346a1d44e34c3b49333c44d2f8f83b0e572b4bade3d6dc0807490"},
 ]
 
 [package.dependencies]
@@ -790,6 +790,7 @@ typing-extensions = ">=4.7.1,<5.0.0"
 
 [package.extras]
 rdkit = ["rdkit (>=2022.3.3)"]
+view = ["ipython (>=8.0.0)", "matplotlib (>=3.0.0)", "py3Dmol (>=2.2.1)"]
 
 [[package]]
 name = "qcparse"
@@ -919,4 +920,4 @@ xtb = ["xtb"]
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.8"
-content-hash = "fb2fc0320b4090c05a1d2846809a2f1f70348ab646b6bce462a409206cc6cbbe"
+content-hash = "cfeb1521e77010cecc0a278398b52ffb6d25e122e1c02dffd36e43a5127f1f38"

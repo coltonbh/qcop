@@ -102,9 +102,9 @@ class TeraChemAdapter(ProgramAdapter[ProgramInput, SinglePointResults]):
         # Wavefunction filenames
         c0, ca0, cb0 = "c0", "ca0", "cb0"
 
-        c0_bytes = output.files.get(f"scr.{scr_postfix}/{c0}")
-        ca0_bytes = output.files.get(f"scr.{scr_postfix}/{ca0}")
-        cb0_bytes = output.files.get(f"scr.{scr_postfix}/{cb0}")
+        c0_bytes = output.results.files.get(f"scr.{scr_postfix}/{c0}")
+        ca0_bytes = output.results.files.get(f"scr.{scr_postfix}/{ca0}")
+        cb0_bytes = output.results.files.get(f"scr.{scr_postfix}/{cb0}")
 
         if not c0_bytes and not (ca0_bytes and cb0_bytes):
             raise AdapterInputError(

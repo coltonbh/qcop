@@ -8,7 +8,6 @@ from qcio import (
     Files,
     InputType,
     Model,
-    NoResults,
     ProgramInput,
     ProgramOutput,
     Structure,
@@ -46,8 +45,9 @@ def compute(
         adapter = get_adapter(program, inp_obj, qcng_fallback)
     except (AdapterNotFoundError, ProgramNotFoundError) as e:
         # Add program_output to the exception
-        output_obj = ProgramOutput[type(inp_obj), NoResults](  # type: ignore
+        output_obj = ProgramOutput[type(inp_obj), Files](  # type: ignore
             input_data=inp_obj,
+            results=Files(),
             success=False,
             provenance={"program": program},
             traceback=traceback.format_exc(),

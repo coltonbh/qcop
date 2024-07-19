@@ -6,6 +6,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## [unreleased]
 
+### Changed
+
+- Updated to [qcio 0.11.0](https://github.com/coltonbh/qcio/releases/tag/0.10.5) which removed `NoResults` and requires explicit passing of a `.results` value to `ProgramOutput` rather than implicitly passing `None` and having `qcio` set `.results = NoResult`. It also moved `.files` from `ProgramOutput` to the `results` objects.
+
 ## [0.7.5] - 2024-07-17
 
 ### Changed
