@@ -51,7 +51,7 @@ class TeraChemAdapter(ProgramAdapter[ProgramInput, SinglePointResults]):
                 update_func.
 
         Returns:
-            A tuple of SinglePointComputedProps and the stdout str.
+            A tuple of SinglePointResults and the stdout str.
         """
         input_filename = "tc.in"
         try:
