@@ -1,0 +1,115 @@
+site_name: Quantum Chemistry Operate (QCOP)
+site_url: https://qcop.coltonhicks.com/
+theme:
+  name: material
+  palette:
+    - media: "(prefers-color-scheme: light)"
+      scheme: default
+      primary: green
+      accent: amber
+      toggle:
+        icon: material/lightbulb
+        name: Switch to dark mode
+    - media: "(prefers-color-scheme: dark)"
+      scheme: slate
+      primary: green
+      accent: amber
+      toggle:
+        icon: material/lightbulb-outline
+        name: Switch to light mode
+  features:
+    - content.tabs.link
+    - content.code.annotate
+    - content.code.copy
+    - announce.dismiss
+    - navigation.tabs
+    - navigation.instant
+    - navigation.instant.prefetch
+    - navigation.instant.preview
+    - navigation.instant.progress
+    - navigation.path
+    - navigation.sections
+    - navigation.top
+    - navigation.tracking
+    - search.suggest
+    - toc.follow
+
+  icon:
+    repo: fontawesome/brands/github-alt
+
+repo_url: https://github.com/coltonbh/qcop
+edit_uri: edit/master/docs/
+site_author: Colton Hicks
+plugins:
+  - search
+  - autorefs
+  - mkdocstrings:
+      handlers:
+        python:
+          options:
+            members_order: source
+            separate_signature: true
+            show_bases: false
+            show_root_heading: true
+            show_symbol_type_heading: true
+            show_symbol_type_toc: true
+            merge_init_into_class: true
+            show_signature_annotations: true
+            signature_crossrefs: true
+            inherited_members: false
+            # Pretty sure I want this false.
+            show_if_no_docstring: false
+
+            docstring_options:
+              ignore_init_summary: true
+
+            filters:
+              - "!^_"
+              - "!^model"
+              - "^__init__"
+
+          selection:
+            new_path_syntax: true
+
+  - exclude:
+      glob:
+        - dev-docs/**
+
+markdown_extensions:
+  - toc:
+      permalink: true
+      title: Page contents
+  - admonition
+  - pymdownx.details
+  - pymdownx.superfences
+  - pymdownx.highlight:
+      pygments_lang_class: true
+  - pymdownx.extra
+  - pymdownx.emoji:
+      emoji_index: !!python/name:material.extensions.emoji.twemoji
+      emoji_generator: !!python/name:material.extensions.emoji.to_svg
+  - pymdownx.tabbed:
+      alternate_style: true
+  - markdown_include.include
+
+watch:
+  - qcop # Adjust this
+
+nav:
+  - Getting Started:
+      - Welcome to qcop: index.md
+  #     - Why use qcop?: why.md
+  - Programs:
+      - Overview: programs/overview.md
+      - TeraChem: programs/terachem.md
+      - CREST: programs/crest.md
+      - geomeTRIC: programs/geometric.md
+      - xtb: programs/xtb.md
+      - QCEngine: programs/qcengine.md
+  - Examples:
+      - Overview: examples/overview.md
+      - Single Point: examples/single_point.md
+      - Optimization: examples/optimization.md
+      - Conformer Search: examples/conformer_search.md
+      - File Input: examples/file_input.md
+  - Changelog: https://github.com/coltonbh/qcop/blob/master/CHANGELOG.md

@@ -28,6 +28,8 @@ from .utils import capture_logs
 
 
 class GeometricAdapter(ProgramAdapter[DualProgramInput, OptimizationResults]):
+    """Adapter for geomeTRIC."""
+
     program = "geometric"
     supported_calctypes = [CalcType.optimization, CalcType.transition_state]
 

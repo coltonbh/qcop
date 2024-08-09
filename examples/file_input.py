@@ -7,17 +7,19 @@ from qcio import FileInput, Structure
 from qcop import compute
 
 # Input files for QC Program
-qc_inp = Path("path/to/tc.in").read_text()  # Or your own function to create tc.in
+inp_file = Path("path/to/tc.in").read_text()  # Or your own function to create tc.in
 
 # Structure object to XYZ file
 structure = Structure.open("path/to/my/mol.xyz")
-mol_xyz = structure.to_xyz()
+xyz_str = structure.to_xyz()  # type: ignore
 
 # Create a FileInput object for TeraChem
 file_inp = FileInput(
-    files={"tc.in": qc_inp, "coords.xyz": mol_xyz}, cmdline_args=["tc.in"]
+    files={"tc.in": inp_file, "coords.xyz": xyz_str}, cmdline_args=["tc.in"]
 )
 
+# This will write the files to disk in a temporary directory and then run
+# "terachem tc.in" in that directory.
 output = compute("terachem", file_inp, print_stdout=True)
 
 # Data
@@ -26,4 +28,4 @@ output.input_data
 output.results.files  # Has all the files terachem creates
 output.results.files.keys()  # Print out file names
 # Saves all outputs with the exact structure produced by the QC program
-output.save_files("where")
+output.results.save_files("to/this/directory")
