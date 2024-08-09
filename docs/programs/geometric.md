@@ -1,0 +1,1 @@
+::: qcop.adapters.geometric.GeometricAdapter

@@ -35,7 +35,7 @@ def compute(
     raise_exc: bool = True,
     propagate_wfn: bool = False,
     qcng_fallback: bool = True,
-    **kwargs,
+    **adapter_kwargs,
 ) -> ProgramOutput:
     """Use the given program to compute on the given input.
 
@@ -69,7 +69,7 @@ def compute(
             print_stdout=print_stdout,
             raise_exc=raise_exc,
             propagate_wfn=propagate_wfn,
-            **kwargs,
+            **adapter_kwargs,
         )
 
 

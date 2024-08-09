@@ -1,0 +1,1 @@
+::: qcop.adapters.terachem.TeraChemAdapter

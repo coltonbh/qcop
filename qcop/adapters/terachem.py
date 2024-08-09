@@ -51,13 +51,13 @@ class TeraChemAdapter(ProgramAdapter[ProgramInput, SinglePointResults]):
                 update_func.
 
         Returns:
-            A tuple of SinglePointComputedProps and the stdout str.
+            A tuple of SinglePointResults and the stdout str.
         """
         input_filename = "tc.in"
         try:
             native_input = qcparse.encode(inp_obj, self.program)
         except qcparse.exceptions.EncoderError as e:
-            raise AdapterInputError(self.program, str(e))
+            raise AdapterInputError(self.program, "Invalid input for TeraChem") from e
         Path(input_filename).write_text(native_input.input_file)
         Path(native_input.geometry_filename).write_text(native_input.geometry_file)
 

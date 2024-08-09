@@ -25,5 +25,5 @@ prog_input = ProgramInput(
 )
 
 
-output = compute("xtb", prog_input)
-print(output)
+prog_output = compute("xtb", prog_input)
+print(prog_output)

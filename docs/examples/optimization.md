@@ -1,0 +1,3 @@
+```python
+{!examples/geometric.py!}
+```
