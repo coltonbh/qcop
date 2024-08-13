@@ -243,6 +243,9 @@ def construct_provenance(
         program_version=version,
         scratch_dir=str(scratch_dir),
         wall_time=round(wall_time, 6),
+        # TODO: Possibly add psutil.virtual_memory().total and then wrap these calls in
+        # @lru_cache so that for quick calculations we don't have to call these
+        # functions every time.
         hostname=platform.node(),
         hostcpus=os.cpu_count(),
     )

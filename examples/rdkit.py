@@ -25,7 +25,7 @@ pi = ProgramInput(
 # Run the calculation
 try:
     # po is instance of ProgramOutput
-    po = compute("terachem", pi, collect_files=True)
+    po = compute("rdkit", pi, collect_files=True)
 except exceptions.QCOPBaseError as e:
     po = e.program_output
     print(po.stdout)  # or output.pstdout for short

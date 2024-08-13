@@ -6,6 +6,11 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## [unreleased]
 
+### Added
+
+- `CRESTAdapter` that supports `CalcType.conformer_search`.
+- `mkdocs` documentation.
+
 ## [0.8.0] - 2024-07-19
 
 ### Changed
