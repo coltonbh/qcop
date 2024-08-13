@@ -631,7 +631,7 @@
         
   
   <span class="md-ellipsis">
-    XTB
+    xtb
   </span>
   
 
@@ -1224,7 +1224,7 @@ update_func.</p>
     <span class="k">try</span><span class="p">:</span>
         <span class="n">native_input</span> <span class="o">=</span> <span class="n">qcparse</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="n">inp_obj</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">program</span><span class="p">)</span>
     <span class="k">except</span> <span class="n">qcparse</span><span class="o">.</span><span class="n">exceptions</span><span class="o">.</span><span class="n">EncoderError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
-        <span class="k">raise</span> <span class="n">AdapterInputError</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">program</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">))</span>
+        <span class="k">raise</span> <span class="n">AdapterInputError</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">program</span><span class="p">,</span> <span class="s2">&quot;Invalid input for TeraChem&quot;</span><span class="p">)</span> <span class="kn">from</span> <span class="nn">e</span>
     <span class="n">Path</span><span class="p">(</span><span class="n">input_filename</span><span class="p">)</span><span class="o">.</span><span class="n">write_text</span><span class="p">(</span><span class="n">native_input</span><span class="o">.</span><span class="n">input_file</span><span class="p">)</span>
     <span class="n">Path</span><span class="p">(</span><span class="n">native_input</span><span class="o">.</span><span class="n">geometry_filename</span><span class="p">)</span><span class="o">.</span><span class="n">write_text</span><span class="p">(</span><span class="n">native_input</span><span class="o">.</span><span class="n">geometry_file</span><span class="p">)</span>
 
