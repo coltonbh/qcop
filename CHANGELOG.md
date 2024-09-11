@@ -6,6 +6,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## [unreleased]
 
+## [0.9.0] - 2024-09-11
+
 ### Changed
 
 - 🚨: Bumped minimum python version from 3.8 -> 3.9 (needed for compatibility with `tcpb`).
@@ -300,7 +302,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 - Created adapter for TeraChem.
 - Exposed general purpose computing for any subprocess with `FileAdaptor`
 
-[unreleased]: https://github.com/coltonbh/qcop/compare/0.8.1...HEAD
+[unreleased]: https://github.com/coltonbh/qcop/compare/0.9.0...HEAD
+[0.9.0]: https://github.com/coltonbh/qcop/releases/tag/0.9.0
 [0.8.1]: https://github.com/coltonbh/qcop/releases/tag/0.8.1
 [0.8.0]: https://github.com/coltonbh/qcop/releases/tag/0.8.0
 [0.7.5]: https://github.com/coltonbh/qcop/releases/tag/0.7.5
