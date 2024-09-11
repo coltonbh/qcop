@@ -1,7 +1,7 @@
 """Top level compute functions for qcop."""
 
 import traceback
-from typing import Any, Callable, Dict, Optional, Union
+from typing import Any, Callable, Optional, Union
 
 from qcio import (
     CalcType,
@@ -78,10 +78,10 @@ def compute_args(
     structure: Structure,
     *,
     calctype: Union[str, CalcType],
-    model: Union[Dict[str, str], Model],
-    keywords: Optional[Dict[str, Any]] = None,
-    files: Optional[Union[Dict[str, Union[str, bytes]], Files]] = None,
-    extras: Optional[Dict[str, Any]] = None,
+    model: Union[dict[str, str], Model],
+    keywords: Optional[dict[str, Any]] = None,
+    files: Optional[Union[dict[str, Union[str, bytes]], Files]] = None,
+    extras: Optional[dict[str, Any]] = None,
     **kwargs,
 ) -> ProgramOutput:
     """Compute function that accepts independent argument for a ProgramInput.

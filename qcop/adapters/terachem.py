@@ -1,5 +1,5 @@
 from pathlib import Path
-from typing import Callable, Dict, Optional, Tuple, Union
+from typing import Callable, Optional, Union
 
 import qcparse
 from qcio import CalcType, ProgramInput, ProgramOutput, SinglePointResults
@@ -41,7 +41,7 @@ class TeraChemAdapter(ProgramAdapter[ProgramInput, SinglePointResults]):
         update_func: Optional[Callable] = None,
         update_interval: Optional[float] = None,
         **kwargs,
-    ) -> Tuple[SinglePointResults, str]:
+    ) -> tuple[SinglePointResults, str]:
         """Execute TeraChem on the given input.
 
         Args:
@@ -67,7 +67,7 @@ class TeraChemAdapter(ProgramAdapter[ProgramInput, SinglePointResults]):
         parsed_output = qcparse.parse(stdout, self.program, "stdout")
         return parsed_output, stdout
 
-    def collect_wfn(self) -> Dict[str, Union[str, bytes]]:
+    def collect_wfn(self) -> dict[str, Union[str, bytes]]:
         """Append wavefunction data to the output."""
 
         # Naming conventions from TeraChem uses xyz filename as scratch dir postfix
@@ -79,7 +79,7 @@ class TeraChemAdapter(ProgramAdapter[ProgramInput, SinglePointResults]):
         if not any(wfn_path.exists() for wfn_path in wfn_paths):
             raise AdapterError(f"No wavefunction files found in {Path.cwd()}")
 
-        wfns: Dict[str, Union[str, bytes]] = {}
+        wfns: dict[str, Union[str, bytes]] = {}
         for wfn_path in wfn_paths:
             if wfn_path.exists():
                 wfns[str(wfn_path)] = wfn_path.read_bytes()

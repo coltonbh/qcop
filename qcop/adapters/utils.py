@@ -15,7 +15,7 @@ from contextlib import contextmanager
 from io import StringIO
 from pathlib import Path
 from time import time
-from typing import Callable, List, Optional, Union
+from typing import Callable, Optional, Union
 
 from qcio import Provenance
 from qcio.helper_types import StrOrPath
@@ -25,7 +25,7 @@ from qcop.exceptions import ExternalSubprocessError, ProgramNotFoundError
 
 def execute_subprocess(
     program: str,
-    cmdline_args: Optional[List[str]] = None,
+    cmdline_args: Optional[list[str]] = None,
     update_func: Optional[Callable] = None,
     update_interval: Optional[float] = 0.5,
 ) -> str:
@@ -73,7 +73,7 @@ def execute_subprocess(
         raise ProgramNotFoundError(program)
 
     # Setup variables for monitoring stdout
-    stdout_lines: List[str] = []
+    stdout_lines: list[str] = []
     prev_update_time = time()
     prev_line_count = len(stdout_lines)
 

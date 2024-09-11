@@ -1,7 +1,7 @@
 import traceback
 from abc import ABC, abstractmethod
 from time import time
-from typing import Any, Callable, Dict, Generic, List, Optional, Tuple, Union
+from typing import Any, Callable, Generic, Optional, Union
 
 from qcio import (
     CalcType,
@@ -66,7 +66,7 @@ class BaseAdapter(ABC, Generic[InputType, ResultsType]):
         update_func: Optional[Callable] = None,
         update_interval: Optional[float] = None,
         **kwargs,
-    ) -> Tuple[ResultsType, str]:
+    ) -> tuple[ResultsType, str]:
         """Subclasses should implement this method with custom compute logic."""
         raise NotImplementedError
 
@@ -145,7 +145,7 @@ class BaseAdapter(ABC, Generic[InputType, ResultsType]):
                 inp_obj.save_files()
 
             # Define outputs
-            output_dict: Dict[str, Any] = {}
+            output_dict: dict[str, Any] = {}
             stdout: Optional[str] = None
             results: Results
             exc: Optional[QCOPBaseError] = None
@@ -226,7 +226,7 @@ class BaseAdapter(ABC, Generic[InputType, ResultsType]):
 
         return output_obj
 
-    def collect_wfn(self) -> Dict[str, Union[str, bytes]]:
+    def collect_wfn(self) -> dict[str, Union[str, bytes]]:
         """Collect the wavefunction file(s) from the scratch_dir.
 
         Returns:
@@ -243,7 +243,7 @@ class BaseAdapter(ABC, Generic[InputType, ResultsType]):
 class ProgramAdapter(BaseAdapter, Generic[InputType, ResultsType]):
     """Base adapter for all program adapters (all but FileAdaptor)."""
 
-    supported_calctypes: List[
+    supported_calctypes: list[
         CalcType
     ]  # All subclasses must specify supported calctypes
 
@@ -285,7 +285,7 @@ class ProgramAdapter(BaseAdapter, Generic[InputType, ResultsType]):
         update_func: Optional[Callable] = None,
         update_interval: Optional[float] = None,
         **kwargs,
-    ) -> Tuple[ResultsType, str]:
+    ) -> tuple[ResultsType, str]:
         """All ProgramAdapters must return a ResultsType."""
         raise NotImplementedError
 

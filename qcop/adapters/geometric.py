@@ -1,7 +1,7 @@
 """Adapter for geomeTRIC program."""
 
 from pathlib import Path
-from typing import Callable, Dict, List, Optional, Tuple, Union
+from typing import Callable, Optional, Union
 
 import numpy as np
 from qcio import (
@@ -78,7 +78,7 @@ class GeometricAdapter(ProgramAdapter[DualProgramInput, OptimizationResults]):
         update_interval: Optional[float] = None,
         propagate_wfn: bool = True,
         **kwargs,
-    ) -> Tuple[OptimizationResults, str]:
+    ) -> tuple[OptimizationResults, str]:
         """Compute the requested calculation.
 
         Args:
@@ -257,11 +257,11 @@ class GeometricAdapter(ProgramAdapter[DualProgramInput, OptimizationResults]):
                 self.qcio_program_args = qcio_program_args
                 self.qcio_structure = qcio_structure
                 self.propagate_wfn = propagate_wfn
-                self.qcio_trajectory: List[ProgramOutput] = []
+                self.qcio_trajectory: list[ProgramOutput] = []
                 self.update_func = update_func
                 self.update_interval = update_interval
 
-            def calc_new(self, coords, *args) -> Dict[str, Union[float, np.ndarray]]:
+            def calc_new(self, coords, *args) -> dict[str, Union[float, np.ndarray]]:
                 """Calculate the energy and gradient for a given geometry.
 
                 Args:

@@ -1,7 +1,7 @@
 """Adapter for CREST package. https://crest-lab.github.io/crest-docs/"""
 
 from pathlib import Path
-from typing import Callable, Optional, Tuple
+from typing import Callable, Optional
 
 import qcparse
 from qcio import CalcType, ConformerSearchResults, ProgramInput
@@ -48,7 +48,7 @@ class CRESTAdapter(ProgramAdapter[ProgramInput, ConformerSearchResults]):
         update_interval: Optional[float] = None,
         collect_rotamers: bool = False,
         **kwargs,
-    ) -> Tuple[ConformerSearchResults, str]:
+    ) -> tuple[ConformerSearchResults, str]:
         """Execute CREST on the given input.
 
         Args:

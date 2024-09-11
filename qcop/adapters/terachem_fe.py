@@ -1,5 +1,5 @@
 import importlib
-from typing import Callable, Optional, Tuple
+from typing import Callable, Optional
 
 from qcio import CalcType, ProgramInput, SinglePointResults
 
@@ -44,7 +44,7 @@ class TeraChemFEAdapter(ProgramAdapter[ProgramInput, SinglePointResults]):
         update_func: Optional[Callable] = None,
         update_interval: Optional[float] = None,
         **kwargs,
-    ) -> Tuple[SinglePointResults, str]:
+    ) -> tuple[SinglePointResults, str]:
         """Execute TeraChem on the given input.
 
         Args:
