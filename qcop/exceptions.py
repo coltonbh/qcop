@@ -134,11 +134,12 @@ class ExternalSubprocessError(ExternalProgramError):
         *args,
         **kwargs,
     ):
+        super().__init__(
+            f"External program failed with return code {returncode}. "
+            f"Command: '{cmd}'",
+            *args,
+            **kwargs,
+        )
         self.returncode = returncode
         self.cmd = cmd
         self.stdout = stdout
-        self.message = (
-            f"External program failed with return code {self.returncode}. "
-            f"Command: '{self.cmd}'"
-        )
-        super().__init__(self.message, *args, **kwargs)
