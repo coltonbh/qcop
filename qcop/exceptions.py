@@ -16,9 +16,11 @@ class QCOPBaseError(Exception):
         program_output: Optional[ProgramOutput] = None,
         *,
         results: Optional[Results] = None,
+        stdout: Optional[str] = None,
     ):
         self.program_output = program_output
         self.results = results
+        self.stdout = stdout
         super().__init__(message)
 
     @property
@@ -34,7 +36,7 @@ class QCOPBaseError(Exception):
 
     def __str__(self):
         """Omits the program_output attribute from the string representation."""
-        return self.message
+        return self.args[0]
 
 
 class AdapterError(QCOPBaseError):
@@ -132,11 +134,12 @@ class ExternalSubprocessError(ExternalProgramError):
         *args,
         **kwargs,
     ):
+        super().__init__(
+            f"External program failed with return code {returncode}. "
+            f"Command: '{cmd}'",
+            *args,
+            **kwargs,
+        )
         self.returncode = returncode
         self.cmd = cmd
         self.stdout = stdout
-        self.message = (
-            f"External program failed with return code {self.returncode}. "
-            f"Command: '{self.cmd}'"
-        )
-        super().__init__(self.message, *args, **kwargs)

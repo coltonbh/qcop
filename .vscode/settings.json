@@ -27,6 +27,7 @@
         "rotamers",
         "singlepoint",
         "spinmult",
+        "TCPB",
         "terachem",
         "terachemd",
         "tmpdir",
