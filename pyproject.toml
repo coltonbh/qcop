@@ -9,7 +9,7 @@ repository = "https://github.com/coltonbh/qcop"
 homepage = "https://github.com/coltonbh/qcop"
 
 [tool.poetry.dependencies]
-python = "^3.8"
+python = "^3.9"
 
 # A list of all of the optional dependencies, some of which are included in the below
 # `extras`. They can be opted into by apps.
@@ -17,6 +17,7 @@ qcelemental = { version = "^0.26.0", optional = true }
 qcengine = { version = "^0.27.0", optional = true }
 geometric = { version = "^1.0.1", optional = true }
 xtb = { version = "^22.1", optional = true }
+tcpb = { version = "^0.14.1", optional = true }
 tomli-w = "^1.0.0"
 qcio = "^0.11.8"
 qcparse = "^0.6.2"
@@ -25,7 +26,7 @@ qcparse = "^0.6.2"
 qcengine = ["qcelemental", "qcengine"]
 geometric = ["geometric"]
 xtb = ["xtb"]
-all = ["qcelemental", "qcengine", "geometric", "xtb"]
+all = ["qcelemental", "qcengine", "geometric", "xtb", "tcpb"]
 
 [tool.poetry.group.dev.dependencies]
 black = "^24.0.0"
@@ -47,7 +48,7 @@ mkdocs = "^1.6.0"
 mkdocs-material = "^9.5.31"
 markdown-include = "^0.8.1"
 pymdown-extensions = "^10.9"
-mkdocstrings = {extras = ["python"], version = "^0.25.2"}
+mkdocstrings = { extras = ["python"], version = "^0.25.2" }
 mkdocs-exclude = "^1.0.2"
 
 [build-system]

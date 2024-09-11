@@ -6,6 +6,14 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## [unreleased]
 
+### Changed
+
+- 🚨: Bumped minimum python version from 3.8 -> 3.9 (needed for compatibility with `tcpb`).
+
+### Added
+
+- TeraChem protocol buffer server (and frontend) adapters.
+
 ## [0.8.1] - 2024-08-13
 
 ### Added
