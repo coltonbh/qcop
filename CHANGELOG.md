@@ -9,6 +9,11 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 ### Changed
 
 - 🚨: Bumped minimum python version from 3.8 -> 3.9 (needed for compatibility with `tcpb`).
+- Updated type annotations to use `dict`, `list`, `tuple` instead of `typing.Dict`, etc.
+
+### Removed
+
+- `black` and `isort` in favor of modern `ruff`.
 
 ### Added
 

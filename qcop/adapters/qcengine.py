@@ -1,5 +1,4 @@
 from pathlib import Path
-from typing import Tuple
 
 from qcio import CalcType, SinglePointResults
 from qcio.qcel import from_qcel_output_results, to_qcel_input
@@ -34,7 +33,7 @@ class QCEngineAdapter(ProgramAdapter):
 
     def compute_results(
         self, inp_obj, *args, propagate_wfn=False, **kwargs
-    ) -> Tuple[SinglePointResults, str]:
+    ) -> tuple[SinglePointResults, str]:
         from qcengine import compute as qcng_compute
         from qcengine.exceptions import QCEngineException
 
