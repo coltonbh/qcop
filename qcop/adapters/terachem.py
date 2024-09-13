@@ -4,7 +4,7 @@ from typing import Callable, Optional, Union
 import qcparse
 from qcio import CalcType, ProgramInput, ProgramOutput, SinglePointResults
 from qcparse.encoders.terachem import XYZ_FILENAME
-from qcparse.parsers.terachem import parse_version_string
+from qcparse.parsers.terachem import parse_optimization_dir, parse_version_string
 
 from qcop.exceptions import AdapterError, AdapterInputError
 
@@ -15,7 +15,12 @@ from .utils import execute_subprocess
 class TeraChemAdapter(ProgramAdapter[ProgramInput, SinglePointResults]):
     """Adapter for TeraChem."""
 
-    supported_calctypes = [CalcType.energy, CalcType.gradient, CalcType.hessian]
+    supported_calctypes = [
+        CalcType.energy,
+        CalcType.gradient,
+        CalcType.hessian,
+        CalcType.optimization,
+    ]
     program = "terachem"
 
     def program_version(self, stdout: Optional[str] = None) -> str:
@@ -53,18 +58,28 @@ class TeraChemAdapter(ProgramAdapter[ProgramInput, SinglePointResults]):
         Returns:
             A tuple of SinglePointResults and the stdout str.
         """
+        # Construct and write input file and xyz file to disk
         input_filename = "tc.in"
         try:
             native_input = qcparse.encode(inp_obj, self.program)
-        except qcparse.exceptions.EncoderError as e:
-            raise AdapterInputError(self.program, "Invalid input for TeraChem") from e
+        except qcparse.exceptions.EncoderError:
+            raise AdapterInputError(self.program, "Invalid input for TeraChem")
         Path(input_filename).write_text(native_input.input_file)
         Path(native_input.geometry_filename).write_text(native_input.geometry_file)
 
+        # Execute TeraChem
         stdout = execute_subprocess(
             self.program, [input_filename], update_func, update_interval
         )
-        parsed_output = qcparse.parse(stdout, self.program, "stdout")
+
+        # Parse output
+        if inp_obj.calctype == CalcType.optimization:
+            parsed_output = parse_optimization_dir(
+                f"scr.{XYZ_FILENAME.split('.')[0]}", stdout, inp_obj=inp_obj
+            )
+        else:
+            parsed_output = qcparse.parse(stdout, self.program, "stdout")
+
         return parsed_output, stdout
 
     def collect_wfn(self) -> dict[str, Union[str, bytes]]:

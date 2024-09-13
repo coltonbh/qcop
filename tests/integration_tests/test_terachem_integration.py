@@ -197,3 +197,20 @@ def test_terachem_hessian():
         ),
         atol=1e-6,
     )
+
+
+@pytest.mark.integration
+@skipif_program_not_available("terachem")
+def test_terachem_optimization(water):
+    # Modify keywords
+    energy_inp = ProgramInput(
+        structure=water,
+        calctype=CalcType.gradient,
+        model={"method": "hf", "basis": "sto-3g"},
+        keywords={"purify": "no", "new_minimizer": "yes"},
+    )
+
+    program = "terachem"
+    output = compute(program, energy_inp)
+    assert output.input_data == energy_inp
+    assert output.provenance.program == program

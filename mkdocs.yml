@@ -93,7 +93,8 @@ markdown_extensions:
   - markdown_include.include
 
 watch:
-  - qcop # Adjust this
+  - qcop
+  - examples
 
 nav:
   - Getting Started:

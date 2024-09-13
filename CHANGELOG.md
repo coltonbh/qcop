@@ -6,6 +6,11 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## [unreleased]
 
+### Added
+
+- `CalcType.optimization` support for TeraChem.
+- `typos` pre-commit check.
+
 ## [0.9.0] - 2024-09-11
 
 ### Changed
