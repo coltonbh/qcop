@@ -1,19 +1,30 @@
 """Adapter for CREST package. https://crest-lab.github.io/crest-docs/"""
 
 from pathlib import Path
-from typing import Callable, Optional
+from typing import Callable, Optional, Union
 
 import qcparse
-from qcio import CalcType, ConformerSearchResults, ProgramInput
+from qcio import (
+    CalcType,
+    ConformerSearchResults,
+    OptimizationResults,
+    ProgramInput,
+    SinglePointResults,
+)
 from qcparse.parsers import crest
 
-from qcop.exceptions import AdapterInputError
+from qcop.exceptions import AdapterInputError, ExternalProgramError
 
 from .base import ProgramAdapter
 from .utils import execute_subprocess
 
 
-class CRESTAdapter(ProgramAdapter[ProgramInput, ConformerSearchResults]):
+class CRESTAdapter(
+    ProgramAdapter[
+        ProgramInput,
+        Union[SinglePointResults, OptimizationResults, ConformerSearchResults],
+    ]
+):
     """Adapter for CREST.
 
     Note:
@@ -25,7 +36,13 @@ class CRESTAdapter(ProgramAdapter[ProgramInput, ConformerSearchResults]):
         automatically.
     """
 
-    supported_calctypes = [CalcType.conformer_search]
+    supported_calctypes = [
+        CalcType.energy,
+        CalcType.gradient,
+        CalcType.hessian,
+        CalcType.optimization,
+        CalcType.conformer_search,
+    ]
     program = "crest"
 
     def program_version(self, stdout: Optional[str] = None) -> str:
@@ -48,7 +65,9 @@ class CRESTAdapter(ProgramAdapter[ProgramInput, ConformerSearchResults]):
         update_interval: Optional[float] = None,
         collect_rotamers: bool = False,
         **kwargs,
-    ) -> tuple[ConformerSearchResults, str]:
+    ) -> tuple[
+        Union[SinglePointResults, OptimizationResults, ConformerSearchResults], str
+    ]:
         """Execute CREST on the given input.
 
         Args:
@@ -78,17 +97,33 @@ class CRESTAdapter(ProgramAdapter[ProgramInput, ConformerSearchResults]):
         )
 
         # Parse the output
-        csr = crest.parse_conformer_search_dir(
-            ".",
-            charge=inp_obj.structure.charge,
-            multiplicity=inp_obj.structure.multiplicity,
-            collect_rotamers=collect_rotamers,
-        )
+        if inp_obj.calctype == CalcType.conformer_search:
+            results = crest.parse_conformer_search_dir(
+                ".",
+                charge=inp_obj.structure.charge,
+                multiplicity=inp_obj.structure.multiplicity,
+                collect_rotamers=collect_rotamers,
+            )
+            # Add identifiers to the conformers and rotamers
+            ids = inp_obj.structure.identifiers.model_dump()
+            for struct_type in ["conformers", "rotamers"]:
+                for struct in getattr(results, struct_type):
+                    struct.add_identifiers(ids)
 
-        # Add identifiers to the conformers and rotamers
-        ids = inp_obj.structure.identifiers.model_dump()
-        for struct_type in ["conformers", "rotamers"]:
-            for struct in getattr(csr, struct_type):
-                struct.add_identifiers(ids)
+        elif inp_obj.calctype in {CalcType.energy, CalcType.gradient}:
+            results = crest.parse_singlepoint_dir(".")
 
-        return csr, stdout
+        elif inp_obj.calctype == CalcType.optimization:
+            results = crest.parse_optimization_dir(".", inp_obj=inp_obj, stdout=stdout)
+
+        elif inp_obj.calctype == CalcType.hessian:
+            results = crest.parse_numhess_dir(".", stdout=stdout)
+
+        # CREST does not exit with a non-zero exit code on failure
+        if "FAILED" in stdout:
+            raise ExternalProgramError(
+                f"CREST calculation failed. See the stdout for more information.",
+                results=results,
+                stdout=stdout,
+            )
+        return results, stdout
