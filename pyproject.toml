@@ -20,7 +20,7 @@ xtb = { version = "^22.1", optional = true }
 tcpb = { version = "^0.14.1", optional = true }
 tomli-w = "^1.0.0"
 qcio = "^0.11.8"
-qcparse = "^0.6.3"
+qcparse = "^0.6.4"
 
 [tool.poetry.extras]
 qcengine = ["qcelemental", "qcengine"]

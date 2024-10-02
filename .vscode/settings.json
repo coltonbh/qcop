@@ -16,6 +16,7 @@
         "htmlcov",
         "libxtb",
         "mrchem",
+        "numhess",
         "pstdout",
         "psutil",
         "pyenv",
