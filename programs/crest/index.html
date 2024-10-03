@@ -20,7 +20,7 @@
       
       
       <link rel="icon" href="../../assets/images/favicon.png">
-      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.5.34">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.5.39">
     
     
       
@@ -28,7 +28,7 @@
       
     
     
-      <link rel="stylesheet" href="../../assets/stylesheets/main.35f28582.min.css">
+      <link rel="stylesheet" href="../../assets/stylesheets/main.8c3ca2c6.min.css">
       
         
         <link rel="stylesheet" href="../../assets/stylesheets/palette.06af60db.min.css">
@@ -1016,18 +1016,18 @@ automatically.</p>
 
             <details class="quote">
               <summary>Source code in <code>qcop/adapters/crest.py</code></summary>
-              <div class="language-python highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">31</span>
-<span class="normal">32</span>
-<span class="normal">33</span>
-<span class="normal">34</span>
-<span class="normal">35</span>
-<span class="normal">36</span>
-<span class="normal">37</span>
-<span class="normal">38</span>
-<span class="normal">39</span>
-<span class="normal">40</span>
-<span class="normal">41</span>
-<span class="normal">42</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">program_version</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">stdout</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+              <div class="language-python highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">48</span>
+<span class="normal">49</span>
+<span class="normal">50</span>
+<span class="normal">51</span>
+<span class="normal">52</span>
+<span class="normal">53</span>
+<span class="normal">54</span>
+<span class="normal">55</span>
+<span class="normal">56</span>
+<span class="normal">57</span>
+<span class="normal">58</span>
+<span class="normal">59</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">program_version</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">stdout</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Get the program version.</span>
 
 <span class="sd">    Args:</span>
@@ -1059,7 +1059,14 @@ automatically.</p>
     <span class="n">update_interval</span><span class="p">:</span> <span class="n"><span title="typing.Optional">Optional</span></span><span class="p">[</span><span class="n">float</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="n">collect_rotamers</span><span class="p">:</span> <span class="n">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
     <span class="o">**</span><span class="n">kwargs</span>
-<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">tuple</span><span class="p">[</span><span class="n"><span title="qcio.ConformerSearchResults">ConformerSearchResults</span></span><span class="p">,</span> <span class="n">str</span><span class="p">]</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">tuple</span><span class="p">[</span>
+    <span class="n"><span title="typing.Union">Union</span></span><span class="p">[</span>
+        <span class="n"><span title="qcio.SinglePointResults">SinglePointResults</span></span><span class="p">,</span>
+        <span class="n"><span title="qcio.OptimizationResults">OptimizationResults</span></span><span class="p">,</span>
+        <span class="n"><span title="qcio.ConformerSearchResults">ConformerSearchResults</span></span><span class="p">,</span>
+    <span class="p">],</span>
+    <span class="n">str</span><span class="p">,</span>
+<span class="p">]</span>
 </code></pre></div>
 
     <div class="doc doc-contents ">
@@ -1150,7 +1157,7 @@ False since rotamers are usually not of interest and there will be many.</p>
       <tbody>
           <tr class="doc-section-item">
             <td>
-                  <code><span title="qcio.ConformerSearchResults">ConformerSearchResults</span></code>
+                  <code>tuple[<span title="typing.Union">Union</span>[<span title="qcio.SinglePointResults">SinglePointResults</span>, <span title="qcio.OptimizationResults">OptimizationResults</span>, <span title="qcio.ConformerSearchResults">ConformerSearchResults</span>], str]</code>
             </td>
             <td>
               <div class="doc-md-description">
@@ -1163,64 +1170,84 @@ False since rotamers are usually not of interest and there will be many.</p>
 
             <details class="quote">
               <summary>Source code in <code>qcop/adapters/crest.py</code></summary>
-              <div class="language-python highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">44</span>
-<span class="normal">45</span>
-<span class="normal">46</span>
-<span class="normal">47</span>
-<span class="normal">48</span>
-<span class="normal">49</span>
-<span class="normal">50</span>
-<span class="normal">51</span>
-<span class="normal">52</span>
-<span class="normal">53</span>
-<span class="normal">54</span>
-<span class="normal">55</span>
-<span class="normal">56</span>
-<span class="normal">57</span>
-<span class="normal">58</span>
-<span class="normal">59</span>
-<span class="normal">60</span>
-<span class="normal">61</span>
-<span class="normal">62</span>
-<span class="normal">63</span>
-<span class="normal">64</span>
-<span class="normal">65</span>
-<span class="normal">66</span>
-<span class="normal">67</span>
-<span class="normal">68</span>
-<span class="normal">69</span>
-<span class="normal">70</span>
-<span class="normal">71</span>
-<span class="normal">72</span>
-<span class="normal">73</span>
-<span class="normal">74</span>
-<span class="normal">75</span>
-<span class="normal">76</span>
-<span class="normal">77</span>
-<span class="normal">78</span>
-<span class="normal">79</span>
-<span class="normal">80</span>
-<span class="normal">81</span>
-<span class="normal">82</span>
-<span class="normal">83</span>
-<span class="normal">84</span>
-<span class="normal">85</span>
-<span class="normal">86</span>
-<span class="normal">87</span>
-<span class="normal">88</span>
-<span class="normal">89</span>
-<span class="normal">90</span>
-<span class="normal">91</span>
-<span class="normal">92</span>
-<span class="normal">93</span>
-<span class="normal">94</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">compute_results</span><span class="p">(</span>
+              <div class="language-python highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 61</span>
+<span class="normal"> 62</span>
+<span class="normal"> 63</span>
+<span class="normal"> 64</span>
+<span class="normal"> 65</span>
+<span class="normal"> 66</span>
+<span class="normal"> 67</span>
+<span class="normal"> 68</span>
+<span class="normal"> 69</span>
+<span class="normal"> 70</span>
+<span class="normal"> 71</span>
+<span class="normal"> 72</span>
+<span class="normal"> 73</span>
+<span class="normal"> 74</span>
+<span class="normal"> 75</span>
+<span class="normal"> 76</span>
+<span class="normal"> 77</span>
+<span class="normal"> 78</span>
+<span class="normal"> 79</span>
+<span class="normal"> 80</span>
+<span class="normal"> 81</span>
+<span class="normal"> 82</span>
+<span class="normal"> 83</span>
+<span class="normal"> 84</span>
+<span class="normal"> 85</span>
+<span class="normal"> 86</span>
+<span class="normal"> 87</span>
+<span class="normal"> 88</span>
+<span class="normal"> 89</span>
+<span class="normal"> 90</span>
+<span class="normal"> 91</span>
+<span class="normal"> 92</span>
+<span class="normal"> 93</span>
+<span class="normal"> 94</span>
+<span class="normal"> 95</span>
+<span class="normal"> 96</span>
+<span class="normal"> 97</span>
+<span class="normal"> 98</span>
+<span class="normal"> 99</span>
+<span class="normal">100</span>
+<span class="normal">101</span>
+<span class="normal">102</span>
+<span class="normal">103</span>
+<span class="normal">104</span>
+<span class="normal">105</span>
+<span class="normal">106</span>
+<span class="normal">107</span>
+<span class="normal">108</span>
+<span class="normal">109</span>
+<span class="normal">110</span>
+<span class="normal">111</span>
+<span class="normal">112</span>
+<span class="normal">113</span>
+<span class="normal">114</span>
+<span class="normal">115</span>
+<span class="normal">116</span>
+<span class="normal">117</span>
+<span class="normal">118</span>
+<span class="normal">119</span>
+<span class="normal">120</span>
+<span class="normal">121</span>
+<span class="normal">122</span>
+<span class="normal">123</span>
+<span class="normal">124</span>
+<span class="normal">125</span>
+<span class="normal">126</span>
+<span class="normal">127</span>
+<span class="normal">128</span>
+<span class="normal">129</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">compute_results</span><span class="p">(</span>
     <span class="bp">self</span><span class="p">,</span>
     <span class="n">inp_obj</span><span class="p">:</span> <span class="n">ProgramInput</span><span class="p">,</span>
     <span class="n">update_func</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Callable</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="n">update_interval</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">float</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="n">collect_rotamers</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
     <span class="o">**</span><span class="n">kwargs</span><span class="p">,</span>
-<span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="n">ConformerSearchResults</span><span class="p">,</span> <span class="nb">str</span><span class="p">]:</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span>
+    <span class="n">Union</span><span class="p">[</span><span class="n">SinglePointResults</span><span class="p">,</span> <span class="n">OptimizationResults</span><span class="p">,</span> <span class="n">ConformerSearchResults</span><span class="p">],</span> <span class="nb">str</span>
+<span class="p">]:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Execute CREST on the given input.</span>
 
 <span class="sd">    Args:</span>
@@ -1250,20 +1277,36 @@ False since rotamers are usually not of interest and there will be many.</p>
     <span class="p">)</span>
 
     <span class="c1"># Parse the output</span>
-    <span class="n">csr</span> <span class="o">=</span> <span class="n">crest</span><span class="o">.</span><span class="n">parse_conformer_search_dir</span><span class="p">(</span>
-        <span class="s2">&quot;.&quot;</span><span class="p">,</span>
-        <span class="n">charge</span><span class="o">=</span><span class="n">inp_obj</span><span class="o">.</span><span class="n">structure</span><span class="o">.</span><span class="n">charge</span><span class="p">,</span>
-        <span class="n">multiplicity</span><span class="o">=</span><span class="n">inp_obj</span><span class="o">.</span><span class="n">structure</span><span class="o">.</span><span class="n">multiplicity</span><span class="p">,</span>
-        <span class="n">collect_rotamers</span><span class="o">=</span><span class="n">collect_rotamers</span><span class="p">,</span>
-    <span class="p">)</span>
+    <span class="k">if</span> <span class="n">inp_obj</span><span class="o">.</span><span class="n">calctype</span> <span class="o">==</span> <span class="n">CalcType</span><span class="o">.</span><span class="n">conformer_search</span><span class="p">:</span>
+        <span class="n">results</span> <span class="o">=</span> <span class="n">crest</span><span class="o">.</span><span class="n">parse_conformer_search_dir</span><span class="p">(</span>
+            <span class="s2">&quot;.&quot;</span><span class="p">,</span>
+            <span class="n">charge</span><span class="o">=</span><span class="n">inp_obj</span><span class="o">.</span><span class="n">structure</span><span class="o">.</span><span class="n">charge</span><span class="p">,</span>
+            <span class="n">multiplicity</span><span class="o">=</span><span class="n">inp_obj</span><span class="o">.</span><span class="n">structure</span><span class="o">.</span><span class="n">multiplicity</span><span class="p">,</span>
+            <span class="n">collect_rotamers</span><span class="o">=</span><span class="n">collect_rotamers</span><span class="p">,</span>
+        <span class="p">)</span>
+        <span class="c1"># Add identifiers to the conformers and rotamers</span>
+        <span class="n">ids</span> <span class="o">=</span> <span class="n">inp_obj</span><span class="o">.</span><span class="n">structure</span><span class="o">.</span><span class="n">identifiers</span><span class="o">.</span><span class="n">model_dump</span><span class="p">()</span>
+        <span class="k">for</span> <span class="n">struct_type</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;conformers&quot;</span><span class="p">,</span> <span class="s2">&quot;rotamers&quot;</span><span class="p">]:</span>
+            <span class="k">for</span> <span class="n">struct</span> <span class="ow">in</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">results</span><span class="p">,</span> <span class="n">struct_type</span><span class="p">):</span>
+                <span class="n">struct</span><span class="o">.</span><span class="n">add_identifiers</span><span class="p">(</span><span class="n">ids</span><span class="p">)</span>
 
-    <span class="c1"># Add identifiers to the conformers and rotamers</span>
-    <span class="n">ids</span> <span class="o">=</span> <span class="n">inp_obj</span><span class="o">.</span><span class="n">structure</span><span class="o">.</span><span class="n">identifiers</span><span class="o">.</span><span class="n">model_dump</span><span class="p">()</span>
-    <span class="k">for</span> <span class="n">struct_type</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;conformers&quot;</span><span class="p">,</span> <span class="s2">&quot;rotamers&quot;</span><span class="p">]:</span>
-        <span class="k">for</span> <span class="n">struct</span> <span class="ow">in</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">csr</span><span class="p">,</span> <span class="n">struct_type</span><span class="p">):</span>
-            <span class="n">struct</span><span class="o">.</span><span class="n">add_identifiers</span><span class="p">(</span><span class="n">ids</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="n">inp_obj</span><span class="o">.</span><span class="n">calctype</span> <span class="ow">in</span> <span class="p">{</span><span class="n">CalcType</span><span class="o">.</span><span class="n">energy</span><span class="p">,</span> <span class="n">CalcType</span><span class="o">.</span><span class="n">gradient</span><span class="p">}:</span>
+        <span class="n">results</span> <span class="o">=</span> <span class="n">crest</span><span class="o">.</span><span class="n">parse_singlepoint_dir</span><span class="p">(</span><span class="s2">&quot;.&quot;</span><span class="p">)</span>
 
-    <span class="k">return</span> <span class="n">csr</span><span class="p">,</span> <span class="n">stdout</span>
+    <span class="k">elif</span> <span class="n">inp_obj</span><span class="o">.</span><span class="n">calctype</span> <span class="o">==</span> <span class="n">CalcType</span><span class="o">.</span><span class="n">optimization</span><span class="p">:</span>
+        <span class="n">results</span> <span class="o">=</span> <span class="n">crest</span><span class="o">.</span><span class="n">parse_optimization_dir</span><span class="p">(</span><span class="s2">&quot;.&quot;</span><span class="p">,</span> <span class="n">inp_obj</span><span class="o">=</span><span class="n">inp_obj</span><span class="p">,</span> <span class="n">stdout</span><span class="o">=</span><span class="n">stdout</span><span class="p">)</span>
+
+    <span class="k">elif</span> <span class="n">inp_obj</span><span class="o">.</span><span class="n">calctype</span> <span class="o">==</span> <span class="n">CalcType</span><span class="o">.</span><span class="n">hessian</span><span class="p">:</span>
+        <span class="n">results</span> <span class="o">=</span> <span class="n">crest</span><span class="o">.</span><span class="n">parse_numhess_dir</span><span class="p">(</span><span class="s2">&quot;.&quot;</span><span class="p">,</span> <span class="n">stdout</span><span class="o">=</span><span class="n">stdout</span><span class="p">)</span>
+
+    <span class="c1"># CREST does not exit with a non-zero exit code on failure</span>
+    <span class="k">if</span> <span class="s2">&quot;FAILED&quot;</span> <span class="ow">in</span> <span class="n">stdout</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="n">ExternalProgramError</span><span class="p">(</span>
+            <span class="sa">f</span><span class="s2">&quot;CREST calculation failed. See the stdout for more information.&quot;</span><span class="p">,</span>
+            <span class="n">results</span><span class="o">=</span><span class="n">results</span><span class="p">,</span>
+            <span class="n">stdout</span><span class="o">=</span><span class="n">stdout</span><span class="p">,</span>
+        <span class="p">)</span>
+    <span class="k">return</span> <span class="n">results</span><span class="p">,</span> <span class="n">stdout</span>
 </code></pre></div></td></tr></table></div>
             </details>
     </div>
@@ -1333,10 +1376,10 @@ False since rotamers are usually not of interest and there will be many.</p>
       <div class="md-progress" data-md-component="progress" role="progressbar"></div>
     
     
-    <script id="__config" type="application/json">{"base": "../..", "features": ["content.tabs.link", "content.code.annotate", "content.code.copy", "announce.dismiss", "navigation.tabs", "navigation.instant", "navigation.instant.prefetch", "navigation.instant.preview", "navigation.instant.progress", "navigation.path", "navigation.sections", "navigation.top", "navigation.tracking", "search.suggest", "toc.follow"], "search": "../../assets/javascripts/workers/search.07f07601.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}}</script>
+    <script id="__config" type="application/json">{"base": "../..", "features": ["content.tabs.link", "content.code.annotate", "content.code.copy", "announce.dismiss", "navigation.tabs", "navigation.instant", "navigation.instant.prefetch", "navigation.instant.preview", "navigation.instant.progress", "navigation.path", "navigation.sections", "navigation.top", "navigation.tracking", "search.suggest", "toc.follow"], "search": "../../assets/javascripts/workers/search.6ce7567c.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}}</script>
     
     
-      <script src="../../assets/javascripts/bundle.56dfad97.min.js"></script>
+      <script src="../../assets/javascripts/bundle.525ec568.min.js"></script>
       
     
   </body>
