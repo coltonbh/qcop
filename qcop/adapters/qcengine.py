@@ -13,6 +13,7 @@ class QCEngineAdapter(ProgramAdapter):
 
     program = "qcengine"
     supported_calctypes = [CalcType.energy, CalcType.gradient, CalcType.hessian]
+    """Supported calculation types."""
 
     def __init__(self, external_program: str) -> None:
         super().__init__()

@@ -31,6 +31,7 @@ class XTBAdapter(ProgramAdapter[ProgramInput, SinglePointResults]):
     """Adapter for xtb-python."""
 
     supported_calctypes = [CalcType.energy, CalcType.gradient]
+    """Supported calculation types."""
     program = "xtb"
     uses_files = False  # xtb-python does not use files written to disk
 

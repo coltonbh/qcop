@@ -32,6 +32,7 @@ class GeometricAdapter(ProgramAdapter[DualProgramInput, OptimizationResults]):
 
     program = "geometric"
     supported_calctypes = [CalcType.optimization, CalcType.transition_state]
+    """Supported calculation types."""
 
     def __init__(self):
         super().__init__()

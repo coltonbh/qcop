@@ -21,6 +21,7 @@ class TeraChemAdapter(ProgramAdapter[ProgramInput, SinglePointResults]):
         CalcType.hessian,
         CalcType.optimization,
     ]
+    """Supported calculation types."""
     program = "terachem"
 
     def program_version(self, stdout: Optional[str] = None) -> str:

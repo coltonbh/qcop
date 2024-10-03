@@ -43,6 +43,7 @@ class CRESTAdapter(
         CalcType.optimization,
         CalcType.conformer_search,
     ]
+    """Supported calculation types."""
     program = "crest"
 
     def program_version(self, stdout: Optional[str] = None) -> str:

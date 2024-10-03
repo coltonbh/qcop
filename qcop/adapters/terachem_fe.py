@@ -12,6 +12,7 @@ class TeraChemFEAdapter(ProgramAdapter[ProgramInput, SinglePointResults]):
     """Adapter for TeraChem's Protocol Buffer Server and Frontend file server."""
 
     supported_calctypes = [CalcType.energy, CalcType.gradient]
+    """Supported calculation types."""
     program = "terachem-fe"
 
     def __init__(self):
