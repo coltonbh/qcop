@@ -1,15 +1,9 @@
 name: Create Release
 
 on:
-  # Trigger on pushes after running this for past releases
-  # push:
-  #   tags:
-  #     - "*"  # Match any tag
-  workflow_dispatch: # Manual trigger for release creation
-    inputs:
-      tag:
-        description: "The tag to create a release for"
-        required: true
+  push:
+    tags:
+      - "*"  # Match any tag
 
 jobs:
   create-release:
