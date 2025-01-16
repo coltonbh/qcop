@@ -6,6 +6,12 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## [unreleased]
 
+## [0.9.4] - 2025-01-15
+
+### Changed
+
+- More flexibly defined `qcparse` dependency from `^0.6.4` to `>=0.6.4`.
+
 ## [0.9.3] - 2025-01-15
 
 ### Changed
@@ -321,7 +327,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 - Created adapter for TeraChem.
 - Exposed general purpose computing for any subprocess with `FileAdaptor`
 
-[unreleased]: https://github.com/coltonbh/qcop/compare/0.9.3...HEAD
+[unreleased]: https://github.com/coltonbh/qcop/compare/0.9.4...HEAD
+[0.9.4]: https://github.com/coltonbh/qcop/releases/tag/0.9.4
 [0.9.3]: https://github.com/coltonbh/qcop/releases/tag/0.9.3
 [0.9.2]: https://github.com/coltonbh/qcop/releases/tag/0.9.2
 [0.9.1]: https://github.com/coltonbh/qcop/releases/tag/0.9.1

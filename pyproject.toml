@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "qcop"
-version = "0.9.3"
+version = "0.9.4"
 description = "A package for operating Quantum Chemistry programs using qcio standardized data structures. Compatible with TeraChem, psi4, QChem, NWChem, ORCA, Molpro, geomeTRIC and many more."
 authors = ["Colton Hicks <github@coltonhicks.com>"]
 license = "MIT"
@@ -20,7 +20,7 @@ xtb = { version = "^22.1", optional = true }
 tcpb = { version = "^0.14.1", optional = true }
 tomli-w = "^1.0.0"
 qcio = ">=0.11.8"
-qcparse = "^0.6.4"
+qcparse = ">=0.6.4"
 
 [tool.poetry.extras]
 qcengine = ["qcelemental", "qcengine"]
