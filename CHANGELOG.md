@@ -6,6 +6,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## [unreleased]
 
+### Added
+
+- `Try/Except` statement for TeraChem version parsing. If `libcuda.so.1` is not found, TeraChem will not print the version string to `stdout`. This will no longer throw an exception and will return `Could not parse version` instead.
+
 ## [0.9.5] - 2025-02-07
 
 ### Changed
