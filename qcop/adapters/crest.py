@@ -34,6 +34,17 @@ class CRESTAdapter(
         Keywords such as method, charge, and uhf (which are stored on the `Model` and
         `Structure`; uhf is `multiplicity - 1`) will be added to the input file
         automatically.
+    
+    Warning:
+        CREST does not exit with a non-zero exit code on failure. Instead, it prints
+        "FAILED" in the stdout. This adapter will raise an ExternalProgramError if
+        "FAILED" is found in the stdout.
+    
+    Warning:
+        CREST automatically translates the input geometry to the origin. This means
+        that the input geometry printed to CREST's stdout will not match the input
+        structure; however, all computed values (such as energies, gradients, etc.) are
+        still valid because they are translationally invariant.
     """
 
     supported_calctypes = [

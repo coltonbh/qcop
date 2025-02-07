@@ -6,6 +6,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## [unreleased]
 
+### Changed
+
+- Loosened `tcpb` dependency from `^0.14.1` to `>=0.14.1`.
+
 ## [0.9.4] - 2025-01-15
 
 ### Changed
