@@ -3,6 +3,7 @@ from typing import Callable, Optional, Union
 
 import qcparse
 from qcio import CalcType, ProgramInput, ProgramOutput, SinglePointResults
+from qcparse import exceptions as qcparse_exceptions
 from qcparse.encoders.terachem import XYZ_FILENAME
 from qcparse.parsers.terachem import parse_optimization_dir, parse_version_string
 
@@ -34,7 +35,12 @@ class TeraChemAdapter(ProgramAdapter[ProgramInput, SinglePointResults]):
             The program version.
         """
         if stdout:
-            return parse_version_string(stdout)
+            try:
+                return parse_version_string(stdout)
+            except qcparse_exceptions.ParserError:
+                # If the version string is not found. Happens when libcuda.so is not
+                # found and TeraChem fails to start. terachem --version will fail too.
+                return "Could not parse version"
         else:
             # Cut out "TeraChem version " (17 chars) from the output
             return execute_subprocess(self.program, ["--version"])[17:]
