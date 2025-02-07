@@ -6,6 +6,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## [unreleased]
 
+## [0.9.6] - 2025-02-07
+
 ### Added
 
 - `Try/Except` statement for TeraChem version parsing. If `libcuda.so.1` is not found, TeraChem will not print the version string to `stdout`. This will no longer throw an exception and will return `Could not parse version` instead.
@@ -337,7 +339,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 - Created adapter for TeraChem.
 - Exposed general purpose computing for any subprocess with `FileAdaptor`
 
-[unreleased]: https://github.com/coltonbh/qcop/compare/0.9.5...HEAD
+[unreleased]: https://github.com/coltonbh/qcop/compare/0.9.6...HEAD
+[0.9.6]: https://github.com/coltonbh/qcop/releases/tag/0.9.6
 [0.9.5]: https://github.com/coltonbh/qcop/releases/tag/0.9.5
 [0.9.4]: https://github.com/coltonbh/qcop/releases/tag/0.9.4
 [0.9.3]: https://github.com/coltonbh/qcop/releases/tag/0.9.3
