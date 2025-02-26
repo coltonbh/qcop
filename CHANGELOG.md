@@ -6,6 +6,15 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## [unreleased]
 
+### Changed
+
+- Only add identifiers from the input structure to CREST's generated conformer and rotamers if `topo: True` meaning CREST prohibited topology changes.
+- Updated `poetry.lock` package dependencies.
+
+### Fixed
+
+- CREST Adapter's call to `Structure.add_identifiers()` need to pass kwargs and not a dictionary due to an update to the `qcio` API.
+
 ## [0.9.6] - 2025-02-07
 
 ### Added
