@@ -34,12 +34,12 @@ class CRESTAdapter(
         Keywords such as method, charge, and uhf (which are stored on the `Model` and
         `Structure`; uhf is `multiplicity - 1`) will be added to the input file
         automatically.
-    
+
     Warning:
         CREST does not exit with a non-zero exit code on failure. Instead, it prints
         "FAILED" in the stdout. This adapter will raise an ExternalProgramError if
         "FAILED" is found in the stdout.
-    
+
     Warning:
         CREST automatically translates the input geometry to the origin. This means
         that the input geometry printed to CREST's stdout will not match the input
@@ -116,11 +116,12 @@ class CRESTAdapter(
                 multiplicity=inp_obj.structure.multiplicity,
                 collect_rotamers=collect_rotamers,
             )
-            # Add identifiers to the conformers and rotamers
-            ids = inp_obj.structure.identifiers.model_dump()
-            for struct_type in ["conformers", "rotamers"]:
-                for struct in getattr(results, struct_type):
-                    struct.add_identifiers(ids)
+            # Add identifiers to the conformers and rotamers if topo is unchanged
+            if inp_obj.keywords.get("topo", True):
+                ids = inp_obj.structure.identifiers.model_dump()
+                for struct_type in ["conformers", "rotamers"]:
+                    for struct in getattr(results, struct_type):
+                        struct.add_identifiers(**ids)
 
         elif inp_obj.calctype in {CalcType.energy, CalcType.gradient}:
             results = crest.parse_singlepoint_dir(".")
