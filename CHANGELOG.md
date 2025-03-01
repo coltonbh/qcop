@@ -6,6 +6,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## [unreleased]
 
+### Added
+
+- `try/except` statement to `self.program_version` call inside `BaseAdapter.compute()` that would trigger a second exception if the original issue was the quantum chemistry program was not available on the `$PATH`.
+
 ## [0.9.7] - 2025-02-25
 
 ### Changed

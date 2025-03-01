@@ -76,7 +76,12 @@ def test_execute_subprocess_with_update_func(mocker):
 
 
 def test_execute_subprocess_interval_with_update_func(mocker):
-    """Test that execute_subprocess can run a python script with an update function."""
+    """
+    Test that execute_subprocess can run a python script with an update function.
+
+    NOTE: This test has a race condition that may cause it to fail if update_func isn't
+        called a second the python subprocess exits.
+    """
     # Create a mock using mocker
     mock_update_func = mocker.MagicMock()
     execute_subprocess(
@@ -84,10 +89,10 @@ def test_execute_subprocess_interval_with_update_func(mocker):
         [
             "-u",
             "-c",
-            "import time;print('Hello World!');time.sleep(0.01); print('After sleep')",
+            "import time;print('Hello World!');time.sleep(0.01); print('After sleep');time.sleep(0.1)",
         ],
         update_func=mock_update_func,
-        update_interval=0.0001,
+        update_interval=0.00001,
     )
 
     # Check that 'mock_update_func' was called with the expected output.
