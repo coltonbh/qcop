@@ -15,7 +15,7 @@ from qcio import (
 )
 from qcio.helper_types import StrOrPath
 
-from qcop.exceptions import AdapterInputError, QCOPBaseError
+from qcop.exceptions import AdapterInputError, ProgramNotFoundError, QCOPBaseError
 
 from .utils import construct_provenance, tmpdir
 
@@ -184,7 +184,11 @@ class BaseAdapter(ABC, Generic[InputType, ResultsType]):
                 output_dict["traceback"] = traceback.format_exc()
 
             wall_time = time() - start
-            program_version = self.program_version(stdout)
+
+            try:
+                program_version = self.program_version(stdout)
+            except ProgramNotFoundError:
+                pass  # program_version = None set above
 
             # Construct Provenance object
             provenance = construct_provenance(
