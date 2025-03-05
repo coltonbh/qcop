@@ -20,7 +20,7 @@ from typing import Callable, Optional, Union
 from qcio import Provenance
 from qcio.helper_types import StrOrPath
 
-from qcop.exceptions import ExternalSubprocessError, ProgramNotFoundError
+from qcop.exceptions import ExternalProgramError, ProgramNotFoundError
 
 
 def execute_subprocess(
@@ -69,8 +69,8 @@ def execute_subprocess(
             stderr=subprocess.STDOUT,  # stderr is redirected to stdout
             universal_newlines=True,  # returns stdout as string
         )
-    except FileNotFoundError:
-        raise ProgramNotFoundError(program)
+    except FileNotFoundError as e:
+        raise ProgramNotFoundError(program=program) from e
 
     # Setup variables for monitoring stdout
     stdout_lines: list[str] = []
@@ -105,7 +105,11 @@ def execute_subprocess(
 
     # Check if program executed successfully
     if proc.returncode != 0:
-        raise ExternalSubprocessError(proc.returncode, " ".join(cmd), stdout)
+        raise ExternalProgramError(
+            f"External program failed with return code {proc.returncode}. Command: '{cmd}'",
+            program=program,
+            stdout=stdout,
+        )
 
     return stdout
 

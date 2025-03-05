@@ -11,8 +11,7 @@ from qcio import (
 from qcop.adapters import GeometricAdapter
 from qcop.adapters.utils import tmpdir
 from qcop.exceptions import (
-    ExternalSubprocessError,
-    GeometricError,
+    ExternalProgramError,
     ProgramNotFoundError,
 )
 
@@ -87,12 +86,14 @@ def test_qcio_geometric_engine_exception_handling(
     mocker.patch.object(
         test_adapter,
         "compute",
-        side_effect=ExternalSubprocessError(
-            1, "terachem tc.in", "some stdout", po_failure
+        side_effect=ExternalProgramError(
+            program="terachem",
+            stdout="some stdout",
+            program_output=po_failure,
         ),
     )
 
-    with pytest.raises(ExternalSubprocessError) as excinfo:
+    with pytest.raises(ExternalProgramError) as excinfo:
         # Random coordinates for testing
         coords = hydrogen.geometry
         engine.calc_new(coords)
@@ -112,5 +113,5 @@ def test_geometric_exceptions_converted_to_qcop_exceptions(mocker, dual_prog_inp
     )
 
     prog_inp = dual_prog_inp(CalcType.optimization)
-    with pytest.raises(GeometricError):
+    with pytest.raises(ExternalProgramError):
         adapter.compute_results(prog_inp, propagate_wfn=False)

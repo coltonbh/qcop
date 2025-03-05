@@ -96,7 +96,7 @@ class CRESTAdapter(
         try:
             native_inp = qcparse.encode(inp_obj, self.program)
         except qcparse.exceptions.EncoderError as e:
-            raise AdapterInputError(self.program, "Invalid input for CREST") from e
+            raise AdapterInputError(program=self.program) from e
 
         # Write the input files to disk
         inp_file, struct_file = Path("input.toml"), Path(native_inp.geometry_filename)
@@ -109,33 +109,44 @@ class CRESTAdapter(
         )
 
         # Parse the output
-        if inp_obj.calctype == CalcType.conformer_search:
-            results = crest.parse_conformer_search_dir(
-                ".",
-                charge=inp_obj.structure.charge,
-                multiplicity=inp_obj.structure.multiplicity,
-                collect_rotamers=collect_rotamers,
-            )
-            # Add identifiers to the conformers and rotamers if topo is unchanged
-            if inp_obj.keywords.get("topo", True):
-                ids = inp_obj.structure.identifiers.model_dump()
-                for struct_type in ["conformers", "rotamers"]:
-                    for struct in getattr(results, struct_type):
-                        struct.add_identifiers(**ids)
+        try:
+            if inp_obj.calctype == CalcType.conformer_search:
+                results = crest.parse_conformer_search_dir(
+                    ".",
+                    charge=inp_obj.structure.charge,
+                    multiplicity=inp_obj.structure.multiplicity,
+                    collect_rotamers=collect_rotamers,
+                )
+                # Add identifiers to the conformers and rotamers if topo is unchanged
+                if inp_obj.keywords.get("topo", True):
+                    ids = inp_obj.structure.identifiers.model_dump()
+                    for struct_type in ["conformers", "rotamers"]:
+                        for struct in getattr(results, struct_type):
+                            struct.add_identifiers(**ids)
 
-        elif inp_obj.calctype in {CalcType.energy, CalcType.gradient}:
-            results = crest.parse_singlepoint_dir(".")
+            elif inp_obj.calctype in {CalcType.energy, CalcType.gradient}:
+                results = crest.parse_singlepoint_dir(".")
 
-        elif inp_obj.calctype == CalcType.optimization:
-            results = crest.parse_optimization_dir(".", inp_obj=inp_obj, stdout=stdout)
+            elif inp_obj.calctype == CalcType.optimization:
+                results = crest.parse_optimization_dir(
+                    ".", inp_obj=inp_obj, stdout=stdout
+                )
 
-        elif inp_obj.calctype == CalcType.hessian:
-            results = crest.parse_numhess_dir(".", stdout=stdout)
+            elif inp_obj.calctype == CalcType.hessian:
+                results = crest.parse_numhess_dir(".", stdout=stdout)
+        except qcparse.exceptions.ParserError as e:
+            raise ExternalProgramError(
+                "Failed to parse CREST output.",
+                program="qcparse",
+                stdout=stdout,
+                original_exception=e,
+            ) from e
 
         # CREST does not exit with a non-zero exit code on failure
         if "FAILED" in stdout:
             raise ExternalProgramError(
                 f"CREST calculation failed. See the stdout for more information.",
+                program=self.program,
                 results=results,
                 stdout=stdout,
             )

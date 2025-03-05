@@ -6,7 +6,7 @@ from pathlib import Path
 import pytest
 
 from qcop.adapters.utils import capture_logs, execute_subprocess, tmpdir
-from qcop.exceptions import ExternalSubprocessError, ProgramNotFoundError
+from qcop.exceptions import ExternalProgramError, ProgramNotFoundError
 from qcop.utils import available_programs, prog_available
 
 
@@ -110,14 +110,12 @@ def test_execute_subprocess_raises_exception_if_program_not_found():
 def test_execute_subprocess_raises_external_program_execution_error_if_program_fails():
     """Test that execute_subprocess raises an exception if the program fails."""
     cmd = ["python", "-c", "raise Exception('Hello World!')"]
-    with pytest.raises(ExternalSubprocessError):
+    with pytest.raises(ExternalProgramError):
         execute_subprocess(cmd[0], cmd[1:])
 
     try:
         execute_subprocess(cmd[0], cmd[1:])
-    except ExternalSubprocessError as e:
-        assert e.returncode == 1
-        assert e.cmd == " ".join(cmd)
+    except ExternalProgramError as e:
         assert isinstance(e.stdout, str)
 
 

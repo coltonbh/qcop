@@ -17,7 +17,7 @@ from qcio import (
 
 from qcop.exceptions import (
     AdapterInputError,
-    GeometricError,
+    ExternalProgramError,
     ProgramNotFoundError,
     QCOPBaseError,
 )
@@ -109,7 +109,10 @@ class GeometricAdapter(ProgramAdapter[DualProgramInput, OptimizationResults]):
             try:
                 optimizer.optimizeGeometry()
             except self.geometric.errors.Error as e:
-                raise GeometricError() from e
+                raise ExternalProgramError(
+                    "geomeTRIC optimization failed. See the traceback above for details.",
+                    program=self.program,
+                ) from e
 
         return (
             OptimizationResults(
@@ -217,7 +220,8 @@ class GeometricAdapter(ProgramAdapter[DualProgramInput, OptimizationResults]):
             if "scan" in constraints_dict:
                 raise AdapterInputError(
                     "The constraint 'scan' keyword is not yet supported by the JSON "
-                    "interface, reports geometric!"
+                    "interface, reports geometric!",
+                    program=self.program,
                 )
             constraints_string = self.geometric.run_json.make_constraints_string(
                 constraints_dict
