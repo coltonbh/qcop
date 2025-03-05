@@ -2,7 +2,11 @@ import pytest
 
 from qcop import compute
 from qcop.adapters import registry
-from qcop.exceptions import AdapterNotFoundError, ProgramNotFoundError, QCEngineError
+from qcop.exceptions import (
+    AdapterNotFoundError,
+    ExternalProgramError,
+    ProgramNotFoundError,
+)
 from qcop.utils import check_qcng_support
 
 
@@ -63,7 +67,7 @@ def test_qcng_exception_wrapping_raise_exc_true(mocker, prog_inp):
 
     energy_inp = prog_inp("energy")
     # Program not in qcop, but in qcng
-    with pytest.raises(QCEngineError):
+    with pytest.raises(ExternalProgramError):
         compute("mrchem", energy_inp, raise_exc=True)
 
 

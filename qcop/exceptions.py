@@ -1,145 +1,138 @@
 """Experimental exception hierarchy. This may be too complex and unhelpful for now"""
 
-import warnings
 from typing import Optional
 
 from qcio import ProgramOutput, Results
 
 
 class QCOPBaseError(Exception):
-    """Base class for exceptions in qcop. All custom exceptions should inherit from
-    this class."""
+    """
+    Base class for all qcop exceptions.
+
+    All QCOP exceptions must eventually have a non-None program_output attribute.
+    Lower-level code may leave program_output as None; the top-level compute() method
+    should attach the final ProgramOutput before propagating the error. If some results
+    were computed before the error occurred, they should be attached to the exception
+    as well.
+    """
 
     def __init__(
         self,
         message: str,
+        # Needed as positional arg for celery serialization
         program_output: Optional[ProgramOutput] = None,
         *,
         results: Optional[Results] = None,
-        stdout: Optional[str] = None,
     ):
+        super().__init__(message)
         self.program_output = program_output
         self.results = results
-        self.stdout = stdout
-        super().__init__(message)
-
-    @property
-    def program_failure(self):
-        """Maintain backwards compatibility."""
-        warnings.warn(
-            "The 'program_failure' attribute is deprecated and will be removed in a "
-            "future release. Use 'program_output' instead.",
-            FutureWarning,
-            stacklevel=2,
-        )
-        return self.program_output
 
     def __str__(self):
-        """Omits the program_output attribute from the string representation."""
+        # Only the message is shown in the string representation.
         return self.args[0]
+
+    def __repr__(self):
+        return (
+            f"{self.__class__.__name__}(message={self.args[0]!r}, "
+            f"program_output={self.program_output!r}, results={self.results!r})"
+        )
+
+
+# ===================== Adapter-Related Errors =====================
 
 
 class AdapterError(QCOPBaseError):
-    """Base class for exceptions thrown by adapters."""
+    """Exceptions due to misconfiguration or invalid inputs for adapters."""
 
     pass
 
 
 class AdapterNotFoundError(AdapterError):
-    """
-    Exception raised when no adapter can be found for a given program.
+    """Raised when no adapter can be found for the requested program."""
 
-    Args:
-        program: Program for which no adapter was found
-    """
+    def __init__(
+        self,
+        message: Optional[str] = None,
+        program_output: Optional[ProgramOutput] = None,
+        *,
+        program: str,
+    ):
+        if message is None:
+            message = f"No adapter found for program '{program}'."
+        super().__init__(message, program_output)
+        self.program = program
 
-    def __init__(self, program: str, *args):
-        super().__init__(f"No adapter found for program '{program}'.", *args)
+    def __repr__(self):
+        return f"{super().__repr__()}, program={self.program!r}"
 
 
 class AdapterInputError(AdapterError):
-    """
-    Exception raised when inputs to an adaptor are incorrect.
+    """Raised when the inputs provided to an adapter are invalid."""
 
-    Args:
-        program: Program for which input files could not be generated
-        message: explanation of the error
-    """
-
-    def __init__(self, program: str, message: str, *args):
+    def __init__(
+        self,
+        message: Optional[str] = None,
+        program_output: Optional["ProgramOutput"] = None,
+        *,
+        program: str,
+    ):
+        if message is None:
+            message = f"Invalid inputs for program '{program}'."
+        super().__init__(message, program_output)
         self.program = program
-        self.message = message
-        super().__init__(self.message, *args)
+
+
+# ===================== External Program Errors =====================
 
 
 class ExternalProgramError(QCOPBaseError):
-    """Base Exception raised for errors with an external program."""
-
-    pass
-
-
-class ProgramNotFoundError(ExternalProgramError):
     """
-    Exception raised when a program cannot be found on the host system.
+    Raised when an external program or package fails to complete successfully.
 
-    Args:
-        program: program which was not found
-    """
+    This covers failures from external subprocesses, Python packages (like qcparse or QCEngine),
+    or any other external libraries.
 
-    def __init__(self, program: str, *args, install_msg: Optional[str] = None):
-        self.program = program
-        self.message = install_msg or (
-            f"Program not found: '{self.program}'. To use {self.program} please "
-            f"install it on your system and ensure that it is on your PATH."
-        )
-        super().__init__(self.message, *args)
-
-
-class QCEngineError(ExternalProgramError):
-    """Exception raised when any part of qcengine execution fails."""
-
-    def __init__(self, external_program: str, *args):
-        self.message = (
-            f"Something went wrong with QCEngine trying to run {external_program}. See "
-            "the traceback above for details."
-        )
-        super().__init__(self.message, *args)
-
-
-class GeometricError(ExternalProgramError):
-    """Exception raised when any part of geomeTRIC execution fails."""
-
-    def __init__(self, *args):
-        self.message = (
-            "Something went wrong with geomeTRIC. See the traceback above for details."
-        )
-        super().__init__(self.message, *args)
-
-
-class ExternalSubprocessError(ExternalProgramError):
-    """
-    Exception raised when an external subprocess fails.
-
-    Args:
-        returncode: Return code of the subprocess
-        cmd: Command which failed
-        stdout: Standard output of the subprocess
+    Attributes:
+        results: Any results computed before the error was raised.
+        program: The name of the external program that failed.
+        original_exception: The original exception that was caught (if any).
+        stdout: The standard output produced by the external call.
     """
 
     def __init__(
         self,
-        returncode: int,
-        cmd: str,
+        message: Optional[str] = None,
+        program_output: Optional["ProgramOutput"] = None,
+        *,
+        program: str,
+        results: Optional["Results"] = None,
+        original_exception: Optional[Exception] = None,
         stdout: Optional[str] = None,
-        *args,
-        **kwargs,
     ):
-        super().__init__(
-            f"External program failed with return code {returncode}. "
-            f"Command: '{cmd}'",
-            *args,
-            **kwargs,
-        )
-        self.returncode = returncode
-        self.cmd = cmd
+        if message is None:
+            message = f"External program '{program}' failed."
+        super().__init__(message, program_output, results=results)
+        self.program = program
+        self.original_exception = original_exception
         self.stdout = stdout
+
+
+class ProgramNotFoundError(ExternalProgramError):
+    """Raised when the external program is not found on the host system."""
+
+    def __init__(
+        self,
+        message: Optional[str] = None,
+        program_output: Optional["ProgramOutput"] = None,
+        *,
+        program: str,
+        install_msg: Optional[str] = None,
+    ):
+        if message is None:
+            message = install_msg or (
+                f"Program not found: '{program}'. Please install it and ensure it is on your PATH."
+            )
+        super().__init__(message, program_output, program=program)
+        self.program = program
+        self.install_msg = install_msg

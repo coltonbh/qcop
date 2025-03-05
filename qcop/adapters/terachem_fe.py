@@ -3,7 +3,7 @@ from typing import Callable, Optional
 
 from qcio import CalcType, ProgramInput, SinglePointResults
 
-from qcop.exceptions import AdapterError, ProgramNotFoundError
+from qcop.exceptions import ExternalProgramError, ProgramNotFoundError
 
 from .base import ProgramAdapter
 
@@ -61,10 +61,13 @@ class TeraChemFEAdapter(ProgramAdapter[ProgramInput, SinglePointResults]):
             with self.client() as client:
                 prog_output = client.compute(inp_obj)
         except self.tcpb.exceptions.TCPBError as e:
-            exc = AdapterError("An error occurred with TeraChem PBS")
-            # Pass stdout to .compute() via the exception
-            # Will only exist for TeraChemFrontendAdapter
-            exc.stdout = e.program_output.stdout
+            exc = ExternalProgramError(
+                program=self.program,
+                # Pass stdout to .compute() via the exception
+                # Will only exist for TeraChemFrontendAdapter
+                stdout=e.program_output.stdout,
+            )
+
             raise exc
 
         else:

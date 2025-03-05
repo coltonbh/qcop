@@ -47,9 +47,9 @@ class XTBAdapter(ProgramAdapter[ProgramInput, SinglePointResults]):
         supported_methods = self.xtb.interface.Param.__members__.keys()
         if inp_obj.model.method not in supported_methods:
             raise AdapterInputError(
-                self.program,
                 f"Unsupported method '{inp_obj.model.method}'. "
                 f"Supported methods include: {supported_methods}",
+                program=self.program,
             )
 
     def program_version(self, stdout: Optional[str] = None) -> str:
@@ -140,7 +140,7 @@ class XTBAdapter(ProgramAdapter[ProgramInput, SinglePointResults]):
                 stdout = os.read(r_pipe, 100000).decode()
 
         except self.xtb.interface.XTBException as e:
-            raise ExternalProgramError("Something went wrong with xtb-python.") from e
+            raise ExternalProgramError(program="xtb-python") from e
 
         # Collect results
         # TODO: Collect other results xtb produces

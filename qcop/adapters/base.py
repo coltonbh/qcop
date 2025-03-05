@@ -239,8 +239,8 @@ class BaseAdapter(ABC, Generic[InputType, ResultsType]):
         """
         # Collect wavefunction file from the calc_dir
         raise AdapterInputError(
-            self.program,
             f"Adapter for {self.program} does not support wavefunction collection.",
+            program=self.program,
         )
 
 

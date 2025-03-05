@@ -66,11 +66,11 @@ def check_qcng_support(program: str) -> None:
         # NOTE: This call adds >1s of overhead to execution time!!!
         get_program(program)
     except InputError as e:  # Raised by QCEngine if program not registered
-        raise AdapterNotFoundError(program) from e
+        raise AdapterNotFoundError(program=program) from e
     # Raised by QCEngine if program not installed on system
     # IndexError insulates from .pyenv/shims not covered in qcng
     except (ResourceError, IndexError):
-        raise ProgramNotFoundError(program)
+        raise ProgramNotFoundError(program=program)
 
 
 def get_adapter(
@@ -102,7 +102,7 @@ def get_adapter(
             # Raises AdapterNotFoundError or ProgramNotFoundError
             check_qcng_support(program)
             return registry["qcengine"](program)
-        raise AdapterNotFoundError(program)
+        raise AdapterNotFoundError(program=program)
 
 
 def inherit_docstring_from(func):

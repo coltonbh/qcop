@@ -3,7 +3,7 @@ from pathlib import Path
 from qcio import CalcType, SinglePointResults
 from qcio.qcel import from_qcel_output_results, to_qcel_input
 
-from qcop.exceptions import QCEngineError
+from qcop.exceptions import ExternalProgramError
 
 from .base import ProgramAdapter
 
@@ -28,8 +28,9 @@ class QCEngineAdapter(ProgramAdapter):
             adapter = get_program(self.external_program)
             return adapter.get_version()
         except QCEngineException as e:
-            raise QCEngineError(
-                f"Could not get version for program {self.external_program}."
+            raise ExternalProgramError(
+                f"QCEngine could not get version for program {self.external_program}.",
+                program=self.program,
             ) from e
 
     def compute_results(
@@ -58,7 +59,10 @@ class QCEngineAdapter(ProgramAdapter):
             )
 
         except QCEngineException as e:  # Base exception for all QCEngine
-            raise QCEngineError(self.external_program) from e
+            raise ExternalProgramError(
+                f"QCEngine could not compute results for {self.external_program}.",
+                program=self.program,
+            ) from e
 
         else:
             return from_qcel_output_results(qcng_output), qcng_output["stdout"]

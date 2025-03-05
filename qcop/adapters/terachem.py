@@ -7,7 +7,7 @@ from qcparse import exceptions as qcparse_exceptions
 from qcparse.encoders.terachem import XYZ_FILENAME
 from qcparse.parsers.terachem import parse_optimization_dir, parse_version_string
 
-from qcop.exceptions import AdapterError, AdapterInputError
+from qcop.exceptions import AdapterError, AdapterInputError, ExternalProgramError
 
 from .base import ProgramAdapter
 from .utils import execute_subprocess
@@ -42,8 +42,10 @@ class TeraChemAdapter(ProgramAdapter[ProgramInput, SinglePointResults]):
                 # found and TeraChem fails to start. terachem --version will fail too.
                 return "Could not parse version"
         else:
-            # Cut out "TeraChem version " (17 chars) from the output
-            return execute_subprocess(self.program, ["--version"])[17:]
+            try:
+                return execute_subprocess(self.program, ["--version"])[17:]
+            except ExternalProgramError:
+                return "Could not determine version"
 
     # TODO: Need command line options for TeraChem e.g., -g 1 for GPUs MAYBE?
     # Try using it for a while without and see what roadblocks we run into
@@ -66,11 +68,12 @@ class TeraChemAdapter(ProgramAdapter[ProgramInput, SinglePointResults]):
             A tuple of SinglePointResults and the stdout str.
         """
         # Construct and write input file and xyz file to disk
-        input_filename = "tc.in"
         try:
             native_input = qcparse.encode(inp_obj, self.program)
-        except qcparse.exceptions.EncoderError:
-            raise AdapterInputError(self.program, "Invalid input for TeraChem")
+        except qcparse.exceptions.EncoderError as e:
+            raise AdapterInputError(program=self.program) from e
+
+        input_filename = "tc.in"
         Path(input_filename).write_text(native_input.input_file)
         Path(native_input.geometry_filename).write_text(native_input.geometry_file)
 
@@ -80,13 +83,20 @@ class TeraChemAdapter(ProgramAdapter[ProgramInput, SinglePointResults]):
         )
 
         # Parse output
-        if inp_obj.calctype == CalcType.optimization:
-            parsed_output = parse_optimization_dir(
-                f"scr.{XYZ_FILENAME.split('.')[0]}", stdout, inp_obj=inp_obj
-            )
-        else:
-            parsed_output = qcparse.parse(stdout, self.program, "stdout")
-
+        try:
+            if inp_obj.calctype == CalcType.optimization:
+                parsed_output = parse_optimization_dir(
+                    f"scr.{XYZ_FILENAME.split('.')[0]}", stdout, inp_obj=inp_obj
+                )
+            else:
+                parsed_output = qcparse.parse(stdout, self.program, "stdout")
+        except qcparse_exceptions.ParserError as e:
+            raise ExternalProgramError(
+                "Failed to parse TeraChem output.",
+                program="qcparse",
+                stdout=stdout,
+                original_exception=e,
+            ) from e
         return parsed_output, stdout
 
     def collect_wfn(self) -> dict[str, Union[str, bytes]]:
