@@ -136,8 +136,8 @@ class CRESTAdapter(
                 results = crest.parse_numhess_dir(".", stdout=stdout)
         except qcparse.exceptions.ParserError as e:
             raise ExternalProgramError(
-                "Failed to parse CREST output.",
                 program="qcparse",
+                message="Failed to parse CREST output.",
                 stdout=stdout,
                 original_exception=e,
             ) from e
@@ -145,8 +145,8 @@ class CRESTAdapter(
         # CREST does not exit with a non-zero exit code on failure
         if "FAILED" in stdout:
             raise ExternalProgramError(
-                f"CREST calculation failed. See the stdout for more information.",
                 program=self.program,
+                message=f"CREST calculation failed. See the stdout for more information.",
                 results=results,
                 stdout=stdout,
             )
