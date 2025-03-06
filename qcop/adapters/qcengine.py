@@ -29,8 +29,8 @@ class QCEngineAdapter(ProgramAdapter):
             return adapter.get_version()
         except QCEngineException as e:
             raise ExternalProgramError(
-                f"QCEngine could not get version for program {self.external_program}.",
                 program=self.program,
+                message=f"QCEngine could not get version for program {self.external_program}.",
             ) from e
 
     def compute_results(
@@ -60,8 +60,8 @@ class QCEngineAdapter(ProgramAdapter):
 
         except QCEngineException as e:  # Base exception for all QCEngine
             raise ExternalProgramError(
-                f"QCEngine could not compute results for {self.external_program}.",
                 program=self.program,
+                message=f"QCEngine could not compute results for {self.external_program}.",
             ) from e
 
         else:

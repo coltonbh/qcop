@@ -47,9 +47,9 @@ class XTBAdapter(ProgramAdapter[ProgramInput, SinglePointResults]):
         supported_methods = self.xtb.interface.Param.__members__.keys()
         if inp_obj.model.method not in supported_methods:
             raise AdapterInputError(
-                f"Unsupported method '{inp_obj.model.method}'. "
-                f"Supported methods include: {supported_methods}",
                 program=self.program,
+                message=f"Unsupported method '{inp_obj.model.method}'. "
+                f"Supported methods include: {supported_methods}",
             )
 
     def program_version(self, stdout: Optional[str] = None) -> str:

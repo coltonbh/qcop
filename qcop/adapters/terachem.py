@@ -92,8 +92,8 @@ class TeraChemAdapter(ProgramAdapter[ProgramInput, SinglePointResults]):
                 parsed_output = qcparse.parse(stdout, self.program, "stdout")
         except qcparse_exceptions.ParserError as e:
             raise ExternalProgramError(
-                "Failed to parse TeraChem output.",
                 program="qcparse",
+                message="Failed to parse TeraChem output.",
                 stdout=stdout,
                 original_exception=e,
             ) from e

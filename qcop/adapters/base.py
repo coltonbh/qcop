@@ -224,8 +224,6 @@ class BaseAdapter(ABC, Generic[InputType, ResultsType]):
         # Helpful for BigChem and ChemCloud exception handling
         if raise_exc and exc:
             exc.program_output = output_obj
-            # Updating .args is necessary for Celery to properly serialize the exception
-            exc.args = (*exc.args, output_obj)
             raise exc
 
         return output_obj
@@ -239,8 +237,8 @@ class BaseAdapter(ABC, Generic[InputType, ResultsType]):
         """
         # Collect wavefunction file from the calc_dir
         raise AdapterInputError(
-            f"Adapter for {self.program} does not support wavefunction collection.",
             program=self.program,
+            message=f"Adapter for {self.program} does not support wavefunction collection.",
         )
 
 

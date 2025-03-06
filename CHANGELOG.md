@@ -6,6 +6,11 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## [unreleased]
 
+### Changed
+
+- Updated exception hierarchy to use all positional arguments to facilitate pickle serialization.
+- Dropped exception `.args` hacking in `BaseAdapter.compute()` as it is no longer necessary when I pass `program_output` and `results` as arguments to `super().__init(...)` in `QCOPBaseError`.
+
 ## [0.10.0] - 2025-03-04
 
 ### Changed

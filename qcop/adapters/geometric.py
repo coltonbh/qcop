@@ -110,8 +110,8 @@ class GeometricAdapter(ProgramAdapter[DualProgramInput, OptimizationResults]):
                 optimizer.optimizeGeometry()
             except self.geometric.errors.Error as e:
                 raise ExternalProgramError(
-                    "geomeTRIC optimization failed. See the traceback above for details.",
                     program=self.program,
+                    message="geomeTRIC optimization failed. See the traceback above for details.",
                 ) from e
 
         return (

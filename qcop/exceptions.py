@@ -19,12 +19,12 @@ class QCOPBaseError(Exception):
     def __init__(
         self,
         message: str,
-        # Needed as positional arg for celery serialization
         program_output: Optional[ProgramOutput] = None,
-        *,
         results: Optional[Results] = None,
     ):
-        super().__init__(message)
+        # Pass everything as positional arguments so they are captured in .args
+        # Required for pickling and other serialization methods including celery.
+        super().__init__(message, program_output, results)
         self.program_output = program_output
         self.results = results
 
@@ -53,14 +53,13 @@ class AdapterNotFoundError(AdapterError):
 
     def __init__(
         self,
+        program: str,
         message: Optional[str] = None,
         program_output: Optional[ProgramOutput] = None,
-        *,
-        program: str,
     ):
         if message is None:
             message = f"No adapter found for program '{program}'."
-        super().__init__(message, program_output)
+        super().__init__(message, program_output, None)
         self.program = program
 
     def __repr__(self):
@@ -72,15 +71,17 @@ class AdapterInputError(AdapterError):
 
     def __init__(
         self,
-        message: Optional[str] = None,
-        program_output: Optional["ProgramOutput"] = None,
-        *,
         program: str,
+        message: Optional[str] = None,
+        program_output: Optional[ProgramOutput] = None,
     ):
         if message is None:
             message = f"Invalid inputs for program '{program}'."
-        super().__init__(message, program_output)
+        super().__init__(message, program_output, None)
         self.program = program
+
+    def __repr__(self):
+        return f"{super().__repr__()}, program={self.program!r}"
 
 
 # ===================== External Program Errors =====================
@@ -92,30 +93,29 @@ class ExternalProgramError(QCOPBaseError):
 
     This covers failures from external subprocesses, Python packages (like qcparse or QCEngine),
     or any other external libraries.
-
-    Attributes:
-        results: Any results computed before the error was raised.
-        program: The name of the external program that failed.
-        original_exception: The original exception that was caught (if any).
-        stdout: The standard output produced by the external call.
     """
 
     def __init__(
         self,
-        message: Optional[str] = None,
-        program_output: Optional["ProgramOutput"] = None,
-        *,
         program: str,
-        results: Optional["Results"] = None,
+        message: Optional[str] = None,
+        program_output: Optional[ProgramOutput] = None,
+        results: Optional[Results] = None,
         original_exception: Optional[Exception] = None,
         stdout: Optional[str] = None,
     ):
         if message is None:
             message = f"External program '{program}' failed."
-        super().__init__(message, program_output, results=results)
+        super().__init__(message, program_output, results)
         self.program = program
         self.original_exception = original_exception
         self.stdout = stdout
+
+    def __repr__(self):
+        return (
+            f"{super().__repr__()}, program={self.program!r}, "
+            f"original_exception={self.original_exception!r}, stdout={self.stdout!r}"
+        )
 
 
 class ProgramNotFoundError(ExternalProgramError):
@@ -123,16 +123,20 @@ class ProgramNotFoundError(ExternalProgramError):
 
     def __init__(
         self,
-        message: Optional[str] = None,
-        program_output: Optional["ProgramOutput"] = None,
-        *,
         program: str,
+        message: Optional[str] = None,
+        program_output: Optional[ProgramOutput] = None,
         install_msg: Optional[str] = None,
     ):
         if message is None:
-            message = install_msg or (
-                f"Program not found: '{program}'. Please install it and ensure it is on your PATH."
+            message = (
+                install_msg
+                or f"Program not found: '{program}'. Please install it and ensure it is on your PATH."
             )
-        super().__init__(message, program_output, program=program)
+        # Call ExternalProgramError with results, original_exception, and stdout defaulting to None.
+        super().__init__(program, message, program_output, None, None, None)
         self.program = program
         self.install_msg = install_msg
+
+    def __repr__(self):
+        return f"{super().__repr__()}, install_msg={self.install_msg!r}"
