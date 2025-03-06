@@ -20,7 +20,7 @@
       
       
       <link rel="icon" href="../../assets/images/favicon.png">
-      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.6.3">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.6.5">
     
     
       
@@ -28,7 +28,7 @@
       
     
     
-      <link rel="stylesheet" href="../../assets/stylesheets/main.d7758b05.min.css">
+      <link rel="stylesheet" href="../../assets/stylesheets/main.8608ea7d.min.css">
       
         
         <link rel="stylesheet" href="../../assets/stylesheets/palette.06af60db.min.css">
@@ -1051,7 +1051,7 @@
 
 
 <a href="#qcop.adapters.geometric.GeometricAdapter.program_version" class="headerlink" title="Permanent link">&para;</a></h3>
-<div class="language-python doc-signature highlight"><pre><span></span><code><span class="nf">program_version</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">str</span>
+<div class="language-python doc-signature highlight"><pre><span></span><code><span class="nf">program_version</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n"><span title="str">str</span></span>
 </code></pre></div>
 
     <div class="doc doc-contents ">
@@ -1082,10 +1082,10 @@
 <div class="language-python doc-signature highlight"><pre><span></span><code><span class="nf">compute_results</span><span class="p">(</span>
     <span class="n">inp_obj</span><span class="p">:</span> <span class="n"><span title="qcio.DualProgramInput">DualProgramInput</span></span><span class="p">,</span>
     <span class="n">update_func</span><span class="p">:</span> <span class="n"><span title="typing.Optional">Optional</span></span><span class="p">[</span><span class="n"><span title="typing.Callable">Callable</span></span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
-    <span class="n">update_interval</span><span class="p">:</span> <span class="n"><span title="typing.Optional">Optional</span></span><span class="p">[</span><span class="n">float</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
-    <span class="n">propagate_wfn</span><span class="p">:</span> <span class="n">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+    <span class="n">update_interval</span><span class="p">:</span> <span class="n"><span title="typing.Optional">Optional</span></span><span class="p">[</span><span class="n"><span title="float">float</span></span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">propagate_wfn</span><span class="p">:</span> <span class="n"><span title="bool">bool</span></span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
     <span class="o">**</span><span class="n">kwargs</span>
-<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">tuple</span><span class="p">[</span><span class="n"><span title="qcio.OptimizationResults">OptimizationResults</span></span><span class="p">,</span> <span class="n">str</span><span class="p">]</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n"><span title="tuple">tuple</span></span><span class="p">[</span><span class="n"><span title="qcio.OptimizationResults">OptimizationResults</span></span><span class="p">,</span> <span class="n"><span title="str">str</span></span><span class="p">]</span>
 </code></pre></div>
 
     <div class="doc doc-contents ">
@@ -1121,7 +1121,7 @@
           <tr class="doc-section-item">
             <td><code>propagate_wfn</code></td>
             <td>
-                  <code>bool</code>
+                  <code><span title="bool">bool</span></code>
             </td>
             <td>
               <div class="doc-md-description">
@@ -1182,7 +1182,10 @@ optimization.</p>
 <span class="normal">116</span>
 <span class="normal">117</span>
 <span class="normal">118</span>
-<span class="normal">119</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">compute_results</span><span class="p">(</span>
+<span class="normal">119</span>
+<span class="normal">120</span>
+<span class="normal">121</span>
+<span class="normal">122</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">compute_results</span><span class="p">(</span>
     <span class="bp">self</span><span class="p">,</span>
     <span class="n">inp_obj</span><span class="p">:</span> <span class="n">DualProgramInput</span><span class="p">,</span>
     <span class="n">update_func</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Callable</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
@@ -1219,7 +1222,10 @@ optimization.</p>
         <span class="k">try</span><span class="p">:</span>
             <span class="n">optimizer</span><span class="o">.</span><span class="n">optimizeGeometry</span><span class="p">()</span>
         <span class="k">except</span> <span class="bp">self</span><span class="o">.</span><span class="n">geometric</span><span class="o">.</span><span class="n">errors</span><span class="o">.</span><span class="n">Error</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="n">GeometricError</span><span class="p">()</span> <span class="kn">from</span><span class="w"> </span><span class="nn">e</span>
+            <span class="k">raise</span> <span class="n">ExternalProgramError</span><span class="p">(</span>
+                <span class="n">program</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">program</span><span class="p">,</span>
+                <span class="n">message</span><span class="o">=</span><span class="s2">&quot;geomeTRIC optimization failed. See the traceback above for details.&quot;</span><span class="p">,</span>
+            <span class="p">)</span> <span class="kn">from</span><span class="w"> </span><span class="nn">e</span>
 
     <span class="k">return</span> <span class="p">(</span>
         <span class="n">OptimizationResults</span><span class="p">(</span>

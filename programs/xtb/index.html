@@ -20,7 +20,7 @@
       
       
       <link rel="icon" href="../../assets/images/favicon.png">
-      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.6.3">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.6.5">
     
     
       
@@ -28,7 +28,7 @@
       
     
     
-      <link rel="stylesheet" href="../../assets/stylesheets/main.d7758b05.min.css">
+      <link rel="stylesheet" href="../../assets/stylesheets/main.8608ea7d.min.css">
       
         
         <link rel="stylesheet" href="../../assets/stylesheets/palette.06af60db.min.css">
@@ -1073,8 +1073,8 @@
     <span class="n">supported_methods</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">xtb</span><span class="o">.</span><span class="n">interface</span><span class="o">.</span><span class="n">Param</span><span class="o">.</span><span class="n">__members__</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span>
     <span class="k">if</span> <span class="n">inp_obj</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">method</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">supported_methods</span><span class="p">:</span>
         <span class="k">raise</span> <span class="n">AdapterInputError</span><span class="p">(</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">program</span><span class="p">,</span>
-            <span class="sa">f</span><span class="s2">&quot;Unsupported method &#39;</span><span class="si">{</span><span class="n">inp_obj</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">method</span><span class="si">}</span><span class="s2">&#39;. &quot;</span>
+            <span class="n">program</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">program</span><span class="p">,</span>
+            <span class="n">message</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;Unsupported method &#39;</span><span class="si">{</span><span class="n">inp_obj</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">method</span><span class="si">}</span><span class="s2">&#39;. &quot;</span>
             <span class="sa">f</span><span class="s2">&quot;Supported methods include: </span><span class="si">{</span><span class="n">supported_methods</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
         <span class="p">)</span>
 </code></pre></div></td></tr></table></div>
@@ -1091,7 +1091,7 @@
 
 
 <a href="#qcop.adapters.xtb.XTBAdapter.program_version" class="headerlink" title="Permanent link">&para;</a></h3>
-<div class="language-python doc-signature highlight"><pre><span></span><code><span class="nf">program_version</span><span class="p">(</span><span class="n">stdout</span><span class="p">:</span> <span class="n"><span title="typing.Optional">Optional</span></span><span class="p">[</span><span class="n">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">str</span>
+<div class="language-python doc-signature highlight"><pre><span></span><code><span class="nf">program_version</span><span class="p">(</span><span class="n">stdout</span><span class="p">:</span> <span class="n"><span title="typing.Optional">Optional</span></span><span class="p">[</span><span class="n"><span title="str">str</span></span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n"><span title="str">str</span></span>
 </code></pre></div>
 
     <div class="doc doc-contents ">
@@ -1113,7 +1113,7 @@
           <tr class="doc-section-item">
             <td><code>stdout</code></td>
             <td>
-                  <code><span title="typing.Optional">Optional</span>[str]</code>
+                  <code><span title="typing.Optional">Optional</span>[<span title="str">str</span>]</code>
             </td>
             <td>
               <div class="doc-md-description">
@@ -1139,7 +1139,7 @@
       <tbody>
           <tr class="doc-section-item">
             <td>
-                  <code>str</code>
+                  <code><span title="str">str</span></code>
             </td>
             <td>
               <div class="doc-md-description">
@@ -1194,9 +1194,9 @@
 <div class="language-python doc-signature highlight"><pre><span></span><code><span class="nf">compute_results</span><span class="p">(</span>
     <span class="n">inp_obj</span><span class="p">:</span> <span class="n"><span title="qcio.ProgramInput">ProgramInput</span></span><span class="p">,</span>
     <span class="n">update_func</span><span class="p">:</span> <span class="n"><span title="typing.Optional">Optional</span></span><span class="p">[</span><span class="n"><span title="typing.Callable">Callable</span></span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
-    <span class="n">update_interval</span><span class="p">:</span> <span class="n"><span title="typing.Optional">Optional</span></span><span class="p">[</span><span class="n">float</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">update_interval</span><span class="p">:</span> <span class="n"><span title="typing.Optional">Optional</span></span><span class="p">[</span><span class="n"><span title="float">float</span></span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="o">**</span><span class="n">kwargs</span>
-<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">tuple</span><span class="p">[</span><span class="n"><span title="qcio.SinglePointResults">SinglePointResults</span></span><span class="p">,</span> <span class="n">str</span><span class="p">]</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n"><span title="tuple">tuple</span></span><span class="p">[</span><span class="n"><span title="qcio.SinglePointResults">SinglePointResults</span></span><span class="p">,</span> <span class="n"><span title="str">str</span></span><span class="p">]</span>
 </code></pre></div>
 
     <div class="doc doc-contents ">
@@ -1246,7 +1246,7 @@
           <tr class="doc-section-item">
             <td><code>update_interval</code></td>
             <td>
-                  <code><span title="typing.Optional">Optional</span>[float]</code>
+                  <code><span title="typing.Optional">Optional</span>[<span title="float">float</span>]</code>
             </td>
             <td>
               <div class="doc-md-description">
@@ -1273,7 +1273,7 @@ update_func.</p>
       <tbody>
           <tr class="doc-section-item">
             <td>
-                  <code>tuple[<span title="qcio.SinglePointResults">SinglePointResults</span>, str]</code>
+                  <code><span title="tuple">tuple</span>[<span title="qcio.SinglePointResults">SinglePointResults</span>, <span title="str">str</span>]</code>
             </td>
             <td>
               <div class="doc-md-description">
@@ -1385,7 +1385,7 @@ update_func.</p>
             <span class="n">stdout</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="n">r_pipe</span><span class="p">,</span> <span class="mi">100000</span><span class="p">)</span><span class="o">.</span><span class="n">decode</span><span class="p">()</span>
 
     <span class="k">except</span> <span class="bp">self</span><span class="o">.</span><span class="n">xtb</span><span class="o">.</span><span class="n">interface</span><span class="o">.</span><span class="n">XTBException</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
-        <span class="k">raise</span> <span class="n">ExternalProgramError</span><span class="p">(</span><span class="s2">&quot;Something went wrong with xtb-python.&quot;</span><span class="p">)</span> <span class="kn">from</span><span class="w"> </span><span class="nn">e</span>
+        <span class="k">raise</span> <span class="n">ExternalProgramError</span><span class="p">(</span><span class="n">program</span><span class="o">=</span><span class="s2">&quot;xtb-python&quot;</span><span class="p">)</span> <span class="kn">from</span><span class="w"> </span><span class="nn">e</span>
 
     <span class="c1"># Collect results</span>
     <span class="c1"># TODO: Collect other results xtb produces</span>

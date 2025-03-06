@@ -20,7 +20,7 @@
       
       
       <link rel="icon" href="../../assets/images/favicon.png">
-      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.6.3">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.6.5">
     
     
       
@@ -28,7 +28,7 @@
       
     
     
-      <link rel="stylesheet" href="../../assets/stylesheets/main.d7758b05.min.css">
+      <link rel="stylesheet" href="../../assets/stylesheets/main.8608ea7d.min.css">
       
         
         <link rel="stylesheet" href="../../assets/stylesheets/palette.06af60db.min.css">
@@ -912,15 +912,15 @@
     <span class="n">inp_obj</span><span class="p">:</span> <span class="n"><span title="qcio.InputType">InputType</span></span><span class="p">,</span>
     <span class="o">*</span><span class="p">,</span>
     <span class="n">scratch_dir</span><span class="p">:</span> <span class="n"><span title="typing.Optional">Optional</span></span><span class="p">[</span><span class="n"><span title="qcio.helper_types.StrOrPath">StrOrPath</span></span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
-    <span class="n">rm_scratch_dir</span><span class="p">:</span> <span class="n">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
-    <span class="n">collect_stdout</span><span class="p">:</span> <span class="n">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
-    <span class="n">collect_files</span><span class="p">:</span> <span class="n">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
-    <span class="n">collect_wfn</span><span class="p">:</span> <span class="n">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+    <span class="n">rm_scratch_dir</span><span class="p">:</span> <span class="n"><span title="bool">bool</span></span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+    <span class="n">collect_stdout</span><span class="p">:</span> <span class="n"><span title="bool">bool</span></span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+    <span class="n">collect_files</span><span class="p">:</span> <span class="n"><span title="bool">bool</span></span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+    <span class="n">collect_wfn</span><span class="p">:</span> <span class="n"><span title="bool">bool</span></span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
     <span class="n">update_func</span><span class="p">:</span> <span class="n"><span title="typing.Optional">Optional</span></span><span class="p">[</span><span class="n"><span title="typing.Callable">Callable</span></span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
-    <span class="n">update_interval</span><span class="p">:</span> <span class="n"><span title="typing.Optional">Optional</span></span><span class="p">[</span><span class="n">float</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
-    <span class="n">print_stdout</span><span class="p">:</span> <span class="n">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
-    <span class="n">raise_exc</span><span class="p">:</span> <span class="n">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
-    <span class="n">propagate_wfn</span><span class="p">:</span> <span class="n">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+    <span class="n">update_interval</span><span class="p">:</span> <span class="n"><span title="typing.Optional">Optional</span></span><span class="p">[</span><span class="n"><span title="float">float</span></span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">print_stdout</span><span class="p">:</span> <span class="n"><span title="bool">bool</span></span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+    <span class="n">raise_exc</span><span class="p">:</span> <span class="n"><span title="bool">bool</span></span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+    <span class="n">propagate_wfn</span><span class="p">:</span> <span class="n"><span title="bool">bool</span></span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
     <span class="o">**</span><span class="n">adapter_kwargs</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n"><span title="qcio.ProgramOutput">ProgramOutput</span></span><span class="p">[</span><span class="n"><span title="qcio.InputType">InputType</span></span><span class="p">,</span> <span class="n"><span title="qcio.ResultsType">ResultsType</span></span><span class="p">]</span>
 </code></pre></div>
@@ -975,7 +975,7 @@ is True this directory will be deleted after the program finishes.</p>
           <tr class="doc-section-item">
             <td><code>rm_scratch_dir</code></td>
             <td>
-                  <code>bool</code>
+                  <code><span title="bool">bool</span></code>
             </td>
             <td>
               <div class="doc-md-description">
@@ -989,7 +989,7 @@ is True this directory will be deleted after the program finishes.</p>
           <tr class="doc-section-item">
             <td><code>collect_stdout</code></td>
             <td>
-                  <code>bool</code>
+                  <code><span title="bool">bool</span></code>
             </td>
             <td>
               <div class="doc-md-description">
@@ -1004,7 +1004,7 @@ Failed computations will always collect stdout/stderr.</p>
           <tr class="doc-section-item">
             <td><code>collect_files</code></td>
             <td>
-                  <code>bool</code>
+                  <code><span title="bool">bool</span></code>
             </td>
             <td>
               <div class="doc-md-description">
@@ -1018,7 +1018,7 @@ Failed computations will always collect stdout/stderr.</p>
           <tr class="doc-section-item">
             <td><code>collect_wfn</code></td>
             <td>
-                  <code>bool</code>
+                  <code><span title="bool">bool</span></code>
             </td>
             <td>
               <div class="doc-md-description">
@@ -1050,7 +1050,7 @@ argument.</p>
           <tr class="doc-section-item">
             <td><code>update_interval</code></td>
             <td>
-                  <code><span title="typing.Optional">Optional</span>[float]</code>
+                  <code><span title="typing.Optional">Optional</span>[<span title="float">float</span>]</code>
             </td>
             <td>
               <div class="doc-md-description">
@@ -1065,7 +1065,7 @@ update_func.</p>
           <tr class="doc-section-item">
             <td><code>print_stdout</code></td>
             <td>
-                  <code>bool</code>
+                  <code><span title="bool">bool</span></code>
             </td>
             <td>
               <div class="doc-md-description">
@@ -1080,7 +1080,7 @@ the program executes. Will be ignored if an update_func passed.</p>
           <tr class="doc-section-item">
             <td><code>raise_exc</code></td>
             <td>
-                  <code>bool</code>
+                  <code><span title="bool">bool</span></code>
             </td>
             <td>
               <div class="doc-md-description">
@@ -1095,7 +1095,7 @@ program fails rather than raise an exception.</p>
           <tr class="doc-section-item">
             <td><code>propagate_wfn</code></td>
             <td>
-                  <code>bool</code>
+                  <code><span title="bool">bool</span></code>
             </td>
             <td>
               <div class="doc-md-description">
@@ -1163,7 +1163,7 @@ qcng.compute().</p>
       <tbody>
           <tr class="doc-section-item">
             <td>
-                  <code>AdapterNotFoundError</code>
+                  <code><span title="AdapterNotFoundError">AdapterNotFoundError</span></code>
             </td>
             <td>
               <div class="doc-md-description">
@@ -1174,7 +1174,7 @@ is implemented for the program in qcop or qcengine).</p>
           </tr>
           <tr class="doc-section-item">
             <td>
-                  <code>ProgramNotFoundError</code>
+                  <code><span title="qcop.exceptions.ProgramNotFoundError">ProgramNotFoundError</span></code>
             </td>
             <td>
               <div class="doc-md-description">
@@ -1196,7 +1196,7 @@ or not available on the $PATH.</p>
           </tr>
           <tr class="doc-section-item">
             <td>
-                  <code>ExternalProgramExecutionError</code>
+                  <code><span title="ExternalProgramExecutionError">ExternalProgramExecutionError</span></code>
             </td>
             <td>
               <div class="doc-md-description">
@@ -1206,7 +1206,7 @@ or not available on the $PATH.</p>
           </tr>
           <tr class="doc-section-item">
             <td>
-                  <code>QCEngineError</code>
+                  <code><span title="QCEngineError">QCEngineError</span></code>
             </td>
             <td>
               <div class="doc-md-description">
@@ -1373,7 +1373,9 @@ or not available on the $PATH.</p>
 <span class="normal">224</span>
 <span class="normal">225</span>
 <span class="normal">226</span>
-<span class="normal">227</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">compute</span><span class="p">(</span>
+<span class="normal">227</span>
+<span class="normal">228</span>
+<span class="normal">229</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">compute</span><span class="p">(</span>
     <span class="bp">self</span><span class="p">,</span>
     <span class="n">inp_obj</span><span class="p">:</span> <span class="n">InputType</span><span class="p">,</span>
     <span class="o">*</span><span class="p">,</span>
@@ -1487,7 +1489,11 @@ or not available on the $PATH.</p>
             <span class="n">output_dict</span><span class="p">[</span><span class="s2">&quot;traceback&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">traceback</span><span class="o">.</span><span class="n">format_exc</span><span class="p">()</span>
 
         <span class="n">wall_time</span> <span class="o">=</span> <span class="n">time</span><span class="p">()</span> <span class="o">-</span> <span class="n">start</span>
-        <span class="n">program_version</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">program_version</span><span class="p">(</span><span class="n">stdout</span><span class="p">)</span>
+
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">program_version</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">program_version</span><span class="p">(</span><span class="n">stdout</span><span class="p">)</span>
+        <span class="k">except</span> <span class="n">ProgramNotFoundError</span><span class="p">:</span>
+            <span class="k">pass</span>  <span class="c1"># program_version = None set above</span>
 
         <span class="c1"># Construct Provenance object</span>
         <span class="n">provenance</span> <span class="o">=</span> <span class="n">construct_provenance</span><span class="p">(</span>
@@ -1523,8 +1529,6 @@ or not available on the $PATH.</p>
     <span class="c1"># Helpful for BigChem and ChemCloud exception handling</span>
     <span class="k">if</span> <span class="n">raise_exc</span> <span class="ow">and</span> <span class="n">exc</span><span class="p">:</span>
         <span class="n">exc</span><span class="o">.</span><span class="n">program_output</span> <span class="o">=</span> <span class="n">output_obj</span>
-        <span class="c1"># Updating .args is necessary for Celery to properly serialize the exception</span>
-        <span class="n">exc</span><span class="o">.</span><span class="n">args</span> <span class="o">=</span> <span class="p">(</span><span class="o">*</span><span class="n">exc</span><span class="o">.</span><span class="n">args</span><span class="p">,</span> <span class="n">output_obj</span><span class="p">)</span>
         <span class="k">raise</span> <span class="n">exc</span>
 
     <span class="k">return</span> <span class="n">output_obj</span>
