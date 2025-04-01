@@ -6,6 +6,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## [unreleased]
 
+## [0.10.2] - 2025-04-01
+
 ### Changed
 
 - Renamed `inp_obj` to `input_data` throughput project to standardize on the naming convention in `qcio`.
@@ -377,7 +379,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 - Created adapter for TeraChem.
 - Exposed general purpose computing for any subprocess with `FileAdaptor`
 
-[unreleased]: https://github.com/coltonbh/qcop/compare/0.10.1...HEAD
+[unreleased]: https://github.com/coltonbh/qcop/compare/0.10.2...HEAD
+[0.10.2]: https://github.com/coltonbh/qcop/releases/tag/0.10.2
 [0.10.1]: https://github.com/coltonbh/qcop/releases/tag/0.10.1
 [0.10.0]: https://github.com/coltonbh/qcop/releases/tag/0.10.0
 [0.9.8]: https://github.com/coltonbh/qcop/releases/tag/0.9.8
