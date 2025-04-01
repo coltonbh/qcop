@@ -1,11 +1,11 @@
 from pathlib import Path
 from typing import Callable, Optional, Union
 
-import qcparse
+import qccodec
+from qccodec import exceptions as qccodec_exceptions
+from qccodec.encoders.terachem import XYZ_FILENAME
+from qccodec.parsers.terachem import parse_version
 from qcio import CalcType, ProgramInput, ProgramOutput, SinglePointResults
-from qcparse import exceptions as qcparse_exceptions
-from qcparse.encoders.terachem import XYZ_FILENAME
-from qcparse.parsers.terachem import parse_optimization_dir, parse_version_string
 
 from qcop.exceptions import AdapterError, AdapterInputError, ExternalProgramError
 
@@ -36,8 +36,8 @@ class TeraChemAdapter(ProgramAdapter[ProgramInput, SinglePointResults]):
         """
         if stdout:
             try:
-                return parse_version_string(stdout)
-            except qcparse_exceptions.ParserError:
+                return parse_version(stdout)
+            except qccodec_exceptions.ParserError:
                 # If the version string is not found. Happens when libcuda.so is not
                 # found and TeraChem fails to start. terachem --version will fail too.
                 return "Could not parse version"
@@ -51,7 +51,7 @@ class TeraChemAdapter(ProgramAdapter[ProgramInput, SinglePointResults]):
     # Try using it for a while without and see what roadblocks we run into
     def compute_results(
         self,
-        inp_obj: ProgramInput,
+        input_data: ProgramInput,
         update_func: Optional[Callable] = None,
         update_interval: Optional[float] = None,
         **kwargs,
@@ -59,7 +59,7 @@ class TeraChemAdapter(ProgramAdapter[ProgramInput, SinglePointResults]):
         """Execute TeraChem on the given input.
 
         Args:
-            inp_obj: The qcio ProgramInput object for a computation.
+            input_data: The qcio ProgramInput object for a computation.
             update_func: A callback function to call as the program executes.
             update_interval: The minimum time in seconds between calls to the
                 update_func.
@@ -67,12 +67,13 @@ class TeraChemAdapter(ProgramAdapter[ProgramInput, SinglePointResults]):
         Returns:
             A tuple of SinglePointResults and the stdout str.
         """
-        # Construct and write input file and xyz file to disk
+        # Construct TeraChem native input files
         try:
-            native_input = qcparse.encode(inp_obj, self.program)
-        except qcparse.exceptions.EncoderError as e:
+            native_input = qccodec.encode(input_data, self.program)
+        except qccodec.exceptions.EncoderError as e:
             raise AdapterInputError(program=self.program) from e
 
+        # Write the input files to disk
         input_filename = "tc.in"
         Path(input_filename).write_text(native_input.input_file)
         Path(native_input.geometry_filename).write_text(native_input.geometry_file)
@@ -82,22 +83,32 @@ class TeraChemAdapter(ProgramAdapter[ProgramInput, SinglePointResults]):
             self.program, [input_filename], update_func, update_interval
         )
 
+        # Get the scratch output directory
+        parent = Path.cwd()
+        # TeraChem creates a directory named scr.<xyz_filename> in the current working
+        scr_dir = next(parent.glob("scr.*"), None)
+        if scr_dir is None:
+            raise ExternalProgramError(
+                self.program, f"TeraChem did not create a 'scr.' directory in {parent}."
+            )
+
         # Parse output
         try:
-            if inp_obj.calctype == CalcType.optimization:
-                parsed_output = parse_optimization_dir(
-                    f"scr.{XYZ_FILENAME.split('.')[0]}", stdout, inp_obj=inp_obj
-                )
-            else:
-                parsed_output = qcparse.parse(stdout, self.program, "stdout")
-        except qcparse_exceptions.ParserError as e:
+            results = qccodec.decode(
+                self.program,
+                input_data.calctype,
+                stdout=stdout,
+                directory=scr_dir,
+                input_data=input_data,
+            )
+        except qccodec_exceptions.ParserError as e:
             raise ExternalProgramError(
-                program="qcparse",
+                program="qccodec",
                 message="Failed to parse TeraChem output.",
                 stdout=stdout,
                 original_exception=e,
             ) from e
-        return parsed_output, stdout
+        return results, stdout
 
     def collect_wfn(self) -> dict[str, Union[str, bytes]]:
         """Append wavefunction data to the output."""

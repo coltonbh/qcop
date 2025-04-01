@@ -27,7 +27,7 @@ def test_validate_input(mocker, prog_inp):
 @pytest.mark.integration
 @skipif_program_not_available("xtb")
 def test_xtb():
-    inp_obj = ProgramInput(
+    input_data = ProgramInput(
         structure=Structure(
             symbols=["O", "H", "H"],
             # Integration test depend upon this geometry; do not change
@@ -44,7 +44,7 @@ def test_xtb():
         keywords={},
     )
 
-    output = compute("xtb", inp_obj)
+    output = compute("xtb", input_data)
     assert np.isclose(output.results.energy, -5.070218272184619, atol=1e-6)
     assert np.allclose(
         output.results.gradient,

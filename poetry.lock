@@ -1620,6 +1620,38 @@ files = [
 pyyaml = "*"
 
 [[package]]
+name = "qccodec"
+version = "0.7.6"
+description = "A package for parsing Quantum Chemistry program file outputs into structured qcio data objects."
+optional = false
+python-versions = ">=3.9"
+groups = ["main"]
+files = [
+    {file = "qccodec-0.7.6-py3-none-any.whl", hash = "sha256:22a55f083a34569e2d94d9b8c0d41e24e9865d4a5755a6b51bc6c282933e1fb0"},
+    {file = "qccodec-0.7.6.tar.gz", hash = "sha256:36adcaab1793e8667184a02c71e51a9526fca71953277a8c39546d4904df4f65"},
+]
+
+[package.dependencies]
+qcconst = ">=0.1.1"
+qcio = ">=0.14.0"
+tomli-w = ">=1.0.0"
+
+[[package]]
+name = "qcconst"
+version = "0.1.1"
+description = "Physical constants, conversion factors, and a periodic table with clear source information for every value."
+optional = false
+python-versions = ">=3.9"
+groups = ["main"]
+files = [
+    {file = "qcconst-0.1.1-py3-none-any.whl", hash = "sha256:30d8b540b77af20146bcf073ca11c6cbc32e157108fd8e051ae9f15c2ee5fd8c"},
+    {file = "qcconst-0.1.1.tar.gz", hash = "sha256:26b0dfc1695986015763ff7b49c18d0bc322cda76d0aa672b0b3da3649698cf6"},
+]
+
+[package.dependencies]
+tabulate = ">=0.9.0"
+
+[[package]]
 name = "qcelemental"
 version = "0.26.0"
 description = "Core data structures for Quantum Chemistry."
@@ -1667,14 +1699,14 @@ tests = ["pytest", "pytest-cov"]
 
 [[package]]
 name = "qcio"
-version = "0.13.1"
+version = "0.14.0"
 description = "Beautiful and user friendly data structures for quantum chemistry."
 optional = false
 python-versions = "<4.0,>=3.9"
 groups = ["main"]
 files = [
-    {file = "qcio-0.13.1-py3-none-any.whl", hash = "sha256:943f929fe6e571290dbff71b4525f74e140671c8b5c0fc78460a7603d2d6791a"},
-    {file = "qcio-0.13.1.tar.gz", hash = "sha256:0418cdca9f175441b02eb8ca53e02fe9a2bb90ea319c29357f90d15852153efd"},
+    {file = "qcio-0.14.0-py3-none-any.whl", hash = "sha256:198c7e4d46cb9db62cf3afc7acbb139e73567989f77c98e9fefe342155d8ae41"},
+    {file = "qcio-0.14.0.tar.gz", hash = "sha256:b31fe76a178d84ad294a0c760171190500700be4a264a5320bcc746c6ee1768e"},
 ]
 
 [package.dependencies]
@@ -1690,23 +1722,6 @@ all = ["ipython (>=8.0.0)", "matplotlib (>=3.0.0)", "openbabel-wheel (>=3.1.1.19
 openbabel = ["openbabel-wheel (>=3.1.1.19,<4.0.0.0)"]
 rdkit = ["rdkit (>=2022.3.3)"]
 view = ["ipython (>=8.0.0)", "matplotlib (>=3.0.0)", "py3Dmol (>=2.2.1)", "rdkit (>=2022.3.3)"]
-
-[[package]]
-name = "qcparse"
-version = "0.7.3"
-description = "A package for parsing Quantum Chemistry program file outputs into structured qcio data objects."
-optional = false
-python-versions = "<4.0,>=3.9"
-groups = ["main"]
-files = [
-    {file = "qcparse-0.7.3-py3-none-any.whl", hash = "sha256:656555b71c589569803706f1e0b335fcc3df4096fa183e5dc6bd977f24e3c93d"},
-    {file = "qcparse-0.7.3.tar.gz", hash = "sha256:a1143e817a7b45ff6c2dab37f9898dbf5197780b262c5e046968c04b9a6548e9"},
-]
-
-[package.dependencies]
-pydantic = ">=2.0.0"
-qcio = ">=0.12.1"
-tomli-w = ">=1.0.0,<2.0.0"
 
 [[package]]
 name = "regex"
@@ -1944,6 +1959,21 @@ files = [
 ]
 
 [[package]]
+name = "tabulate"
+version = "0.9.0"
+description = "Pretty-print tabular data"
+optional = false
+python-versions = ">=3.7"
+groups = ["main"]
+files = [
+    {file = "tabulate-0.9.0-py3-none-any.whl", hash = "sha256:024ca478df22e9340661486f85298cff5f6dcdba14f3813e8830015b9ed1948f"},
+    {file = "tabulate-0.9.0.tar.gz", hash = "sha256:0095b12bf5966de529c0feb1fa08671671b3368eec77d7ef7ab114be2c068b3c"},
+]
+
+[package.extras]
+widechars = ["wcwidth"]
+
+[[package]]
 name = "tcpb"
 version = "0.14.3"
 description = "A Python client for TeraChem's protocol buffer API."
@@ -2173,4 +2203,4 @@ xtb = ["xtb"]
 [metadata]
 lock-version = "2.1"
 python-versions = "^3.9"
-content-hash = "3a2425d2dc1a468ea92fdf351107f896fc1a84ff83d7c5633561fc5defb07943"
+content-hash = "ff397e7240aa9a62dd3a7ffbea89cb728a984f008a5c74c188876ffbfaab0af2"

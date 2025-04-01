@@ -41,7 +41,7 @@ class TeraChemFEAdapter(ProgramAdapter[ProgramInput, SinglePointResults]):
 
     def compute_results(
         self,
-        inp_obj: ProgramInput,
+        input_data: ProgramInput,
         update_func: Optional[Callable] = None,
         update_interval: Optional[float] = None,
         **kwargs,
@@ -49,7 +49,7 @@ class TeraChemFEAdapter(ProgramAdapter[ProgramInput, SinglePointResults]):
         """Execute TeraChem on the given input.
 
         Args:
-            inp_obj: The qcio ProgramInput object for a computation.
+            input_data: The qcio ProgramInput object for a computation.
             update_func: A callback function to call as the program executes.
             update_interval: The minimum time in seconds between calls to the
                 update_func.
@@ -59,7 +59,7 @@ class TeraChemFEAdapter(ProgramAdapter[ProgramInput, SinglePointResults]):
         """
         try:
             with self.client() as client:
-                prog_output = client.compute(inp_obj)
+                prog_output = client.compute(input_data)
         except self.tcpb.exceptions.TCPBError as e:
             exc = ExternalProgramError(
                 program=self.program,

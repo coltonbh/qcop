@@ -6,6 +6,13 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## [unreleased]
 
+### Changed
+
+- Renamed `inp_obj` to `input_data` throughput project to standardize on the naming convention in `qcio`.
+- The check for Crest execution failure that looks for "FAILED" in the stdout now occur before results parsing rather than after.
+- Updated to using the new `qccodec` API for parsing results rather than the older `qcparse` functions.
+- Updated `qcio` dependency to `>=0.14.0` since this is required for `qccodec`.
+
 ## [0.10.1] - 2025-03-05
 
 ### Changed

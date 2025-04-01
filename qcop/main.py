@@ -22,7 +22,7 @@ from .utils import get_adapter, inherit_docstring_from
 @inherit_docstring_from(BaseAdapter.compute)
 def compute(
     program: str,
-    inp_obj: InputType,
+    input_data: InputType,
     *,
     scratch_dir: Optional[StrOrPath] = None,
     rm_scratch_dir: bool = True,
@@ -42,11 +42,11 @@ def compute(
     See BaseAdapter.compute for more details.
     """
     try:
-        adapter = get_adapter(program, inp_obj, qcng_fallback)
+        adapter = get_adapter(program, input_data, qcng_fallback)
     except (AdapterNotFoundError, ProgramNotFoundError) as e:
         # Add program_output to the exception
-        output_obj = ProgramOutput[type(inp_obj), Files](  # type: ignore
-            input_data=inp_obj,
+        output_obj = ProgramOutput[type(input_data), Files](  # type: ignore
+            input_data=input_data,
             results=Files(),
             success=False,
             provenance={"program": program},
@@ -58,7 +58,7 @@ def compute(
 
     else:
         return adapter.compute(
-            inp_obj,
+            input_data,
             scratch_dir=scratch_dir,
             rm_scratch_dir=rm_scratch_dir,
             collect_stdout=collect_stdout,
@@ -106,7 +106,7 @@ def compute_args(
     if isinstance(files, Files):  # Check in case Files object is passed instead of dict
         files = files.files
 
-    inp_obj = ProgramInput(
+    input_data = ProgramInput(
         calctype=calctype,  # type: ignore
         structure=structure,
         model=model,  # type: ignore
@@ -115,4 +115,4 @@ def compute_args(
         extras=extras or {},
     )
 
-    return compute(program, inp_obj, **kwargs)
+    return compute(program, input_data, **kwargs)

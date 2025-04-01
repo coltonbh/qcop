@@ -1,7 +1,7 @@
 from pathlib import Path
 
 import pytest
-from qcparse.encoders.terachem import XYZ_FILENAME
+from qccodec.encoders.terachem import XYZ_FILENAME
 
 from qcop.adapters import TeraChemAdapter
 from qcop.adapters.utils import tmpdir
@@ -29,14 +29,14 @@ def test_get_version_stdout(mocker):
     """Test get_version method."""
     adapter = TeraChemAdapter()
     # Create a mock for parse_version_string
-    mock_parse_version_string = mocker.patch(
-        "qcop.adapters.terachem.parse_version_string"
+    mock_parse_version = mocker.patch(
+        "qcop.adapters.terachem.parse_version"
     )
 
     adapter.program_version("some stdout data")
 
     # Assert that parse_version_string was called once
-    mock_parse_version_string.assert_called_once()
+    mock_parse_version.assert_called_once()
 
 
 def test_propagate_wfn(prog_inp, prog_output):
