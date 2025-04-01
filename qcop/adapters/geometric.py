@@ -74,7 +74,7 @@ class GeometricAdapter(ProgramAdapter[DualProgramInput, OptimizationResults]):
 
     def compute_results(
         self,
-        inp_obj: DualProgramInput,
+        input_data: DualProgramInput,
         update_func: Optional[Callable] = None,
         update_interval: Optional[float] = None,
         propagate_wfn: bool = True,
@@ -83,18 +83,18 @@ class GeometricAdapter(ProgramAdapter[DualProgramInput, OptimizationResults]):
         """Compute the requested calculation.
 
         Args:
-            inp_obj: The qcio DualProgramInput object for a computation.
+            input_data: The qcio DualProgramInput object for a computation.
             propagate_wfn: Whether to propagate the wavefunction between steps of the
                 optimization.
         """
         # Update the input object based on its calctype
-        self._update_inp_obj(inp_obj)
-        geometric_molecule = self._create_geometric_molecule(inp_obj.structure)
-        internal_coords_sys = self._setup_coords(inp_obj, geometric_molecule)
+        self._update_input_data(input_data)
+        geometric_molecule = self._create_geometric_molecule(input_data.structure)
+        internal_coords_sys = self._setup_coords(input_data, geometric_molecule)
 
-        qcio_adapter = get_adapter(inp_obj.subprogram, inp_obj, qcng_fallback=True)
+        qcio_adapter = get_adapter(input_data.subprogram, input_data, qcng_fallback=True)
         optimizer = self._construct_optimizer(
-            inp_obj,
+            input_data,
             geometric_molecule,
             internal_coords_sys,
             qcio_adapter,
@@ -121,19 +121,19 @@ class GeometricAdapter(ProgramAdapter[DualProgramInput, OptimizationResults]):
             log_string.getvalue(),
         )
 
-    def _update_inp_obj(self, inp_obj: DualProgramInput) -> None:
-        """Update the input object based on its calctype
+    def _update_input_data(self, input_data: DualProgramInput) -> None:
+        """Update the input_data based on its calctype
 
         Args:
-            inp_obj: The qcio DualProgramInput object for a computation.
+            input_data: The qcio DualProgramInput object for a computation.
 
         Returns:
-            None. The input object is updated in place.
+            None. The input_data is updated in place.
         """
-        if inp_obj.calctype == CalcType.transition_state:
-            inp_obj.keywords["transition"] = True
+        if input_data.calctype == CalcType.transition_state:
+            input_data.keywords["transition"] = True
         else:
-            inp_obj.keywords["transition"] = False
+            input_data.keywords["transition"] = False
 
     def _create_geometric_molecule(self, structure: Structure):
         """Create a geomeTRIC Structure from the input object.
@@ -153,7 +153,7 @@ class GeometricAdapter(ProgramAdapter[DualProgramInput, OptimizationResults]):
 
     def _construct_optimizer(
         self,
-        inp_obj,
+        input_data,
         geometric_molecule,
         internal_coords_sys,
         qcio_adapter,
@@ -165,7 +165,7 @@ class GeometricAdapter(ProgramAdapter[DualProgramInput, OptimizationResults]):
         """Construct the geomeTRIC optimizer object
 
         Args:
-            inp_obj: The qcio DualProgramInput object for a computation.
+            input_data: The qcio DualProgramInput object for a computation.
             geometric_molecule: The geomeTRIC Molecule object.
             internal_coords_sys: The geomeTRIC internal coordinate system.
             qcio_adapter: The qcio adapter for the subprogram.
@@ -174,13 +174,13 @@ class GeometricAdapter(ProgramAdapter[DualProgramInput, OptimizationResults]):
             The geomeTRIC optimizer object.
         """
         return self.geometric.optimize.Optimizer(
-            inp_obj.structure.geometry.flatten(),
+            input_data.structure.geometry.flatten(),
             geometric_molecule,
             internal_coords_sys,
             engine=self._geometric_engine()(
                 qcio_adapter,
-                inp_obj.subprogram_args,
-                inp_obj.structure,
+                input_data.subprogram_args,
+                input_data.structure,
                 geometric_molecule,
                 propagate_wfn,
                 update_func,
@@ -191,15 +191,15 @@ class GeometricAdapter(ProgramAdapter[DualProgramInput, OptimizationResults]):
             # This file will contain every geometry in the optimization as a
             # multi-structure .xyz file with the energy of each step as a comment.
             params=self.geometric.params.OptParams(
-                xyzout="qcio_optim.xyz", **inp_obj.keywords
+                xyzout="qcio_optim.xyz", **input_data.keywords
             ),
         )
 
-    def _setup_coords(self, inp_obj, geometric_structure):
+    def _setup_coords(self, input_data, geometric_structure):
         """Setup the internal coordinate system.
 
         Args:
-            inp_obj: The qcio DualProgramInput object for a computation.
+            input_data: The qcio DualProgramInput object for a computation.
             geometric_structure: The geomeTRIC Structure object.
 
         Returns:
@@ -207,7 +207,7 @@ class GeometricAdapter(ProgramAdapter[DualProgramInput, OptimizationResults]):
         """
 
         # Default to internal coords
-        coords_sys = inp_obj.keywords.get("coordsys", "tric")
+        coords_sys = input_data.keywords.get("coordsys", "tric")
         coords_cls, connect, addcart = self.coordsys_params[coords_sys]
 
         # Handle constraints; see geometric.run_json, it's a mess!
@@ -215,7 +215,7 @@ class GeometricAdapter(ProgramAdapter[DualProgramInput, OptimizationResults]):
         # 0-indexed; however, in practice they are 0-indexed.
         # https://geometric.readthedocs.io/en/latest/constraints.html
         constraints, constraint_vals = None, None
-        constraints_dict = inp_obj.keywords.pop("constraints", None)
+        constraints_dict = input_data.keywords.pop("constraints", None)
         if constraints_dict:
             if "scan" in constraints_dict:
                 raise AdapterInputError(

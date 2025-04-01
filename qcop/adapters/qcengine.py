@@ -34,7 +34,7 @@ class QCEngineAdapter(ProgramAdapter):
             ) from e
 
     def compute_results(
-        self, inp_obj, *args, propagate_wfn=False, **kwargs
+        self, input_data, *args, propagate_wfn=False, **kwargs
     ) -> tuple[SinglePointResults, str]:
         from qcengine import compute as qcng_compute
         from qcengine.exceptions import QCEngineException
@@ -50,7 +50,7 @@ class QCEngineAdapter(ProgramAdapter):
 
         try:
             qcng_output = qcng_compute(
-                to_qcel_input(inp_obj),
+                to_qcel_input(input_data),
                 self.external_program,
                 raise_error=True,  # Always raise exceptions
                 return_dict=True,  # qcio works with dicts for qcel i/o

@@ -91,7 +91,7 @@ class ExternalProgramError(QCOPBaseError):
     """
     Raised when an external program or package fails to complete successfully.
 
-    This covers failures from external subprocesses, Python packages (like qcparse or QCEngine),
+    This covers failures from external subprocesses, Python packages (like qccodec or QCEngine),
     or any other external libraries.
     """
 

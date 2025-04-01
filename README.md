@@ -7,14 +7,14 @@ A package for operating Quantum Chemistry programs using [qcio](https://github.c
 [![image](https://img.shields.io/pypi/pyversions/qcop.svg)](https://pypi.python.org/pypi/qcop)
 [![Actions status](https://github.com/coltonbh/qcop/workflows/Tests/badge.svg)](https://github.com/coltonbh/qcop/actions)
 [![Actions status](https://github.com/coltonbh/qcop/workflows/Basic%20Code%20Quality/badge.svg)](https://github.com/coltonbh/qcop/actions)
-[![Ruff](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/charliermarsh/ruff/main/assets/badge/v1.json)](https://github.com/charliermarsh/ruff)
 
 `qcop` works in harmony with a suite of other quantum chemistry tools for fast, structured, and interoperable quantum chemistry.
 
 ## The QC Suite of Programs
 
+- [qcconst](https://github.com/coltonbh/qcconst) - Physical constants, conversion factors, and a periodic table with clear source information for every value.
 - [qcio](https://github.com/coltonbh/qcio) - Elegant and intuitive data structures for quantum chemistry, featuring seamless Jupyter Notebook visualizations.
-- [qcparse](https://github.com/coltonbh/qcparse) - A library for efficient parsing of quantum chemistry data into structured `qcio` objects.
+- [qccodec](https://github.com/coltonbh/qccodec) - A library for efficient parsing of quantum chemistry data into structured `qcio` objects.
 - [qcop](https://github.com/coltonbh/qcop) - A package for operating quantum chemistry programs using `qcio` standardized data structures. Compatible with `TeraChem`, `psi4`, `QChem`, `NWChem`, `ORCA`, `Molpro`, `geomeTRIC`, and many more, featuring seamless Jupyter Notebook visualizations.
 - [BigChem](https://github.com/mtzgroup/bigchem) - A distributed application for running quantum chemistry calculations at scale across clusters of computers or the cloud. Bring multi-node scaling to your favorite quantum chemistry program, featuring seamless Jupyter Notebook visualizations.
 - `ChemCloud` - A [web application](https://github.com/mtzgroup/chemcloud-server) and associated [Python client](https://github.com/mtzgroup/chemcloud-client) for exposing a BigChem cluster securely over the internet, featuring seamless Jupyter Notebook visualizations.

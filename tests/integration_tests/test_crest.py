@@ -9,7 +9,7 @@ from tests.conftest import skipif_program_not_available
 @pytest.mark.integration
 @skipif_program_not_available("crest")
 def test_crest():
-    inp_obj = ProgramInput(
+    input_data = ProgramInput(
         structure=Structure(
             symbols=["O", "H", "H"],
             # Integration test depend upon this geometry; do not change
@@ -26,7 +26,7 @@ def test_crest():
         keywords={"calculation": {"level": [{"alpb": "acetonitrile"}]}},
     )
 
-    prog_output = compute("crest", inp_obj)
+    prog_output = compute("crest", input_data)
 
     assert len(prog_output.results.conformers) == 1
     assert np.isclose(prog_output.results.conformer_energies[0], -0.33568982, atol=1e-4)

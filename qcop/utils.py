@@ -74,13 +74,13 @@ def check_qcng_support(program: str) -> None:
 
 
 def get_adapter(
-    program: str, inp_obj: Optional[Inputs] = None, qcng_fallback: bool = False
+    program: str, input_data: Optional[Inputs] = None, qcng_fallback: bool = False
 ) -> BaseAdapter:
     """Get the adapter for a program.
 
     Args:
         program: The program to get the adapter for.
-        inp_obj: The input object for the calculation. Required only for FileInput.
+        input_data: The input object for the calculation. Required only for FileInput.
         qcng_fallback: Fallback to use QCEngine if the adapter is not in qcop.
 
     Returns:
@@ -93,7 +93,7 @@ def get_adapter(
             checks for the adapter and the program.
     """
 
-    if type(inp_obj) is FileInput:
+    if type(input_data) is FileInput:
         return FileAdapter(program)
     try:
         return registry[program]()

@@ -20,6 +20,7 @@
         "pstdout",
         "psutil",
         "pyenv",
+        "qcconst",
         "qcel",
         "qcio",
         "qcop",

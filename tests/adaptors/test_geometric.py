@@ -42,10 +42,10 @@ def test_ensure_geometric():
         (CalcType.optimization, False),
     ],
 )
-def test_update_inp_obj(calctype, expected, dual_prog_inp):
+def test_update_input_data(calctype, expected, dual_prog_inp):
     adapter = GeometricAdapter()
     prog_inp = dual_prog_inp(calctype)
-    adapter._update_inp_obj(prog_inp)
+    adapter._update_input_data(prog_inp)
     assert prog_inp.keywords["transition"] is expected
 
 

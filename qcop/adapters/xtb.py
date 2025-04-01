@@ -40,15 +40,15 @@ class XTBAdapter(ProgramAdapter[ProgramInput, SinglePointResults]):
         # Check that xtb-python is installed.
         self.xtb = self._ensure_xtb()
 
-    def validate_input(self, inp_obj: ProgramInput) -> None:
+    def validate_input(self, input_data: ProgramInput) -> None:
         """Validate the input for xtb-python."""
-        super().validate_input(inp_obj)
+        super().validate_input(input_data)
         # Check that xtb supports the method.
         supported_methods = self.xtb.interface.Param.__members__.keys()
-        if inp_obj.model.method not in supported_methods:
+        if input_data.model.method not in supported_methods:
             raise AdapterInputError(
                 program=self.program,
-                message=f"Unsupported method '{inp_obj.model.method}'. "
+                message=f"Unsupported method '{input_data.model.method}'. "
                 f"Supported methods include: {supported_methods}",
             )
 
@@ -99,7 +99,7 @@ class XTBAdapter(ProgramAdapter[ProgramInput, SinglePointResults]):
 
     def compute_results(
         self,
-        inp_obj: ProgramInput,
+        input_data: ProgramInput,
         update_func: Optional[Callable] = None,
         update_interval: Optional[float] = None,
         **kwargs,
@@ -107,7 +107,7 @@ class XTBAdapter(ProgramAdapter[ProgramInput, SinglePointResults]):
         """Execute xtb on the given input.
 
         Args:
-            inp_obj: The qcio ProgramInput object for a computation.
+            input_data: The qcio ProgramInput object for a computation.
             update_func: A callback function to call as the program executes.
             update_interval: The minimum time in seconds between calls to the
                 update_func.
@@ -118,17 +118,17 @@ class XTBAdapter(ProgramAdapter[ProgramInput, SinglePointResults]):
         try:
             # Create Calculator
             calc = self.xtb.interface.Calculator(
-                getattr(self.xtb.interface.Param, inp_obj.model.method),
-                np.array(inp_obj.structure.atomic_numbers),
-                inp_obj.structure.geometry,
-                inp_obj.structure.charge,
+                getattr(self.xtb.interface.Param, input_data.model.method),
+                np.array(input_data.structure.atomic_numbers),
+                input_data.structure.geometry,
+                input_data.structure.charge,
                 # From https://github.com/grimme-lab/xtb-python/blob/a32309a43e5a6572b033814eacf396328a2a36ed/xtb/qcschema/harness.py#L126 # noqa: E501
-                inp_obj.structure.multiplicity - 1,
+                input_data.structure.multiplicity - 1,
             )
             calc.set_verbosity(self.xtb.libxtb.VERBOSITY_FULL)  # all logs
 
             # Set Keywords
-            for key, value in inp_obj.keywords.items():
+            for key, value in input_data.keywords.items():
                 # TODO: Need to handle external_charges and solvent
                 getattr(calc, f"set_{key}")(value)
 

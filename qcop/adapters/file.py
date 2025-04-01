@@ -14,13 +14,13 @@ class FileAdapter(BaseAdapter[FileInput, Files]):
         super().__init__()
         self.program = program
 
-    def validate_input(self, inp_obj: FileInput) -> None:
+    def validate_input(self, input_data: FileInput) -> None:
         """No validation checks performed for FileAdapter"""
         pass
 
     def compute_results(
         self,
-        inp_obj: FileInput,
+        input_data: FileInput,
         update_func: Optional[Callable] = None,
         update_interval: Optional[float] = None,
         **kwargs,
@@ -28,7 +28,7 @@ class FileAdapter(BaseAdapter[FileInput, Files]):
         """Compute the given program on the given files.
 
         Args:
-            inp_obj: The qcio FileInput object for a computation.
+            input_data: The qcio FileInput object for a computation.
             update_func: A callback function to call as the program executes.
             update_interval: The minimum time in seconds between calls to the
             update_func.
@@ -43,7 +43,7 @@ class FileAdapter(BaseAdapter[FileInput, Files]):
 
         """
         stdout = execute_subprocess(
-            self.program, inp_obj.cmdline_args, update_func, update_interval
+            self.program, input_data.cmdline_args, update_func, update_interval
         )
         # Files will be added to this object by the .compute() method
         return Files(), stdout

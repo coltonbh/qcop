@@ -3,7 +3,8 @@
 from pathlib import Path
 from typing import Callable, Optional, Union
 
-import qcparse
+import qccodec
+from qccodec.parsers.crest import parse_version
 from qcio import (
     CalcType,
     ConformerSearchResults,
@@ -11,7 +12,6 @@ from qcio import (
     ProgramInput,
     SinglePointResults,
 )
-from qcparse.parsers import crest
 
 from qcop.exceptions import AdapterInputError, ExternalProgramError
 
@@ -68,11 +68,11 @@ class CRESTAdapter(
         """
         if not stdout:
             stdout = execute_subprocess(self.program, ["--version"])
-        return crest.parse_version_string(stdout)
+        return parse_version(stdout)
 
     def compute_results(
         self,
-        inp_obj: ProgramInput,
+        input_data: ProgramInput,
         update_func: Optional[Callable] = None,
         update_interval: Optional[float] = None,
         collect_rotamers: bool = False,
@@ -83,7 +83,7 @@ class CRESTAdapter(
         """Execute CREST on the given input.
 
         Args:
-            inp_obj: The qcio ProgramInput object for a computation.
+            input_data: The qcio ProgramInput object for a computation.
             update_func: A function to call with the stdout at regular intervals.
             update_interval: The interval at which to call the update function.
             collect_rotamers: Collect rotamers if doing a conformer_search. Defaults to
@@ -94,8 +94,8 @@ class CRESTAdapter(
         """
         # Create CREST native input files
         try:
-            native_inp = qcparse.encode(inp_obj, self.program)
-        except qcparse.exceptions.EncoderError as e:
+            native_inp = qccodec.encode(input_data, self.program)
+        except qccodec.exceptions.EncoderError as e:
             raise AdapterInputError(program=self.program) from e
 
         # Write the input files to disk
@@ -108,46 +108,29 @@ class CRESTAdapter(
             self.program, [inp_file.name], update_func, update_interval
         )
 
-        # Parse the output
-        try:
-            if inp_obj.calctype == CalcType.conformer_search:
-                results = crest.parse_conformer_search_dir(
-                    ".",
-                    charge=inp_obj.structure.charge,
-                    multiplicity=inp_obj.structure.multiplicity,
-                    collect_rotamers=collect_rotamers,
-                )
-                # Add identifiers to the conformers and rotamers if topo is unchanged
-                if inp_obj.keywords.get("topo", True):
-                    ids = inp_obj.structure.identifiers.model_dump()
-                    for struct_type in ["conformers", "rotamers"]:
-                        for struct in getattr(results, struct_type):
-                            struct.add_identifiers(**ids)
-
-            elif inp_obj.calctype in {CalcType.energy, CalcType.gradient}:
-                results = crest.parse_singlepoint_dir(".")
-
-            elif inp_obj.calctype == CalcType.optimization:
-                results = crest.parse_optimization_dir(
-                    ".", inp_obj=inp_obj, stdout=stdout
-                )
-
-            elif inp_obj.calctype == CalcType.hessian:
-                results = crest.parse_numhess_dir(".", stdout=stdout)
-        except qcparse.exceptions.ParserError as e:
-            raise ExternalProgramError(
-                program="qcparse",
-                message="Failed to parse CREST output.",
-                stdout=stdout,
-                original_exception=e,
-            ) from e
-
         # CREST does not exit with a non-zero exit code on failure
         if "FAILED" in stdout:
             raise ExternalProgramError(
                 program=self.program,
                 message=f"CREST calculation failed. See the stdout for more information.",
-                results=results,
                 stdout=stdout,
             )
+
+        # Parse the output
+        try:
+            results = qccodec.decode(
+                self.program,
+                input_data.calctype,
+                stdout=stdout,
+                directory=".",
+                input_data=input_data,
+            )
+        except qccodec.exceptions.ParserError as e:
+            raise ExternalProgramError(
+                program="qccodec",
+                message="Failed to parse CREST output.",
+                stdout=stdout,
+                original_exception=e,
+            ) from e
+
         return results, stdout

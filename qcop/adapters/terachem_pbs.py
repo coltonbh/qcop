@@ -8,6 +8,6 @@ class TeraChemPBSAdapter(TeraChemFEAdapter):
 
     def __init__(self):
         super().__init__()
-        # Check that xtb-python is installed.
+        # Check that tcpb is installed.
         self.tcpb = self._ensure_tcpb()
         self.client = self.tcpb.TCProtobufClient
