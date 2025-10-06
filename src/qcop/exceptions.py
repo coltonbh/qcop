@@ -2,7 +2,7 @@
 
 from typing import Optional
 
-from qcio import ProgramOutput, Results
+from qcio import Data, Results
 
 
 class QCOPBaseError(Exception):
@@ -11,7 +11,7 @@ class QCOPBaseError(Exception):
 
     All QCOP exceptions must eventually have a non-None program_output attribute.
     Lower-level code may leave program_output as None; the top-level compute() method
-    should attach the final ProgramOutput before propagating the error. If some results
+    should attach the final Results before propagating the error. If some results
     were computed before the error occurred, they should be attached to the exception
     as well.
     """
@@ -19,8 +19,8 @@ class QCOPBaseError(Exception):
     def __init__(
         self,
         message: str,
-        program_output: Optional[ProgramOutput] = None,
-        results: Optional[Results] = None,
+        program_output: Optional[Results] = None,
+        results: Optional[Data] = None,
     ):
         # Pass everything as positional arguments so they are captured in .args
         # Required for pickling and other serialization methods including celery.
@@ -55,7 +55,7 @@ class AdapterNotFoundError(AdapterError):
         self,
         program: str,
         message: Optional[str] = None,
-        program_output: Optional[ProgramOutput] = None,
+        program_output: Optional[Results] = None,
     ):
         if message is None:
             message = f"No adapter found for program '{program}'."
@@ -73,7 +73,7 @@ class AdapterInputError(AdapterError):
         self,
         program: str,
         message: Optional[str] = None,
-        program_output: Optional[ProgramOutput] = None,
+        program_output: Optional[Results] = None,
     ):
         if message is None:
             message = f"Invalid inputs for program '{program}'."
@@ -99,8 +99,8 @@ class ExternalProgramError(QCOPBaseError):
         self,
         program: str,
         message: Optional[str] = None,
-        program_output: Optional[ProgramOutput] = None,
-        results: Optional[Results] = None,
+        program_output: Optional[Results] = None,
+        results: Optional[Data] = None,
         original_exception: Optional[Exception] = None,
         stdout: Optional[str] = None,
     ):
@@ -125,7 +125,7 @@ class ProgramNotFoundError(ExternalProgramError):
         self,
         program: str,
         message: Optional[str] = None,
-        program_output: Optional[ProgramOutput] = None,
+        program_output: Optional[Results] = None,
         install_msg: Optional[str] = None,
     ):
         if message is None:

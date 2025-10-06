@@ -4,12 +4,12 @@ import traceback
 from typing import Any, Callable, Optional, Union
 
 from qcio import (
+    CalcSpec,
     CalcType,
     Files,
-    InputType,
     Model,
-    ProgramInput,
-    ProgramOutput,
+    Results,
+    SpecType,
     Structure,
 )
 from qcio.helper_types import StrOrPath
@@ -22,7 +22,7 @@ from .utils import get_adapter, inherit_docstring_from
 @inherit_docstring_from(BaseAdapter.compute)
 def compute(
     program: str,
-    input_data: InputType,
+    input_data: SpecType,
     *,
     scratch_dir: Optional[StrOrPath] = None,
     rm_scratch_dir: bool = True,
@@ -36,7 +36,7 @@ def compute(
     propagate_wfn: bool = False,
     qcng_fallback: bool = True,
     **adapter_kwargs,
-) -> ProgramOutput:
+) -> Results:
     """Use the given program to compute on the given input.
 
     See BaseAdapter.compute for more details.
@@ -45,9 +45,9 @@ def compute(
         adapter = get_adapter(program, input_data, qcng_fallback)
     except (AdapterNotFoundError, ProgramNotFoundError) as e:
         # Add program_output to the exception
-        output_obj = ProgramOutput[type(input_data), Files](  # type: ignore
+        output_obj = Results[type(input_data), Files](  # type: ignore
             input_data=input_data,
-            results=Files(),
+            data=Files(),
             success=False,
             provenance={"program": program},
             traceback=traceback.format_exc(),
@@ -83,8 +83,8 @@ def compute_args(
     files: Optional[Union[dict[str, Union[str, bytes]], Files]] = None,
     extras: Optional[dict[str, Any]] = None,
     **kwargs,
-) -> ProgramOutput:
-    """Compute function that accepts independent argument for a ProgramInput.
+) -> Results:
+    """Compute function that accepts independent argument for a CalcSpec.
 
     Args:
         program: The program to run.
@@ -106,7 +106,7 @@ def compute_args(
     if isinstance(files, Files):  # Check in case Files object is passed instead of dict
         files = files.files
 
-    input_data = ProgramInput(
+    input_data = CalcSpec(
         calctype=calctype,  # type: ignore
         structure=structure,
         model=model,  # type: ignore

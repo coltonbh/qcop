@@ -18,12 +18,12 @@ test_data = [
 
 
 @pytest.mark.parametrize("exc_class,args", test_data)
-def test_exception_pickle(prog_output, exc_class, args):
+def test_exception_pickle(results, exc_class, args):
     # Instantiate the exception.
     exc_instance = exc_class(*args)
 
     # Append program_output
-    exc_instance.program_output = prog_output
+    exc_instance.program_output = results
 
     # Perform a full pickle round-trip.
     pickled = pickle.dumps(exc_instance)

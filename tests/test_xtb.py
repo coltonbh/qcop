@@ -8,9 +8,9 @@ from qcop.exceptions import AdapterInputError
 from tests.conftest import skipif_program_not_available
 
 
-def test_validate_input(mocker, prog_inp):
+def test_validate_input(mocker, calcspec):
     valid_method = "GFN2xTB"
-    inp_dict = prog_inp(CalcType.gradient).model_dump()
+    inp_dict = calcspec(CalcType.gradient).model_dump()
     inp_dict["model"]["method"] = "some_invalid_method"
     invalid_method = ProgramInput(**inp_dict)
 

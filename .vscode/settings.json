@@ -5,6 +5,7 @@
         "allclose",
         "alpb",
         "arange",
+        "calcspec",
         "calctype",
         "calctypes",
         "coordsys",
