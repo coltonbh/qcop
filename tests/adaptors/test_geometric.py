@@ -2,7 +2,7 @@ import pytest
 from qcio import (
     CalcType,
     CoreSpec,
-    OptimizationResults,
+    OptimizationData,
     ProgramInput,
     ProgramOutput,
     SinglePointResults,
@@ -98,7 +98,7 @@ def test_qcio_geometric_engine_exception_handling(
         coords = hydrogen.geometry
         engine.calc_new(coords)
 
-    assert excinfo.value.results == OptimizationResults(
+    assert excinfo.value.results == OptimizationData(
         trajectory=[results, po_failure]
     )
 

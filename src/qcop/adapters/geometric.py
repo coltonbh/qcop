@@ -7,8 +7,8 @@ import numpy as np
 from qcio import (
     CalcSpec,
     CalcType,
+    CompositeCalcSpec,
     CoreSpec,
-    DualCalcSpec,
     OptimizationData,
     Results,
     SinglePointData,
@@ -27,7 +27,7 @@ from .base import ProgramAdapter
 from .utils import capture_logs
 
 
-class GeometricAdapter(ProgramAdapter[DualCalcSpec, OptimizationData]):
+class GeometricAdapter(ProgramAdapter[CompositeCalcSpec, OptimizationData]):
     """Adapter for geomeTRIC."""
 
     program = "geometric"
@@ -74,7 +74,7 @@ class GeometricAdapter(ProgramAdapter[DualCalcSpec, OptimizationData]):
 
     def compute_results(
         self,
-        input_data: DualCalcSpec,
+        input_data: CompositeCalcSpec,
         update_func: Optional[Callable] = None,
         update_interval: Optional[float] = None,
         propagate_wfn: bool = True,
@@ -83,7 +83,7 @@ class GeometricAdapter(ProgramAdapter[DualCalcSpec, OptimizationData]):
         """Compute the requested calculation.
 
         Args:
-            input_data: The qcio DualCalcSpec object for a computation.
+            input_data: The qcio CompositeCalcSpec object for a computation.
             propagate_wfn: Whether to propagate the wavefunction between steps of the
                 optimization.
         """
@@ -92,7 +92,9 @@ class GeometricAdapter(ProgramAdapter[DualCalcSpec, OptimizationData]):
         geometric_molecule = self._create_geometric_molecule(input_data.structure)
         internal_coords_sys = self._setup_coords(input_data, geometric_molecule)
 
-        qcio_adapter = get_adapter(input_data.subprogram, input_data, qcng_fallback=True)
+        qcio_adapter = get_adapter(
+            input_data.subprogram, input_data, qcng_fallback=True
+        )
         optimizer = self._construct_optimizer(
             input_data,
             geometric_molecule,
@@ -121,11 +123,11 @@ class GeometricAdapter(ProgramAdapter[DualCalcSpec, OptimizationData]):
             log_string.getvalue(),
         )
 
-    def _update_input_data(self, input_data: DualCalcSpec) -> None:
+    def _update_input_data(self, input_data: CompositeCalcSpec) -> None:
         """Update the input_data based on its calctype
 
         Args:
-            input_data: The qcio DualCalcSpec object for a computation.
+            input_data: The qcio CompositeCalcSpec object for a computation.
 
         Returns:
             None. The input_data is updated in place.
@@ -165,7 +167,7 @@ class GeometricAdapter(ProgramAdapter[DualCalcSpec, OptimizationData]):
         """Construct the geomeTRIC optimizer object
 
         Args:
-            input_data: The qcio DualCalcSpec object for a computation.
+            input_data: The qcio CompositeCalcSpec object for a computation.
             geometric_molecule: The geomeTRIC Molecule object.
             internal_coords_sys: The geomeTRIC internal coordinate system.
             qcio_adapter: The qcio adapter for the subprogram.
@@ -199,7 +201,7 @@ class GeometricAdapter(ProgramAdapter[DualCalcSpec, OptimizationData]):
         """Setup the internal coordinate system.
 
         Args:
-            input_data: The qcio DualCalcSpec object for a computation.
+            input_data: The qcio CompositeCalcSpec object for a computation.
             geometric_structure: The geomeTRIC Structure object.
 
         Returns:
