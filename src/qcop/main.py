@@ -2,6 +2,7 @@
 
 import traceback
 from typing import Any, Callable, Optional, Union
+from warnings import warn
 
 from qcio import (
     CalcSpec,
@@ -26,12 +27,12 @@ def compute(
     *,
     scratch_dir: Optional[StrOrPath] = None,
     rm_scratch_dir: bool = True,
-    collect_stdout: bool = True,
+    collect_logs: bool = True,
     collect_files: bool = False,
     collect_wfn: bool = False,
     update_func: Optional[Callable] = None,
     update_interval: Optional[float] = None,
-    print_stdout: bool = False,
+    print_logs: bool = False,
     raise_exc: bool = True,
     propagate_wfn: bool = False,
     qcng_fallback: bool = True,
@@ -57,16 +58,31 @@ def compute(
         raise e
 
     else:
+        if "collect_stdout" in adapter_kwargs:
+            warn(
+                "`collect_stdout` is deprecated; use `collect_logs` instead.",
+                DeprecationWarning,
+                stacklevel=2,
+            )
+            collect_logs = adapter_kwargs.pop("collect_stdout")
+        if "print_stdout" in adapter_kwargs:
+            warn(
+                "`print_stdout` is deprecated; use `print_logs` instead.",
+                DeprecationWarning,
+                stacklevel=2,
+            )
+            print_logs = adapter_kwargs.pop("print_stdout")
+
         return adapter.compute(
             input_data,
             scratch_dir=scratch_dir,
             rm_scratch_dir=rm_scratch_dir,
-            collect_stdout=collect_stdout,
+            collect_logs=collect_logs,
             collect_files=collect_files,
             collect_wfn=collect_wfn,
             update_func=update_func,
             update_interval=update_interval,
-            print_stdout=print_stdout,
+            print_logs=print_logs,
             raise_exc=raise_exc,
             propagate_wfn=propagate_wfn,
             **adapter_kwargs,

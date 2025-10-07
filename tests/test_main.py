@@ -39,19 +39,19 @@ def test_compute_raises_adapter_not_found_error_no_qcng_fallback(calcspec):
         compute("not-a-real-program", energy_inp, qcng_fallback=False)
 
 
-def test_print_stdout(test_adapter, calcspec, mocker):
+def test_print_logs(test_adapter, calcspec, mocker):
     energy_inp = calcspec("energy")
 
     spy = mocker.spy(type(test_adapter), "compute_data")
 
     compute("test", energy_inp)
     assert spy.call_args.args[2] is None  # update_func
-    compute("test", energy_inp, print_stdout=True)
+    compute("test", energy_inp, print_logs=True)
     assert isinstance(spy.call_args.args[2], Callable)  # update_func passed
     assert isinstance(spy.call_args.args[3], float)  # update_interval passed
 
 
-def test_update_func_preferred_over_print_stdout(test_adapter, calcspec, mocker):
+def test_update_func_preferred_over_print_logs(test_adapter, calcspec, mocker):
     energy_inp = calcspec("energy")
 
     spy = mocker.spy(type(test_adapter), "compute_data")
@@ -59,7 +59,7 @@ def test_update_func_preferred_over_print_stdout(test_adapter, calcspec, mocker)
     def update_func(stdout, stderr):
         pass
 
-    compute("test", energy_inp, update_func=update_func, print_stdout=True)
+    compute("test", energy_inp, update_func=update_func, print_logs=True)
     assert spy.call_args.args[2] == update_func  # update_func passed
     assert spy.call_args.args[3] is None
 

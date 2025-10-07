@@ -45,9 +45,9 @@ class QCEngineAdapter(ProgramAdapter):
         # Keep scratch files so qcio can collect them
         task_config["scratch_messy"] = True
 
-        # Remove the 'collect_rotamers' key from kwargs if it exists
+        # Remove qcop-specific kwargs
         kwargs.pop("collect_rotamers", None)
-
+        
         try:
             qcng_output = qcng_compute(
                 to_qcel_input(input_data),

@@ -20,7 +20,7 @@ file_inp = FileSpec(
 
 # This will write the files to disk in a temporary directory and then run
 # "terachem tc.in" in that directory.
-output = compute("terachem", file_inp, print_stdout=True)
+output = compute("terachem", file_inp, print_logs=True)
 
 # Data
 output.stdout
