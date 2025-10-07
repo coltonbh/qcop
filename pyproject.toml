@@ -3,27 +3,32 @@ name = "qcop"
 version = "0.10.2"
 description = "A package for operating Quantum Chemistry programs using qcio standardized data structures. Compatible with TeraChem, psi4, QChem, NWChem, ORCA, Molpro, geomeTRIC and many more."
 authors = [{ name = "Colton Hicks", email = "github@coltonhicks.com" }]
-requires-python = ">=3.9"
+requires-python = ">=3.10"
 readme = "README.md"
 license = { file = "LICENSE" }
-dependencies = [
-    "qcio>=0.14.0",
-    "qccodec>=0.7.6",
-    "tomli-w>=1.0.0,<2",
+dependencies = ["qcio>=0.15.0", "qccodec>=0.8.0", "tomli-w>=1.0.0,<2"]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Developers",
+    "Intended Audience :: Science/Research",
+    "License :: OSI Approved :: MIT License",
+    "Natural Language :: English",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Programming Language :: Python :: 3.14",
+    "Topic :: Scientific/Engineering",
+    "Topic :: Software Development :: Libraries",
 ]
 
 [project.optional-dependencies]
-qcengine = [
-    "qcelemental>=0.26.0,<0.27",
-    "qcengine>=0.27.0,<0.28",
-]
+qcengine = ["qcelemental>=0.26.0,<0.27", "qcengine>=0.27.0,<0.28"]
 geometric = ["geometric>=1.0.1,<2"]
-xtb = ["xtb~=22.1"]
 all = [
     "qcelemental>=0.26.0,<0.27",
     "qcengine>=0.27.0,<0.28",
     "geometric>=1.0.1,<2",
-    "xtb~=22.1",
     "tcpb>=0.14.1",
 ]
 
@@ -43,7 +48,6 @@ dev = [
     "geometric>=1.0.1,<2",
     "qcelemental>=0.26.0,<0.27",
     "qcengine>=0.27.0,<0.28",
-    "xtb~=22.1",
     "types-toml>=0.10.8.20240310,<0.11",
 ]
 docs = [
@@ -56,10 +60,7 @@ docs = [
 ]
 
 [tool.uv]
-default-groups = [
-    "dev",
-    "docs",
-]
+default-groups = ["dev", "docs"]
 
 [build-system]
 requires = ["hatchling"]

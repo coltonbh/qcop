@@ -8,7 +8,16 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ### Changed
 
-- Removed `poetry` in favor of `uv` for package management.
+- 🚨 Dropped python 3.9 support. Minimum supported version is 3.10. [#67](https://github.com/coltonbh/qcop/pull/67)
+- 🚨 Upgraded to latest `qcio` `v0.15.0` with new data structure nomenclature. [#67](https://github.com/coltonbh/qcop/pull/67)
+- 🚨 Removed `poetry` in favor of `uv` for package management. [#67](https://github.com/coltonbh/qcop/pull/67)
+- 🚨 Renamed `compute` kwarg `collect_stdout` -> `collect_logs`. [#67](https://github.com/coltonbh/qcop/pull/67)
+- 🚨 Renamed `compute` kwarg `print_stdout` -> `print_logs`. [#67](https://github.com/coltonbh/qcop/pull/67)
+- 🚨 `qcop` Exception classes updated to `.results` and `.data` nomenclature. [#67](https://github.com/coltonbh/qcop/pull/67)
+
+### Removed
+
+- 🚨 Removed `xtb` support from the installation options as it is no longer supported and cannot install on python 3.12+. [#67](https://github.com/coltonbh/qcop/pull/67)
 
 ## [0.10.2] - 2025-04-01
 
@@ -24,7 +33,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 ### Changed
 
 - Updated exception hierarchy to use all positional arguments to facilitate pickle serialization.
-- Dropped exception `.args` hacking in `BaseAdapter.compute()` as it is no longer necessary when I pass `program_output` and `results` as arguments to `super().__init(...)` in `QCOPBaseError`.
+- Dropped exception `.args` hacking in `BaseAdapter.compute()` as it is no longer necessary when I pass `results` and `data` as arguments to `super().__init__(...)` in `QCOPBaseError`.
 
 ## [0.10.0] - 2025-03-04
 
@@ -183,7 +192,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ### Added
 
-- `try/except` to top-level `compute` function that will append the `.program_output` to the exception if the `get_adapter` function raises an exception.
+- `try/except` to top-level `compute` function that will append the `.program_output` object to the exception if the `get_adapter` function raises an exception.
 
 ### Changed
 

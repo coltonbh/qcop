@@ -1,11 +1,11 @@
 import pytest
 from qcio import (
+    CalcSpec,
     CalcType,
-    OptimizationResults,
-    ProgramArgs,
-    ProgramInput,
-    ProgramOutput,
-    SinglePointResults,
+    CoreSpec,
+    OptimizationData,
+    Results,
+    SinglePointData,
 )
 
 from qcop.adapters import GeometricAdapter
@@ -42,9 +42,9 @@ def test_ensure_geometric():
         (CalcType.optimization, False),
     ],
 )
-def test_update_input_data(calctype, expected, dual_prog_inp):
+def test_update_input_data(calctype, expected, ccalcspec):
     adapter = GeometricAdapter()
-    prog_inp = dual_prog_inp(calctype)
+    prog_inp = ccalcspec(calctype)
     adapter._update_input_data(prog_inp)
     assert prog_inp.keywords["transition"] is expected
 
@@ -61,7 +61,7 @@ def test_create_geometric_molecule(hydrogen):
 
 
 def test_qcio_geometric_engine_exception_handling(
-    test_adapter, hydrogen, prog_output, mocker
+    test_adapter, hydrogen, results, mocker
 ):
     adapter = GeometricAdapter()  # Just for using helper methods below
     QCIOGeometricEngine = adapter._geometric_engine()
@@ -69,18 +69,18 @@ def test_qcio_geometric_engine_exception_handling(
 
     engine = QCIOGeometricEngine(
         test_adapter,
-        ProgramArgs(**{"model": {"method": "hf", "basis": "sto-3g"}}),
+        CoreSpec(**{"model": {"method": "hf", "basis": "sto-3g"}}),
         hydrogen,
         geometric_hydrogen,
     )
 
     # Set trajectory
-    engine.qcio_trajectory = [prog_output]
+    engine.qcio_trajectory = [results]
 
-    # Create a failed ProgramOutput object
-    po_dict = prog_output.model_dump()
+    # Create a failed Results object
+    po_dict = results.model_dump()
     po_dict.update({"success": False, "traceback": "fake traceback"})
-    po_failure = ProgramOutput[ProgramInput, SinglePointResults](**po_dict)
+    po_failure = Results[CalcSpec, SinglePointData](**po_dict)
 
     # Mock adapter to raise ExternalProgramExecutionError
     mocker.patch.object(
@@ -88,8 +88,8 @@ def test_qcio_geometric_engine_exception_handling(
         "compute",
         side_effect=ExternalProgramError(
             program="terachem",
-            stdout="some stdout",
-            program_output=po_failure,
+            logs="some stdout",
+            results=po_failure,
         ),
     )
 
@@ -98,12 +98,12 @@ def test_qcio_geometric_engine_exception_handling(
         coords = hydrogen.geometry
         engine.calc_new(coords)
 
-    assert excinfo.value.results == OptimizationResults(
-        trajectory=[prog_output, po_failure]
+    assert excinfo.value.data == OptimizationData(
+        trajectory=[results, po_failure]
     )
 
 
-def test_geometric_exceptions_converted_to_qcop_exceptions(mocker, dual_prog_inp):
+def test_geometric_exceptions_converted_to_qcop_exceptions(mocker, ccalcspec):
     adapter = GeometricAdapter()
 
     # cause .optimizeGeometry to raise a geomeTRIC exception
@@ -112,6 +112,6 @@ def test_geometric_exceptions_converted_to_qcop_exceptions(mocker, dual_prog_inp
         side_effect=adapter.geometric.errors.Error("Some geomeTRIC exception."),
     )
 
-    prog_inp = dual_prog_inp(CalcType.optimization)
+    prog_inp = ccalcspec(CalcType.optimization)
     with pytest.raises(ExternalProgramError):
-        adapter.compute_results(prog_inp, propagate_wfn=False)
+        adapter.compute_data(prog_inp, propagate_wfn=False)

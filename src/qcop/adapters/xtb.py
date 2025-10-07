@@ -6,10 +6,10 @@ https://github.com/grimme-lab/xtb-python/blob/main/xtb/qcschema/harness.py
 
 import importlib
 import os
-from typing import Callable, Optional
+from collections.abc import Callable
 
 import numpy as np
-from qcio import CalcType, ProgramInput, SinglePointResults, Wavefunction
+from qcio import CalcSpec, CalcType, SinglePointData, Wavefunction
 
 from qcop.exceptions import (
     AdapterInputError,
@@ -27,7 +27,7 @@ from .utils import capture_sys_stdout, set_env_variable
 CACHED_XTB_VERSION = None
 
 
-class XTBAdapter(ProgramAdapter[ProgramInput, SinglePointResults]):
+class XTBAdapter(ProgramAdapter[CalcSpec, SinglePointData]):
     """Adapter for xtb-python."""
 
     supported_calctypes = [CalcType.energy, CalcType.gradient]
@@ -40,7 +40,7 @@ class XTBAdapter(ProgramAdapter[ProgramInput, SinglePointResults]):
         # Check that xtb-python is installed.
         self.xtb = self._ensure_xtb()
 
-    def validate_input(self, input_data: ProgramInput) -> None:
+    def validate_input(self, input_data: CalcSpec) -> None:
         """Validate the input for xtb-python."""
         super().validate_input(input_data)
         # Check that xtb supports the method.
@@ -52,7 +52,7 @@ class XTBAdapter(ProgramAdapter[ProgramInput, SinglePointResults]):
                 f"Supported methods include: {supported_methods}",
             )
 
-    def program_version(self, stdout: Optional[str] = None) -> str:
+    def program_version(self, stdout: str | None = None) -> str:
         """Get the program version.
 
         Args:
@@ -97,17 +97,17 @@ class XTBAdapter(ProgramAdapter[ProgramInput, SinglePointResults]):
                     ),
                 )
 
-    def compute_results(
+    def compute_data(
         self,
-        input_data: ProgramInput,
-        update_func: Optional[Callable] = None,
-        update_interval: Optional[float] = None,
+        input_data: CalcSpec,
+        update_func: Callable | None = None,
+        update_interval: float | None = None,
         **kwargs,
-    ) -> tuple[SinglePointResults, str]:
+    ) -> tuple[SinglePointData, str]:
         """Execute xtb on the given input.
 
         Args:
-            input_data: The qcio ProgramInput object for a computation.
+            input_data: The qcio CalcSpec object for a computation.
             update_func: A callback function to call as the program executes.
             update_interval: The minimum time in seconds between calls to the
                 update_func.
@@ -144,7 +144,7 @@ class XTBAdapter(ProgramAdapter[ProgramInput, SinglePointResults]):
 
         # Collect results
         # TODO: Collect other results xtb produces
-        results = SinglePointResults(
+        results = SinglePointData(
             energy=res.get_energy(),
             gradient=res.get_gradient(),
             scf_dipole_moment=res.get_dipole(),

@@ -1,11 +1,11 @@
+from collections.abc import Callable
 from pathlib import Path
-from typing import Callable, Optional, Union
 
 import qccodec
 from qccodec import exceptions as qccodec_exceptions
 from qccodec.encoders.terachem import XYZ_FILENAME
 from qccodec.parsers.terachem import parse_version
-from qcio import CalcType, ProgramInput, ProgramOutput, SinglePointResults
+from qcio import CalcSpec, CalcType, Results, SinglePointData
 
 from qcop.exceptions import AdapterError, AdapterInputError, ExternalProgramError
 
@@ -13,7 +13,7 @@ from .base import ProgramAdapter
 from .utils import execute_subprocess
 
 
-class TeraChemAdapter(ProgramAdapter[ProgramInput, SinglePointResults]):
+class TeraChemAdapter(ProgramAdapter[CalcSpec, SinglePointData]):
     """Adapter for TeraChem."""
 
     supported_calctypes = [
@@ -25,7 +25,7 @@ class TeraChemAdapter(ProgramAdapter[ProgramInput, SinglePointResults]):
     """Supported calculation types."""
     program = "terachem"
 
-    def program_version(self, stdout: Optional[str] = None) -> str:
+    def program_version(self, stdout: str | None = None) -> str:
         """Get the program version.
 
         Args:
@@ -49,23 +49,23 @@ class TeraChemAdapter(ProgramAdapter[ProgramInput, SinglePointResults]):
 
     # TODO: Need command line options for TeraChem e.g., -g 1 for GPUs MAYBE?
     # Try using it for a while without and see what roadblocks we run into
-    def compute_results(
+    def compute_data(
         self,
-        input_data: ProgramInput,
-        update_func: Optional[Callable] = None,
-        update_interval: Optional[float] = None,
+        input_data: CalcSpec,
+        update_func: Callable | None = None,
+        update_interval: float | None = None,
         **kwargs,
-    ) -> tuple[SinglePointResults, str]:
+    ) -> tuple[SinglePointData, str]:
         """Execute TeraChem on the given input.
 
         Args:
-            input_data: The qcio ProgramInput object for a computation.
+            input_data: The qcio CalcSpec object for a computation.
             update_func: A callback function to call as the program executes.
             update_interval: The minimum time in seconds between calls to the
                 update_func.
 
         Returns:
-            A tuple of SinglePointResults and the stdout str.
+            A tuple of SinglePointData and the stdout str.
         """
         # Construct TeraChem native input files
         try:
@@ -105,12 +105,12 @@ class TeraChemAdapter(ProgramAdapter[ProgramInput, SinglePointResults]):
             raise ExternalProgramError(
                 program="qccodec",
                 message="Failed to parse TeraChem output.",
-                stdout=stdout,
+                logs=stdout,
                 original_exception=e,
             ) from e
         return results, stdout
 
-    def collect_wfn(self) -> dict[str, Union[str, bytes]]:
+    def collect_wfn(self) -> dict[str, str | bytes]:
         """Append wavefunction data to the output."""
 
         # Naming conventions from TeraChem uses xyz filename as scratch dir postfix
@@ -122,21 +122,21 @@ class TeraChemAdapter(ProgramAdapter[ProgramInput, SinglePointResults]):
         if not any(wfn_path.exists() for wfn_path in wfn_paths):
             raise AdapterError(f"No wavefunction files found in {Path.cwd()}")
 
-        wfns: dict[str, Union[str, bytes]] = {}
+        wfns: dict[str, str | bytes] = {}
         for wfn_path in wfn_paths:
             if wfn_path.exists():
                 wfns[str(wfn_path)] = wfn_path.read_bytes()
         return wfns
 
-    def propagate_wfn(self, output: ProgramOutput, prog_inp: ProgramInput) -> None:
+    def propagate_wfn(self, output: Results, calcspec: CalcSpec) -> None:
         """Propagate the wavefunction from the previous calculation.
 
         Args:
             output: The output from a previous calculation containing wavefunction data.
-            prog_inp: The ProgramInput object on which to place the wavefunction data.
+            calcspec: The CalcSpec object on which to place the wavefunction data.
 
         Returns:
-            None. Modifies the prog_inp object in place.
+            None. Modifies the calcspec object in place.
         """
 
         # Naming conventions from TeraChem uses xyz filename as scratch dir postfix
@@ -145,9 +145,10 @@ class TeraChemAdapter(ProgramAdapter[ProgramInput, SinglePointResults]):
         # Wavefunction filenames
         c0, ca0, cb0 = "c0", "ca0", "cb0"
 
-        c0_bytes = output.results.files.get(f"scr.{scr_postfix}/{c0}")
-        ca0_bytes = output.results.files.get(f"scr.{scr_postfix}/{ca0}")
-        cb0_bytes = output.results.files.get(f"scr.{scr_postfix}/{cb0}")
+        files = output.data.files
+        c0_bytes = files.get(f"scr.{scr_postfix}/{c0}")
+        ca0_bytes = files.get(f"scr.{scr_postfix}/{ca0}")
+        cb0_bytes = files.get(f"scr.{scr_postfix}/{cb0}")
 
         if not c0_bytes and not (ca0_bytes and cb0_bytes):
             raise AdapterInputError(
@@ -155,14 +156,14 @@ class TeraChemAdapter(ProgramAdapter[ProgramInput, SinglePointResults]):
                 message="Could not find c0 or ca/b0 files in output.",
             )
 
-        # Load wavefunction data onto ProgramInput object
+        # Load wavefunction data onto CalcSpec object
 
         if c0_bytes:
-            prog_inp.files[c0] = c0_bytes
-            prog_inp.keywords["guess"] = c0
+            calcspec.files[c0] = c0_bytes
+            calcspec.keywords["guess"] = c0
 
         else:  # ca0_bytes and cb0_bytes
             assert ca0_bytes and cb0_bytes  # for mypy
-            prog_inp.files[ca0] = ca0_bytes
-            prog_inp.files[cb0] = cb0_bytes
-            prog_inp.keywords["guess"] = f"{ca0} {cb0}"
+            calcspec.files[ca0] = ca0_bytes
+            calcspec.files[cb0] = cb0_bytes
+            calcspec.keywords["guess"] = f"{ca0} {cb0}"

@@ -1,14 +1,13 @@
-from typing import Optional
 
 import numpy as np
 import pytest
 from qcio import (
+    CalcSpec,
     CalcType,
-    DualProgramInput,
-    ProgramArgs,
-    ProgramInput,
-    ProgramOutput,
-    SinglePointResults,
+    CompositeCalcSpec,
+    CoreSpec,
+    Results,
+    SinglePointData,
     Structure,
 )
 
@@ -41,12 +40,12 @@ def water():
 
 
 @pytest.fixture(scope="session")
-def prog_inp(hydrogen):
-    """Create a function that returns a ProgramInput object with a specified
+def calcspec(hydrogen):
+    """Create a function that returns a CalcSpec object with a specified
     calculation type."""
 
-    def create_prog_input(calctype):
-        return ProgramInput(
+    def create_calctype(calctype):
+        return CalcSpec(
             structure=hydrogen,
             calctype=calctype,
             # Integration tests depend up this model; do not change
@@ -58,38 +57,38 @@ def prog_inp(hydrogen):
             },
         )
 
-    return create_prog_input
+    return create_calctype
 
 
 @pytest.fixture(scope="function")
-def dual_prog_inp(hydrogen):
-    def create_prog_input(calctype):
-        return DualProgramInput(
+def ccalcspec(hydrogen):
+    def create_calcspec(calctype):
+        return CompositeCalcSpec(
             calctype=calctype,
             structure=hydrogen,
             subprogram="test",
-            subprogram_args=ProgramArgs(
+            subprogram_spec=CoreSpec(
                 model={"method": "hf", "basis": "sto-3g"},
             ),
         )
 
-    return create_prog_input
+    return create_calcspec
 
 
 @pytest.fixture
-def prog_output(prog_inp):
-    """Create ProgramOutput object"""
-    sp_inp_energy = prog_inp("energy")
+def results(calcspec):
+    """Create Results object"""
+    sp_inp_energy = calcspec("energy")
     energy = 1.0
     n_atoms = len(sp_inp_energy.structure.symbols)
     gradient = np.arange(n_atoms * 3).reshape(n_atoms, 3)
     hessian = np.arange(n_atoms**2 * 3**2).reshape(n_atoms * 3, n_atoms * 3)
 
-    return ProgramOutput[ProgramInput, SinglePointResults](
+    return Results[CalcSpec, SinglePointData](
         input_data=sp_inp_energy,
         success=True,
-        stdout="program standard out...",
-        results={
+        logs="program standard out...",
+        data={
             "energy": energy,
             "gradient": gradient,
             "hessian": hessian,
@@ -106,12 +105,12 @@ def test_adapter():
         program = "test"
         supported_calctypes = [CalcType.energy, CalcType.gradient]
 
-        def compute_results(
+        def compute_data(
             self, input_data, update_func=None, update_interval=None, **kwargs
         ):
-            return SinglePointResults(energy=0.0), "Some stdout."
+            return SinglePointData(energy=0.0), "Some stdout."
 
-        def program_version(self, stdout: Optional[str] = None) -> str:
+        def program_version(self, stdout: str | None = None) -> str:
             return "v1.0.0"
 
     return TestAdapter()

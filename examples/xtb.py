@@ -1,6 +1,6 @@
 """Must run script like this: python -m examples.xtb"""
 
-from qcio import CalcType, ProgramInput, Structure
+from qcio import CalcSpec, CalcType, Structure
 
 from qcop import compute
 
@@ -16,8 +16,8 @@ structure = Structure(
     ],
 )
 
-# Define the program input
-prog_input = ProgramInput(
+# Define the calcspec
+spec = CalcSpec(
     structure=structure,
     calctype=CalcType.energy,
     model={"method": "GFN2xTB"},  # type: ignore
@@ -25,5 +25,5 @@ prog_input = ProgramInput(
 )
 
 
-prog_output = compute("xtb", prog_input)
-print(prog_output)
+results = compute("xtb", spec)
+print(results)

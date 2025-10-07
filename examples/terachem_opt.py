@@ -1,6 +1,6 @@
 """Example of how to run an optimization calculation with TeraChem using qcop."""
 
-from qcio import ProgramInput, Structure
+from qcio import CalcSpec, Structure
 
 from qcop import compute, exceptions
 
@@ -16,8 +16,8 @@ structure = Structure(
     ],
 )
 
-# Define the program input
-prog_input = ProgramInput(
+# Define the calcspec
+spec = CalcSpec(
     structure=structure,
     # Can be "energy", "gradient", "hessian", "optimization", "transition_state"
     calctype="optimization",  # type: ignore
@@ -27,24 +27,24 @@ prog_input = ProgramInput(
 
 # Run the calculation
 try:
-    # prog_output is instance of ProgramOutput
-    prog_output = compute("terachem", prog_input, collect_files=True)
+    # results is instance of Results
+    results = compute("terachem", spec, collect_files=True)
 except exceptions.QCOPBaseError as e:
-    prog_output = e.program_output
-    print(prog_output.stdout)  # or output.pstdout for short
-    print(f"Success: {prog_output.success}")  # False
-    print(prog_output.input_data)  # Input data used to generate the calculation
-    print(prog_output.provenance)  # Provenance of generated calculation
-    print(prog_output.traceback)  # or output.ptraceback for short
+    results = e.results
+    print(results.logs)
+    print(f"Success: {results.success}")  # False
+    print(results.input_data)  # Input data used to generate the calculation
+    print(results.provenance)  # Provenance of generated calculation
+    print(results.traceback)  # or output.ptraceback for short
     raise
 
 else:
     # Check results
-    print(prog_output.stdout)  # or output.pstdout for short
-    print(f"Success: {prog_output.success}")  # True
-    print("output.results: ", prog_output.results)
-    print("output.results.energies:", prog_output.results.energies)
-    print("output.results.structures:", prog_output.results.structures)
-    print("output.results.final_structure:", prog_output.results.final_structure)
-    print(prog_output.input_data)  # Input data used to generate the calculation
-    print(prog_output.provenance)  # Provenance of generated calculation
+    print(results.logs)
+    print(f"Success: {results.success}")  # True
+    print("output.data: ", results.data)
+    print("output.data.energies:", results.data.energies)
+    print("output.data.structures:", results.data.structures)
+    print("output.data.final_structure:", results.data.final_structure)
+    print(results.input_data)  # Input data used to generate the calculation
+    print(results.provenance)  # Provenance of generated calculation

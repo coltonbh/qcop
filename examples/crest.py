@@ -1,4 +1,4 @@
-from qcio import ProgramInput, Structure
+from qcio import CalcSpec, Structure
 
 from qcop import compute, exceptions
 
@@ -14,8 +14,8 @@ structure = Structure(
     ],
 )
 
-# Define the program input
-prog_input = ProgramInput(
+# Define the calcspec
+spec = CalcSpec(
     structure=structure,
     calctype="conformer_search",  # type: ignore
     model={"method": "gfnff"},  # type: ignore
@@ -24,28 +24,28 @@ prog_input = ProgramInput(
 
 # Run the calculation
 try:
-    # prog_output is instance of ProgramOutput
-    prog_output = compute(
-        "crest", prog_input, collect_files=True, collect_rotamers=False
+    # results is instance of Results
+    results = compute(
+        "crest", spec, collect_files=True, collect_rotamers=False
     )
 except exceptions.QCOPBaseError as e:
-    prog_output = e.program_output
-    print(prog_output.stdout)  # or output.pstdout for short
-    print(f"Success: {prog_output.success}")  # False
-    print(prog_output.input_data)  # Input data used to generate the calculation
-    print(prog_output.provenance)  # Provenance of generated calculation
-    print(prog_output.traceback)  # or output.ptraceback for short
+    results = e.results
+    print(results.logs)
+    print(f"Success: {results.success}")  # False
+    print(results.input_data)  # Input data used to generate the calculation
+    print(results.provenance)  # Provenance of generated calculation
+    print(results.traceback)  # or output.ptraceback for short
     raise
 
 else:
     # Check results
-    print(prog_output.stdout)  # or output.pstdout for short
-    print(f"Success: {prog_output.success}")  # True
-    print("output.results: ", prog_output.results)
-    print("output.results.conformer_energies:", prog_output.results.conformer_energies)
+    print(results.logs)
+    print(f"Success: {results.success}")  # True
+    print("output.data: ", results.data)
+    print("output.data.conformer_energies:", results.data.conformer_energies)
     print(
-        "output.results.conformer_energies_relative:",
-        prog_output.results.conformer_energies_relative,
+        "output.data.conformer_energies_relative:",
+        results.data.conformer_energies_relative,
     )
-    print(prog_output.input_data)  # Input data used to generate the calculation
-    print(prog_output.provenance)  # Provenance of generated calculation
+    print(results.input_data)  # Input data used to generate the calculation
+    print(results.provenance)  # Provenance of generated calculation

@@ -1,4 +1,4 @@
-from qcio import CalcType, ProgramInput, Structure
+from qcio import CalcSpec, CalcType, Structure
 
 from qcop import compute, exceptions
 
@@ -14,8 +14,8 @@ structure = Structure(
     ],
 )
 
-# Define the program input
-pi = ProgramInput(
+# Define the calcspec
+spec = CalcSpec(
     structure=structure,
     calctype=CalcType.hessian,
     model={"method": "b3lyp", "basis": "6-31g"},  # type: ignore
@@ -24,22 +24,22 @@ pi = ProgramInput(
 
 # Run the calculation
 try:
-    # po is instance of ProgramOutput
-    po = compute("terachem", pi, collect_files=True)
+    # results is instance of Results
+    results = compute("terachem", spec, collect_files=True)
 except exceptions.QCOPBaseError as e:
-    po = e.program_output
-    print(po.stdout)  # or output.pstdout for short
-    print(f"Success: {po.success}")  # False
-    print(po.input_data)  # Input data used to generate the calculation
-    print(po.provenance)  # Provenance of generated calculation
-    print(po.traceback)  # or output.ptraceback for short
+    results = e.results
+    print(results.logs)
+    print(f"Success: {results.success}")  # False
+    print(results.input_data)  # Input data used to generate the calculation
+    print(results.provenance)  # Provenance of generated calculation
+    print(results.traceback)  # or output.ptraceback for short
     raise
 
 else:
     # Check results
-    print(po.stdout)  # or output.pstdout for short
-    print(f"Success: {po.success}")  # True
-    print("output.results: ", po.results)
-    print("output.results.hessian:", po.results.hessian)
-    print(po.input_data)  # Input data used to generate the calculation
-    print(po.provenance)  # Provenance of generated calculation
+    print(results.logs)
+    print(f"Success: {results.success}")  # True
+    print("output.data: ", results.data)
+    print("output.data.hessian:", results.data.hessian)
+    print(results.input_data)  # Input data used to generate the calculation
+    print(results.provenance)  # Provenance of generated calculation

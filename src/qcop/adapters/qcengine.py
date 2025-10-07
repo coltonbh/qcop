@@ -1,6 +1,6 @@
 from pathlib import Path
 
-from qcio import CalcType, SinglePointResults
+from qcio import CalcType, SinglePointData
 from qcio.qcel import from_qcel_output_results, to_qcel_input
 
 from qcop.exceptions import ExternalProgramError
@@ -33,9 +33,9 @@ class QCEngineAdapter(ProgramAdapter):
                 message=f"QCEngine could not get version for program {self.external_program}.",
             ) from e
 
-    def compute_results(
+    def compute_data(
         self, input_data, *args, propagate_wfn=False, **kwargs
-    ) -> tuple[SinglePointResults, str]:
+    ) -> tuple[SinglePointData, str]:
         from qcengine import compute as qcng_compute
         from qcengine.exceptions import QCEngineException
 
@@ -45,9 +45,9 @@ class QCEngineAdapter(ProgramAdapter):
         # Keep scratch files so qcio can collect them
         task_config["scratch_messy"] = True
 
-        # Remove the 'collect_rotamers' key from kwargs if it exists
+        # Remove qcop-specific kwargs
         kwargs.pop("collect_rotamers", None)
-
+        
         try:
             qcng_output = qcng_compute(
                 to_qcel_input(input_data),

@@ -11,11 +11,11 @@ import subprocess
 import sys
 import tempfile
 import threading
+from collections.abc import Callable
 from contextlib import contextmanager
 from io import StringIO
 from pathlib import Path
 from time import time
-from typing import Callable, Optional, Union
 
 from qcio import Provenance
 from qcio.helper_types import StrOrPath
@@ -25,9 +25,9 @@ from qcop.exceptions import ExternalProgramError, ProgramNotFoundError
 
 def execute_subprocess(
     program: str,
-    cmdline_args: Optional[list[str]] = None,
-    update_func: Optional[Callable] = None,
-    update_interval: Optional[float] = 0.5,
+    cmdline_args: list[str] | None = None,
+    update_func: Callable | None = None,
+    update_interval: float | None = 0.5,
 ) -> str:
     """Execute a subprocess and monitor its stdout/stderr using a callback function.
 
@@ -108,7 +108,7 @@ def execute_subprocess(
         raise ExternalProgramError(
             program=program,
             message=f"External program failed with return code {proc.returncode}. Command: '{cmd}'",
-            stdout=stdout,
+            logs=stdout,
         )
 
     return stdout
@@ -126,8 +126,8 @@ class DualOutputHandler(logging.Handler):
     def __init__(
         self,
         buffer,
-        update_func: Optional[Callable] = None,
-        update_interval: Optional[float] = None,
+        update_func: Callable | None = None,
+        update_interval: float | None = None,
     ):
         super().__init__()
         self.buffer = buffer
@@ -147,8 +147,8 @@ class DualOutputHandler(logging.Handler):
 @contextmanager
 def capture_logs(
     logger_name: str,
-    update_func: Optional[Callable] = None,
-    update_interval: Optional[float] = None,
+    update_func: Callable | None = None,
+    update_interval: float | None = None,
 ):
     """Capture logs from a program during execution and print them to the console."""
 
@@ -161,7 +161,7 @@ def capture_logs(
     # Create a string buffer and add a DualOutputHandler using the buffer
     logs_string = StringIO()
     if update_func and update_interval:
-        handler: Union[DualOutputHandler, logging.StreamHandler] = DualOutputHandler(
+        handler: DualOutputHandler | logging.StreamHandler = DualOutputHandler(
             logs_string, update_func, update_interval
         )
     else:
@@ -225,7 +225,7 @@ def capture_sys_stdout():
 
 def construct_provenance(
     program: str,
-    version: Optional[str],
+    version: str | None,
     scratch_dir: Path,
     wall_time: float,
 ) -> Provenance:
@@ -257,7 +257,7 @@ def construct_provenance(
 
 @contextmanager
 def tmpdir(
-    mkdir: bool = True, directory: Optional[StrOrPath] = None, rmdir: bool = True
+    mkdir: bool = True, directory: StrOrPath | None = None, rmdir: bool = True
 ):
     """Context manager for a temporary directory.
 

@@ -1,8 +1,7 @@
 import shutil
 from functools import lru_cache
-from typing import Optional
 
-from qcio import FileInput, Inputs
+from qcio import FileSpec, Specs
 
 from .adapters import BaseAdapter, FileAdapter, registry
 from .exceptions import AdapterNotFoundError, ProgramNotFoundError
@@ -74,13 +73,13 @@ def check_qcng_support(program: str) -> None:
 
 
 def get_adapter(
-    program: str, input_data: Optional[Inputs] = None, qcng_fallback: bool = False
+    program: str, input_data: Specs | None = None, qcng_fallback: bool = False
 ) -> BaseAdapter:
     """Get the adapter for a program.
 
     Args:
         program: The program to get the adapter for.
-        input_data: The input object for the calculation. Required only for FileInput.
+        input_data: The input object for the calculation. Required only for FileSpec.
         qcng_fallback: Fallback to use QCEngine if the adapter is not in qcop.
 
     Returns:
@@ -93,7 +92,7 @@ def get_adapter(
             checks for the adapter and the program.
     """
 
-    if type(input_data) is FileInput:
+    if type(input_data) is FileSpec:
         return FileAdapter(program)
     try:
         return registry[program]()

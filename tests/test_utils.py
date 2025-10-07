@@ -116,7 +116,7 @@ def test_execute_subprocess_raises_external_program_execution_error_if_program_f
     try:
         execute_subprocess(cmd[0], cmd[1:])
     except ExternalProgramError as e:
-        assert isinstance(e.stdout, str)
+        assert isinstance(e.logs, str)
 
 
 def test_prog_available():

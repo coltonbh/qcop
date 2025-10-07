@@ -1,5 +1,5 @@
 import pytest
-from qcio import CalcType, DualProgramInput, OptimizationResults, ProgramOutput
+from qcio import CalcType, CompositeCalcSpec, OptimizationResults, Results
 
 from qcop.adapters import GeometricAdapter
 from tests.conftest import skipif_program_not_available
@@ -11,19 +11,19 @@ def test_full_optimization(dual_prog_inp):
     prog_inp = dual_prog_inp(CalcType.optimization)
     prog_inp_dict = prog_inp.model_dump()
     prog_inp_dict["subprogram"] = "terachem"
-    prog_inp = DualProgramInput(**prog_inp_dict)
+    prog_inp = CompositeCalcSpec(**prog_inp_dict)
 
     adapter = GeometricAdapter()
     output = adapter.compute(prog_inp, propagate_wfn=True)
-    assert isinstance(output, ProgramOutput)
-    assert isinstance(output.input_data, DualProgramInput)
-    assert isinstance(output.results, OptimizationResults)
+    assert isinstance(output, Results)
+    assert isinstance(output.input_data, CompositeCalcSpec)
+    assert isinstance(output.data, OptimizationResults)
     # Ensure wavefunction was propagated
     assert (
-        "Initial guess will be loaded from c0" in output.results.trajectory[-1].stdout
+        "Initial guess will be loaded from c0" in output.data.trajectory[-1].logs
     )
     # Ensure energy went downhill
-    assert output.results.energies[0] > output.results.energies[-1]
+    assert output.data.energies[0] > output.data.energies[-1]
 
 
 @pytest.mark.integration
@@ -37,15 +37,15 @@ def test_full_transition_state(dual_prog_inp, water):
     prog_inp_dict = prog_inp.model_dump()
     prog_inp_dict["subprogram"] = "terachem"
     prog_inp_dict["structure"] = water
-    prog_inp = DualProgramInput(**prog_inp_dict)
+    prog_inp = CompositeCalcSpec(**prog_inp_dict)
 
     adapter = GeometricAdapter()
     # Ensure output was produced
     output = adapter.compute(prog_inp, propagate_wfn=True)
-    assert isinstance(output, ProgramOutput)
-    assert isinstance(output.input_data, DualProgramInput)
-    assert isinstance(output.results, OptimizationResults)
+    assert isinstance(output, Results)
+    assert isinstance(output.input_data, CompositeCalcSpec)
+    assert isinstance(output.data, OptimizationResults)
     # Ensure wavefunction was propagated
     assert (
-        "Initial guess will be loaded from c0" in output.results.trajectory[-1].stdout
+        "Initial guess will be loaded from c0" in output.data.trajectory[-1].logs
     )

@@ -1,6 +1,6 @@
 import numpy as np
 import pytest
-from qcio import ProgramInput, Structure
+from qcio import CalcSpec, Structure
 
 from qcop import compute
 from tests.conftest import skipif_program_not_available
@@ -9,7 +9,7 @@ from tests.conftest import skipif_program_not_available
 @pytest.mark.integration
 @skipif_program_not_available("xtb")
 def test_xtb():
-    input_data = ProgramInput(
+    input_data = CalcSpec(
         structure=Structure(
             symbols=["O", "H", "H"],
             # Integration test depend upon this geometry; do not change
@@ -27,9 +27,9 @@ def test_xtb():
     )
 
     output = compute("xtb", input_data)
-    assert np.isclose(output.results.energy, -5.070218272184619, atol=1e-6)
+    assert np.isclose(output.data.energy, -5.070218272184619, atol=1e-6)
     assert np.allclose(
-        output.results.gradient,
+        output.data.gradient,
         np.array(
             [
                 [-0.01079716, -0.0081492, 0.00556273],

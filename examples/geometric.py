@@ -3,7 +3,7 @@
 Constraints docs: https://geometric.readthedocs.io/en/latest/constraints.html
 """
 
-from qcio import DualProgramInput, Structure
+from qcio import CompositeCalcSpec, Structure
 
 from qcop import compute, exceptions
 
@@ -13,12 +13,12 @@ h2 = Structure(
     geometry=[[0, 0.0, 0.0], [0, 0, 1.4]],  # type: ignore
 )
 
-# Define the program input
-prog_inp = DualProgramInput(
+# Define the calcspec
+spec = CompositeCalcSpec(
     calctype="optimization",  # type: ignore
     structure=h2,
     subprogram="terachem",
-    subprogram_args={  # type: ignore
+    subprogram_spec={  # type: ignore
         "model": {"method": "HF", "basis": "6-31g"},
         "keywords": {"purify": "no"},
     },
@@ -36,26 +36,26 @@ prog_inp = DualProgramInput(
 
 # Run calculation
 try:
-    output = compute("geometric", prog_inp, propagate_wfn=True, rm_scratch_dir=False)
+    results = compute("geometric", spec, propagate_wfn=True, rm_scratch_dir=False)
 except exceptions.QCOPBaseError as e:
     # Calculation failed
-    output = e.program_output
-    print(output.stdout)  # or output.pstdout for short
+    results = e.results
+    print(results.logs)
     # Input data used to generate the calculation
-    print(output.input_data)
+    print(results.input_data)
     # Provenance of generated calculation
-    print(output.provenance)
-    print(output.traceback)
+    print(results.provenance)
+    print(results.traceback)
     raise
 
 else:
     # Check results
-    print("Energies:", output.results.energies)
-    print("Structures:", output.results.structures)
-    print("Trajectory:", output.results.trajectory)
+    print("Energies:", results.data.energies)
+    print("Structures:", results.data.structures)
+    print("Trajectory:", results.data.trajectory)
     # Stdout from the program
-    print(output.stdout)  # or output.pstdout for short
+    print(results.logs)
     # Input data used to generate the calculation
-    print(output.input_data)
+    print(results.input_data)
     # Provenance of generated calculation
-    print(output.provenance)
+    print(results.provenance)

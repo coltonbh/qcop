@@ -1,16 +1,16 @@
 """Adapter for CREST package. https://crest-lab.github.io/crest-docs/"""
 
+from collections.abc import Callable
 from pathlib import Path
-from typing import Callable, Optional, Union
 
 import qccodec
 from qccodec.parsers.crest import parse_version
 from qcio import (
+    CalcSpec,
     CalcType,
     ConformerSearchResults,
     OptimizationResults,
-    ProgramInput,
-    SinglePointResults,
+    SinglePointData,
 )
 
 from qcop.exceptions import AdapterInputError, ExternalProgramError
@@ -21,14 +21,14 @@ from .utils import execute_subprocess
 
 class CRESTAdapter(
     ProgramAdapter[
-        ProgramInput,
-        Union[SinglePointResults, OptimizationResults, ConformerSearchResults],
+        CalcSpec,
+        SinglePointData | OptimizationResults | ConformerSearchResults,
     ]
 ):
     """Adapter for CREST.
 
     Note:
-        The `ProgramInput.keywords` attribute is used to create the input file for
+        The `CalcSpec.keywords` attribute is used to create the input file for
         CREST. This means that the structure of the `keywords` attribute should match
         that of [CREST's input specification](https://crest-lab.github.io/crest-docs/page/documentation/inputfiles.html).
         Keywords such as method, charge, and uhf (which are stored on the `Model` and
@@ -57,7 +57,7 @@ class CRESTAdapter(
     """Supported calculation types."""
     program = "crest"
 
-    def program_version(self, stdout: Optional[str] = None) -> str:
+    def program_version(self, stdout: str | None = None) -> str:
         """Get the program version.
 
         Args:
@@ -70,20 +70,18 @@ class CRESTAdapter(
             stdout = execute_subprocess(self.program, ["--version"])
         return parse_version(stdout)
 
-    def compute_results(
+    def compute_data(
         self,
-        input_data: ProgramInput,
-        update_func: Optional[Callable] = None,
-        update_interval: Optional[float] = None,
+        input_data: CalcSpec,
+        update_func: Callable | None = None,
+        update_interval: float | None = None,
         collect_rotamers: bool = False,
         **kwargs,
-    ) -> tuple[
-        Union[SinglePointResults, OptimizationResults, ConformerSearchResults], str
-    ]:
+    ) -> tuple[SinglePointData | OptimizationResults | ConformerSearchResults, str]:
         """Execute CREST on the given input.
 
         Args:
-            input_data: The qcio ProgramInput object for a computation.
+            input_data: The qcio CalcSpec object for a computation.
             update_func: A function to call with the stdout at regular intervals.
             update_interval: The interval at which to call the update function.
             collect_rotamers: Collect rotamers if doing a conformer_search. Defaults to
@@ -113,7 +111,7 @@ class CRESTAdapter(
             raise ExternalProgramError(
                 program=self.program,
                 message=f"CREST calculation failed. See the stdout for more information.",
-                stdout=stdout,
+                logs=stdout,
             )
 
         # Parse the output
@@ -129,7 +127,7 @@ class CRESTAdapter(
             raise ExternalProgramError(
                 program="qccodec",
                 message="Failed to parse CREST output.",
-                stdout=stdout,
+                logs=stdout,
                 original_exception=e,
             ) from e
 
