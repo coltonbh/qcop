@@ -6,6 +6,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## [unreleased]
 
+## [0.11.0] - 2025-10-07
+
 ### Changed
 
 - 🚨 Dropped python 3.9 support. Minimum supported version is 3.10. [#67](https://github.com/coltonbh/qcop/pull/67)
@@ -392,7 +394,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 - Created adapter for TeraChem.
 - Exposed general purpose computing for any subprocess with `FileAdaptor`
 
-[unreleased]: https://github.com/coltonbh/qcop/compare/0.10.2...HEAD
+[unreleased]: https://github.com/coltonbh/qcio/compare/0.11.0...HEAD
+[0.11.0]: https://github.com/coltonbh/qcio/releases/tag/0.11.0
 [0.10.2]: https://github.com/coltonbh/qcop/releases/tag/0.10.2
 [0.10.1]: https://github.com/coltonbh/qcop/releases/tag/0.10.1
 [0.10.0]: https://github.com/coltonbh/qcop/releases/tag/0.10.0
