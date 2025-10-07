@@ -24,7 +24,7 @@ pi = CalcSpec(
 
 # Run the calculation
 try:
-    # po is instance of ProgramOutput
+    # po is instance of Results
     po = compute("terachem", pi, collect_files=True)
 except exceptions.QCOPBaseError as e:
     po = e.program_output

@@ -5,7 +5,7 @@ import qccodec
 from qccodec import exceptions as qccodec_exceptions
 from qccodec.encoders.terachem import XYZ_FILENAME
 from qccodec.parsers.terachem import parse_version
-from qcio import CalcSpec, CalcType, ProgramOutput, SinglePointResults
+from qcio import CalcSpec, CalcType, Results, SinglePointData
 
 from qcop.exceptions import AdapterError, AdapterInputError, ExternalProgramError
 
@@ -13,7 +13,7 @@ from .base import ProgramAdapter
 from .utils import execute_subprocess
 
 
-class TeraChemAdapter(ProgramAdapter[CalcSpec, SinglePointResults]):
+class TeraChemAdapter(ProgramAdapter[CalcSpec, SinglePointData]):
     """Adapter for TeraChem."""
 
     supported_calctypes = [
@@ -55,7 +55,7 @@ class TeraChemAdapter(ProgramAdapter[CalcSpec, SinglePointResults]):
         update_func: Optional[Callable] = None,
         update_interval: Optional[float] = None,
         **kwargs,
-    ) -> tuple[SinglePointResults, str]:
+    ) -> tuple[SinglePointData, str]:
         """Execute TeraChem on the given input.
 
         Args:
@@ -65,7 +65,7 @@ class TeraChemAdapter(ProgramAdapter[CalcSpec, SinglePointResults]):
                 update_func.
 
         Returns:
-            A tuple of SinglePointResults and the stdout str.
+            A tuple of SinglePointData and the stdout str.
         """
         # Construct TeraChem native input files
         try:
@@ -128,7 +128,7 @@ class TeraChemAdapter(ProgramAdapter[CalcSpec, SinglePointResults]):
                 wfns[str(wfn_path)] = wfn_path.read_bytes()
         return wfns
 
-    def propagate_wfn(self, output: ProgramOutput, calcspec: CalcSpec) -> None:
+    def propagate_wfn(self, output: Results, calcspec: CalcSpec) -> None:
         """Propagate the wavefunction from the previous calculation.
 
         Args:

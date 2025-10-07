@@ -27,7 +27,7 @@ prog_input = CalcSpec(
 
 # Run the calculation
 try:
-    # prog_output is instance of ProgramOutput
+    # prog_output is instance of Results
     prog_output = compute("terachem", prog_input, collect_files=True)
 except exceptions.QCOPBaseError as e:
     prog_output = e.program_output

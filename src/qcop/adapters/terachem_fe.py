@@ -1,14 +1,14 @@
 import importlib
 from typing import Callable, Optional
 
-from qcio import CalcSpec, CalcType, SinglePointResults
+from qcio import CalcSpec, CalcType, SinglePointData
 
 from qcop.exceptions import ExternalProgramError, ProgramNotFoundError
 
 from .base import ProgramAdapter
 
 
-class TeraChemFEAdapter(ProgramAdapter[CalcSpec, SinglePointResults]):
+class TeraChemFEAdapter(ProgramAdapter[CalcSpec, SinglePointData]):
     """Adapter for TeraChem's Protocol Buffer Server and Frontend file server."""
 
     supported_calctypes = [CalcType.energy, CalcType.gradient]
@@ -45,7 +45,7 @@ class TeraChemFEAdapter(ProgramAdapter[CalcSpec, SinglePointResults]):
         update_func: Optional[Callable] = None,
         update_interval: Optional[float] = None,
         **kwargs,
-    ) -> tuple[SinglePointResults, str]:
+    ) -> tuple[SinglePointData, str]:
         """Execute TeraChem on the given input.
 
         Args:
@@ -55,7 +55,7 @@ class TeraChemFEAdapter(ProgramAdapter[CalcSpec, SinglePointResults]):
                 update_func.
 
         Returns:
-            A tuple of SinglePointResults and the stdout str.
+            A tuple of SinglePointData and the stdout str.
         """
         try:
             with self.client() as client:

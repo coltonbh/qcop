@@ -34,7 +34,7 @@ class FileAdapter(BaseAdapter[FileSpec, Files]):
             update_func.
 
         Returns:
-            Tuple of None and ProgramOutput object for a computation. None is
+            Tuple of None and Results object for a computation. None is
                 returned because no computed properties are returned for a file
                 computation.
 

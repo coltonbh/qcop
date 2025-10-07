@@ -4,8 +4,8 @@ from qcio import (
     CalcType,
     CoreSpec,
     OptimizationData,
-    ProgramOutput,
-    SinglePointResults,
+    Results,
+    SinglePointData,
 )
 
 from qcop.adapters import GeometricAdapter
@@ -77,10 +77,10 @@ def test_qcio_geometric_engine_exception_handling(
     # Set trajectory
     engine.qcio_trajectory = [results]
 
-    # Create a failed ProgramOutput object
+    # Create a failed Results object
     po_dict = results.model_dump()
     po_dict.update({"success": False, "traceback": "fake traceback"})
-    po_failure = ProgramOutput[CalcSpec, SinglePointResults](**po_dict)
+    po_failure = Results[CalcSpec, SinglePointData](**po_dict)
 
     # Mock adapter to raise ExternalProgramExecutionError
     mocker.patch.object(

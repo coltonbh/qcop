@@ -10,7 +10,7 @@ from qcio import (
     CalcType,
     ConformerSearchResults,
     OptimizationResults,
-    SinglePointResults,
+    SinglePointData,
 )
 
 from qcop.exceptions import AdapterInputError, ExternalProgramError
@@ -22,7 +22,7 @@ from .utils import execute_subprocess
 class CRESTAdapter(
     ProgramAdapter[
         CalcSpec,
-        Union[SinglePointResults, OptimizationResults, ConformerSearchResults],
+        Union[SinglePointData, OptimizationResults, ConformerSearchResults],
     ]
 ):
     """Adapter for CREST.
@@ -78,7 +78,7 @@ class CRESTAdapter(
         collect_rotamers: bool = False,
         **kwargs,
     ) -> tuple[
-        Union[SinglePointResults, OptimizationResults, ConformerSearchResults], str
+        Union[SinglePointData, OptimizationResults, ConformerSearchResults], str
     ]:
         """Execute CREST on the given input.
 

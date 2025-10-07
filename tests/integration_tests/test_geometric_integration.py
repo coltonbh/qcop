@@ -1,5 +1,5 @@
 import pytest
-from qcio import CalcType, CompositeCalcSpec, OptimizationResults, ProgramOutput
+from qcio import CalcType, CompositeCalcSpec, OptimizationResults, Results
 
 from qcop.adapters import GeometricAdapter
 from tests.conftest import skipif_program_not_available
@@ -15,7 +15,7 @@ def test_full_optimization(dual_prog_inp):
 
     adapter = GeometricAdapter()
     output = adapter.compute(prog_inp, propagate_wfn=True)
-    assert isinstance(output, ProgramOutput)
+    assert isinstance(output, Results)
     assert isinstance(output.input_data, CompositeCalcSpec)
     assert isinstance(output.results, OptimizationResults)
     # Ensure wavefunction was propagated
@@ -42,7 +42,7 @@ def test_full_transition_state(dual_prog_inp, water):
     adapter = GeometricAdapter()
     # Ensure output was produced
     output = adapter.compute(prog_inp, propagate_wfn=True)
-    assert isinstance(output, ProgramOutput)
+    assert isinstance(output, Results)
     assert isinstance(output.input_data, CompositeCalcSpec)
     assert isinstance(output.results, OptimizationResults)
     # Ensure wavefunction was propagated

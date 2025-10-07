@@ -22,7 +22,7 @@ prog_input = CalcSpec(
     keywords={"purify": "no", "restricted": False},
 )
 
-# Run the calculation; will return ProgramOutput or raise an exception
+# Run the calculation; will return Results or raise an exception
 prog_output = compute("terachem", prog_input, collect_files=True)
 ```
 

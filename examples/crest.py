@@ -24,7 +24,7 @@ prog_input = CalcSpec(
 
 # Run the calculation
 try:
-    # prog_output is instance of ProgramOutput
+    # prog_output is instance of Results
     prog_output = compute(
         "crest", prog_input, collect_files=True, collect_rotamers=False
     )
