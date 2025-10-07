@@ -9,8 +9,8 @@ class QCOPBaseError(Exception):
     """
     Base class for all qcop exceptions.
 
-    All QCOP exceptions must eventually have a non-None program_output attribute.
-    Lower-level code may leave program_output as None; the top-level compute() method
+    All QCOP exceptions must eventually have a non-None results attribute.
+    Lower-level code may leave results as None; the top-level compute() method
     should attach the final Results before propagating the error. If some results
     were computed before the error occurred, they should be attached to the exception
     as well.
@@ -19,14 +19,14 @@ class QCOPBaseError(Exception):
     def __init__(
         self,
         message: str,
-        program_output: Optional[Results] = None,
-        results: Optional[Data] = None,
+        results: Optional[Results] = None,
+        data: Optional[Data] = None,
     ):
         # Pass everything as positional arguments so they are captured in .args
         # Required for pickling and other serialization methods including celery.
-        super().__init__(message, program_output, results)
-        self.program_output = program_output
+        super().__init__(message, results, data)
         self.results = results
+        self.data = data
 
     def __str__(self):
         # Only the message is shown in the string representation.
@@ -35,7 +35,7 @@ class QCOPBaseError(Exception):
     def __repr__(self):
         return (
             f"{self.__class__.__name__}(message={self.args[0]!r}, "
-            f"program_output={self.program_output!r}, results={self.results!r})"
+            f"results={self.results!r}, data={self.data!r})"
         )
 
 
@@ -55,11 +55,11 @@ class AdapterNotFoundError(AdapterError):
         self,
         program: str,
         message: Optional[str] = None,
-        program_output: Optional[Results] = None,
+        results: Optional[Results] = None,
     ):
         if message is None:
             message = f"No adapter found for program '{program}'."
-        super().__init__(message, program_output, None)
+        super().__init__(message, results, None)
         self.program = program
 
     def __repr__(self):
@@ -73,11 +73,11 @@ class AdapterInputError(AdapterError):
         self,
         program: str,
         message: Optional[str] = None,
-        program_output: Optional[Results] = None,
+        results: Optional[Results] = None,
     ):
         if message is None:
             message = f"Invalid inputs for program '{program}'."
-        super().__init__(message, program_output, None)
+        super().__init__(message, results, None)
         self.program = program
 
     def __repr__(self):
@@ -99,14 +99,14 @@ class ExternalProgramError(QCOPBaseError):
         self,
         program: str,
         message: Optional[str] = None,
-        program_output: Optional[Results] = None,
-        results: Optional[Data] = None,
+        results: Optional[Results] = None,
+        data: Optional[Data] = None,
         original_exception: Optional[Exception] = None,
         logs: Optional[str] = None,
     ):
         if message is None:
             message = f"External program '{program}' failed."
-        super().__init__(message, program_output, results)
+        super().__init__(message, results, data)
         self.program = program
         self.original_exception = original_exception
         self.logs = logs
@@ -125,7 +125,7 @@ class ProgramNotFoundError(ExternalProgramError):
         self,
         program: str,
         message: Optional[str] = None,
-        program_output: Optional[Results] = None,
+        results: Optional[Results] = None,
         install_msg: Optional[str] = None,
     ):
         if message is None:
@@ -134,7 +134,7 @@ class ProgramNotFoundError(ExternalProgramError):
                 or f"Program not found: '{program}'. Please install it and ensure it is on your PATH."
             )
         # Call ExternalProgramError with results, original_exception, and logs defaulting to None.
-        super().__init__(program, message, program_output, None, None, None)
+        super().__init__(program, message, results, None, None, None)
         self.program = program
         self.install_msg = install_msg
 

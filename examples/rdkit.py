@@ -27,7 +27,7 @@ try:
     # po is instance of Results
     po = compute("rdkit", pi, collect_files=True)
 except exceptions.QCOPBaseError as e:
-    po = e.program_output
+    po = e.results
     print(po.stdout)  # or output.pstdout for short
     print(f"Success: {po.success}")  # False
     print(po.input_data)  # Input data used to generate the calculation

@@ -89,7 +89,7 @@ def test_qcio_geometric_engine_exception_handling(
         side_effect=ExternalProgramError(
             program="terachem",
             logs="some stdout",
-            program_output=po_failure,
+            results=po_failure,
         ),
     )
 
@@ -98,7 +98,7 @@ def test_qcio_geometric_engine_exception_handling(
         coords = hydrogen.geometry
         engine.calc_new(coords)
 
-    assert excinfo.value.results == OptimizationData(
+    assert excinfo.value.data == OptimizationData(
         trajectory=[results, po_failure]
     )
 

@@ -13,6 +13,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 - 🚨 Removed `poetry` in favor of `uv` for package management.
 - 🚨 Renamed `compute` kwarg `collect_stdout` -> `collect_logs`.
 - 🚨 Renamed `compute` kwarg `print_stdout` -> `print_logs`.
+- 🚨 `qcop` Exception classes updated to `.results` and `.data` nomenclature.
 
 ### Removed
 

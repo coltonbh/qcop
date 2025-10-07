@@ -39,7 +39,7 @@ try:
     output = compute("geometric", prog_inp, propagate_wfn=True, rm_scratch_dir=False)
 except exceptions.QCOPBaseError as e:
     # Calculation failed
-    output = e.program_output
+    output = e.results
     print(output.logs)
     # Input data used to generate the calculation
     print(output.input_data)

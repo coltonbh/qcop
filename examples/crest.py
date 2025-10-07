@@ -29,7 +29,7 @@ try:
         "crest", prog_input, collect_files=True, collect_rotamers=False
     )
 except exceptions.QCOPBaseError as e:
-    prog_output = e.program_output
+    prog_output = e.results
     print(prog_output.stdout)  # or output.pstdout for short
     print(f"Success: {prog_output.success}")  # False
     print(prog_output.input_data)  # Input data used to generate the calculation

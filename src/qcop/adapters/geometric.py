@@ -309,11 +309,11 @@ class GeometricAdapter(ProgramAdapter[CompositeCalcSpec, OptimizationData]):
                         )
                     )
                 except QCOPBaseError as e:
-                    if e.program_output:  # For mypy
+                    if e.results:  # For mypy
                         # Append error output
-                        self.qcio_trajectory.append(e.program_output)
-                    results = OptimizationData(trajectory=self.qcio_trajectory)
-                    e.results = results
+                        self.qcio_trajectory.append(e.results)
+                    data = OptimizationData(trajectory=self.qcio_trajectory)
+                    e.data = data
                     # TODO: Add args/kwargs update for Celery serialization?
                     # Maybe not because .results is folded into e.program_output in
                     # BaseAdapter.compute()?

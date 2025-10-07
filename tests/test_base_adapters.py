@@ -1,5 +1,5 @@
 import pytest
-from qcio import CalcType, Results
+from qcio import CalcType, Results, SinglePointData
 
 from qcop.adapters import base, registry
 from qcop.exceptions import AdapterInputError, ExternalProgramError
@@ -78,7 +78,7 @@ def test_adapters_raise_error_if_calctype_not_supported(calcspec):
         TestAdapter().compute(gradient_input)
 
 
-def test_results_added_to_program_output_object_if_exception_contains_them(
+def test_data_added_to_results_object_if_exception_contains_it(
     calcspec, mocker, results, test_adapter
 ):
     """Test that results are added to the Results object if the exception
@@ -87,7 +87,7 @@ def test_results_added_to_program_output_object_if_exception_contains_them(
 
     def raise_error(*args, **kwargs):
         raise ExternalProgramError(
-            program="terachem", logs="some stdout", results=results.data
+            program="terachem", logs="some stdout", data=results.data
         )
 
     mocker.patch.object(
@@ -100,17 +100,15 @@ def test_results_added_to_program_output_object_if_exception_contains_them(
     # Check that the exception object contains the results
     with pytest.raises(ExternalProgramError) as excinfo:
         test_adapter.compute(energy_input, raise_exc=True)
-    assert excinfo.value.results == results.data
+    assert excinfo.value.data == results.data
 
     # If no raise_exc=False, the results are added to the Results
-    prog_failure = test_adapter.compute(energy_input, raise_exc=False)
-    assert isinstance(prog_failure, Results)
-    assert prog_failure.data == results.data
+    computed_results = test_adapter.compute(energy_input, raise_exc=False)
+    assert isinstance(computed_results, Results)
+    assert computed_results.data == results.data
 
 
-def test_program_output_object_added_to_exception(
-    calcspec, mocker, results, test_adapter
-):
+def test_results_object_added_to_exception(calcspec, mocker, results, test_adapter):
     """Test that exceptions contain the Results object."""
     test_adapter = registry["test"]()
 
@@ -118,7 +116,7 @@ def test_program_output_object_added_to_exception(
         raise ExternalProgramError(
             program="terachem",
             logs="some stdout",
-            results=results.data,
+            data=results.data,
         )
 
     mocker.patch.object(
@@ -132,10 +130,10 @@ def test_program_output_object_added_to_exception(
     with pytest.raises(ExternalProgramError) as excinfo:
         test_adapter.compute(energy_input, raise_exc=True)
 
-    assert isinstance(excinfo.value.program_output, Results)
-    assert excinfo.value.program_output.success is False
+    assert isinstance(excinfo.value.results, Results)
+    assert excinfo.value.results.success is False
     # NOTE: CHECK WITH BIGCHEM
-    # assert isinstance(excinfo.value.args[-1], Results)
+    assert isinstance(excinfo.value.args[-1], SinglePointData)
 
 
 def test_stdout_collected_with_failed_execution(
@@ -148,7 +146,7 @@ def test_stdout_collected_with_failed_execution(
         raise ExternalProgramError(
             program="terachem",
             logs="some stdout",
-            results=results.data,
+            data=results.data,
         )
 
     mocker.patch.object(
@@ -165,9 +163,9 @@ def test_stdout_collected_with_failed_execution(
     # Added to exception
     assert excinfo.value.logs == "some stdout"
     # Added to Results
-    assert excinfo.value.program_output.logs == "some stdout"
+    assert excinfo.value.results.logs == "some stdout"
     # Added to exception
-    assert excinfo.value.results == results.data
+    assert excinfo.value.data == results.data
 
 
 def test_collect_wfn_raises_adapter_input_error_if_not_implemented(test_adapter):

@@ -176,8 +176,8 @@ class BaseAdapter(ABC, Generic[SpecType, DataType]):
                 # TODO: Is there a type safe way to handle this??
                 exc = e
                 output_dict["success"] = False
-                # Any half-completed results
-                data = getattr(e, "results") or Files()
+                # Any half-completed data
+                data = getattr(e, "data") or Files()
                 logs = getattr(e, "logs", logs)
                 if logs is None:
                     logs = getattr(e, "stdout", logs)
@@ -228,7 +228,7 @@ class BaseAdapter(ABC, Generic[SpecType, DataType]):
         # Append Results to exception and raise if raise_exc=True
         # Helpful for BigChem and ChemCloud exception handling
         if raise_exc and exc:
-            exc.program_output = results
+            exc.results = results
             raise exc
 
         return results

@@ -51,7 +51,7 @@ try:
     result = compute("terachem", calcspec, collect_files=True)
 except ExternalProgramError as e:
     # External QQ program failed in some way
-    result = e.program_output
+    result = e.results
     result.input_data # Input data used by the QC program
     result.success # Will be False
     result.data # Any half-computed results before the failure

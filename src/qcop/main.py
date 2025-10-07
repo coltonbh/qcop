@@ -53,7 +53,7 @@ def compute(
             provenance={"program": program},
             traceback=traceback.format_exc(),
         )
-        e.program_output = output_obj
+        e.results = output_obj
         e.args = (*e.args, output_obj)
         raise e
 
