@@ -44,7 +44,7 @@ def calcspec(hydrogen):
     """Create a function that returns a CalcSpec object with a specified
     calculation type."""
 
-    def create_prog_input(calctype):
+    def create_calctype(calctype):
         return CalcSpec(
             structure=hydrogen,
             calctype=calctype,
@@ -57,12 +57,12 @@ def calcspec(hydrogen):
             },
         )
 
-    return create_prog_input
+    return create_calctype
 
 
 @pytest.fixture(scope="function")
 def ccalcspec(hydrogen):
-    def create_prog_input(calctype):
+    def create_calcspec(calctype):
         return CompositeCalcSpec(
             calctype=calctype,
             structure=hydrogen,
@@ -72,7 +72,7 @@ def ccalcspec(hydrogen):
             ),
         )
 
-    return create_prog_input
+    return create_calcspec
 
 
 @pytest.fixture

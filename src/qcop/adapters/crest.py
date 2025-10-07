@@ -2,7 +2,6 @@
 
 from collections.abc import Callable
 from pathlib import Path
-from typing import Union
 
 import qccodec
 from qccodec.parsers.crest import parse_version
@@ -23,7 +22,7 @@ from .utils import execute_subprocess
 class CRESTAdapter(
     ProgramAdapter[
         CalcSpec,
-        Union[SinglePointData, OptimizationResults, ConformerSearchResults],
+        SinglePointData | OptimizationResults | ConformerSearchResults,
     ]
 ):
     """Adapter for CREST.
@@ -78,9 +77,7 @@ class CRESTAdapter(
         update_interval: float | None = None,
         collect_rotamers: bool = False,
         **kwargs,
-    ) -> tuple[
-        SinglePointData | OptimizationResults | ConformerSearchResults, str
-    ]:
+    ) -> tuple[SinglePointData | OptimizationResults | ConformerSearchResults, str]:
         """Execute CREST on the given input.
 
         Args:
