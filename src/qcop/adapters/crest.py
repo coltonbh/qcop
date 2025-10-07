@@ -6,10 +6,10 @@ from typing import Callable, Optional, Union
 import qccodec
 from qccodec.parsers.crest import parse_version
 from qcio import (
+    CalcSpec,
     CalcType,
     ConformerSearchResults,
     OptimizationResults,
-    ProgramInput,
     SinglePointResults,
 )
 
@@ -21,14 +21,14 @@ from .utils import execute_subprocess
 
 class CRESTAdapter(
     ProgramAdapter[
-        ProgramInput,
+        CalcSpec,
         Union[SinglePointResults, OptimizationResults, ConformerSearchResults],
     ]
 ):
     """Adapter for CREST.
 
     Note:
-        The `ProgramInput.keywords` attribute is used to create the input file for
+        The `CalcSpec.keywords` attribute is used to create the input file for
         CREST. This means that the structure of the `keywords` attribute should match
         that of [CREST's input specification](https://crest-lab.github.io/crest-docs/page/documentation/inputfiles.html).
         Keywords such as method, charge, and uhf (which are stored on the `Model` and
@@ -70,9 +70,9 @@ class CRESTAdapter(
             stdout = execute_subprocess(self.program, ["--version"])
         return parse_version(stdout)
 
-    def compute_results(
+    def compute_data(
         self,
-        input_data: ProgramInput,
+        input_data: CalcSpec,
         update_func: Optional[Callable] = None,
         update_interval: Optional[float] = None,
         collect_rotamers: bool = False,
@@ -83,7 +83,7 @@ class CRESTAdapter(
         """Execute CREST on the given input.
 
         Args:
-            input_data: The qcio ProgramInput object for a computation.
+            input_data: The qcio CalcSpec object for a computation.
             update_func: A function to call with the stdout at regular intervals.
             update_interval: The interval at which to call the update function.
             collect_rotamers: Collect rotamers if doing a conformer_search. Defaults to

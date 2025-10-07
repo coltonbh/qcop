@@ -97,7 +97,7 @@ class XTBAdapter(ProgramAdapter[CalcSpec, SinglePointData]):
                     ),
                 )
 
-    def compute_results(
+    def compute_data(
         self,
         input_data: CalcSpec,
         update_func: Optional[Callable] = None,

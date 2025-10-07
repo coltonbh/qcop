@@ -1,7 +1,7 @@
 Calculations are run by calling the `qcop.compute()` function with the relevant arguments and keywords like this:
 
 ```python
-from qcio import Structure, ProgramInput
+from qcio import Structure, CalcSpec
 from qcop import compute
 
 # Create the Structure
@@ -15,7 +15,7 @@ structure = Structure(
 )
 
 # Define the program input
-prog_input = ProgramInput(
+prog_input = CalcSpec(
     structure=h2o,
     calctype="energy",
     model={"method": "hf", "basis": "sto-3g"},

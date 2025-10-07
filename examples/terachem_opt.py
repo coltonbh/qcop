@@ -1,6 +1,6 @@
 """Example of how to run an optimization calculation with TeraChem using qcop."""
 
-from qcio import ProgramInput, Structure
+from qcio import CalcSpec, Structure
 
 from qcop import compute, exceptions
 
@@ -17,7 +17,7 @@ structure = Structure(
 )
 
 # Define the program input
-prog_input = ProgramInput(
+prog_input = CalcSpec(
     structure=structure,
     # Can be "energy", "gradient", "hessian", "optimization", "transition_state"
     calctype="optimization",  # type: ignore

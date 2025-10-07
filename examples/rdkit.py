@@ -1,4 +1,4 @@
-from qcio import ProgramInput, Structure
+from qcio import CalcSpec, Structure
 
 from qcop import compute, exceptions
 
@@ -16,7 +16,7 @@ structure = Structure(
 )
 
 # Define the program input
-pi = ProgramInput(
+pi = CalcSpec(
     structure=structure,
     calctype="energy",  # type: ignore
     model={"method": "UFF"},  # type: ignore

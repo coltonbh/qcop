@@ -106,7 +106,7 @@ def test_adapter():
         program = "test"
         supported_calctypes = [CalcType.energy, CalcType.gradient]
 
-        def compute_results(
+        def compute_data(
             self, input_data, update_func=None, update_interval=None, **kwargs
         ):
             return SinglePointData(energy=0.0), "Some stdout."

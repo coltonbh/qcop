@@ -1,8 +1,8 @@
-"""An example of how to create a FileInput object for a QC Program."""
+"""An example of how to create a FileSpec object for a QC Program."""
 
 from pathlib import Path
 
-from qcio import FileInput, Structure
+from qcio import FileSpec, Structure
 
 from qcop import compute
 
@@ -13,8 +13,8 @@ inp_file = Path("path/to/tc.in").read_text()  # Or your own function to create t
 structure = Structure.open("path/to/my/mol.xyz")
 xyz_str = structure.to_xyz()  # type: ignore
 
-# Create a FileInput object for TeraChem
-file_inp = FileInput(
+# Create a FileSpec object for TeraChem
+file_inp = FileSpec(
     files={"tc.in": inp_file, "coords.xyz": xyz_str}, cmdline_args=["tc.in"]
 )
 

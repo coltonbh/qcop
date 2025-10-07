@@ -1,4 +1,4 @@
-"""Many of these tests are really testing the BaseAdapter.compute() method because I 
+"""Many of these tests are really testing the BaseAdapter.compute() method because I
 refactored the compute() method to be in the BaseAdapter class. This works for now.
 """
 
@@ -42,7 +42,7 @@ def test_compute_raises_adapter_not_found_error_no_qcng_fallback(calcspec):
 def test_print_stdout(test_adapter, calcspec, mocker):
     energy_inp = calcspec("energy")
 
-    spy = mocker.spy(type(test_adapter), "compute_results")
+    spy = mocker.spy(type(test_adapter), "compute_data")
 
     compute("test", energy_inp)
     assert spy.call_args.args[2] is None  # update_func
@@ -54,7 +54,7 @@ def test_print_stdout(test_adapter, calcspec, mocker):
 def test_update_func_preferred_over_print_stdout(test_adapter, calcspec, mocker):
     energy_inp = calcspec("energy")
 
-    spy = mocker.spy(type(test_adapter), "compute_results")
+    spy = mocker.spy(type(test_adapter), "compute_data")
 
     def update_func(stdout, stderr):
         pass
@@ -105,7 +105,7 @@ def test_compute_does_not_raise_exception_if_raise_exec_false(calcspec, mocker):
     adapter = registry["test"]
     mocker.patch.object(
         adapter,
-        "compute_results",
+        "compute_data",
         side_effect=QCOPBaseError("Something failed!"),
     )
     po = compute("test", grad_input, raise_exc=False)

@@ -72,7 +72,7 @@ class GeometricAdapter(ProgramAdapter[CompositeCalcSpec, OptimizationData]):
         """Get the program version."""
         return self.geometric.__version__
 
-    def compute_results(
+    def compute_data(
         self,
         input_data: CompositeCalcSpec,
         update_func: Optional[Callable] = None,

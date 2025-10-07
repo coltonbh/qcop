@@ -1,4 +1,4 @@
-from qcio import ProgramInput, Structure
+from qcio import CalcSpec, Structure
 
 from qcop import compute, exceptions
 
@@ -15,7 +15,7 @@ structure = Structure(
 )
 
 # Define the program input
-prog_input = ProgramInput(
+prog_input = CalcSpec(
     structure=structure,
     calctype="conformer_search",  # type: ignore
     model={"method": "gfnff"},  # type: ignore

@@ -1,4 +1,4 @@
-from qcio import CalcType, ProgramInput, Structure
+from qcio import CalcSpec, CalcType, Structure
 
 from qcop import compute, exceptions
 
@@ -15,7 +15,7 @@ structure = Structure(
 )
 
 # Define the program input
-pi = ProgramInput(
+pi = CalcSpec(
     structure=structure,
     calctype=CalcType.hessian,
     model={"method": "b3lyp", "basis": "6-31g"},  # type: ignore

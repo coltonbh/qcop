@@ -14,7 +14,7 @@ def test_adapter_subclasses_must_define_program():
             # supported_calctypes defined but program not defined
             supported_calctypes = [CalcType.energy]
 
-            def compute_results(self, *args, **kwargs):
+            def compute_data(self, *args, **kwargs):
                 pass
 
 
@@ -27,7 +27,7 @@ def test_adapter_subclasses_must_define_supported_calctypes():
             # program defined but supported_calctypes not defined
             program = "test"
 
-            def compute_results(self, *args, **kwargs):
+            def compute_data(self, *args, **kwargs):
                 pass
 
 
@@ -53,7 +53,7 @@ def test_adapter_subclasses_defining_program_and_supported_calctypes():
         program = "test"
         supported_calctypes = [CalcType.energy]
 
-        def compute_results(self, *args, **kwargs):
+        def compute_data(self, *args, **kwargs):
             pass
 
     assert registry.get("test") == TestAdapter
@@ -70,7 +70,7 @@ def test_adapters_raise_error_if_calctype_not_supported(calcspec):
         def program_version(self, *args, **kwargs) -> str:
             return "v1.0.0"
 
-        def compute_results(self, *args, **kwargs):
+        def compute_data(self, *args, **kwargs):
             pass
 
     gradient_input = calcspec("gradient")
@@ -92,7 +92,7 @@ def test_results_added_to_program_output_object_if_exception_contains_them(
 
     mocker.patch.object(
         test_adapter,
-        "compute_results",
+        "compute_data",
         side_effect=raise_error,
     )
     energy_input = calcspec("energy")
@@ -123,7 +123,7 @@ def test_program_output_object_added_to_exception(
 
     mocker.patch.object(
         test_adapter,
-        "compute_results",
+        "compute_data",
         side_effect=raise_error,
     )
     energy_input = calcspec("energy")
@@ -153,7 +153,7 @@ def test_stdout_collected_with_failed_execution(
 
     mocker.patch.object(
         test_adapter,
-        "compute_results",
+        "compute_data",
         side_effect=raise_error,
     )
     energy_input = calcspec("energy")

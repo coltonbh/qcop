@@ -3,7 +3,7 @@
 Constraints docs: https://geometric.readthedocs.io/en/latest/constraints.html
 """
 
-from qcio import DualProgramInput, Structure
+from qcio import CompositeCalcSpec, Structure
 
 from qcop import compute, exceptions
 
@@ -14,7 +14,7 @@ h2 = Structure(
 )
 
 # Define the program input
-prog_inp = DualProgramInput(
+prog_inp = CompositeCalcSpec(
     calctype="optimization",  # type: ignore
     structure=h2,
     subprogram="terachem",

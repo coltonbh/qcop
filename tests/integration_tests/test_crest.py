@@ -1,6 +1,6 @@
 import numpy as np
 import pytest
-from qcio import ProgramInput, Structure
+from qcio import CalcSpec, Structure
 
 from qcop import compute
 from tests.conftest import skipif_program_not_available
@@ -9,7 +9,7 @@ from tests.conftest import skipif_program_not_available
 @pytest.mark.integration
 @skipif_program_not_available("crest")
 def test_crest():
-    input_data = ProgramInput(
+    input_data = CalcSpec(
         structure=Structure(
             symbols=["O", "H", "H"],
             # Integration test depend upon this geometry; do not change

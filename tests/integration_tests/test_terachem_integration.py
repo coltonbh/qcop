@@ -1,6 +1,6 @@
 import numpy as np
 import pytest
-from qcio import CalcType, ProgramInput, Structure
+from qcio import CalcSpec, CalcType, Structure
 
 from qcop.main import compute
 from tests.conftest import skipif_program_not_available
@@ -10,7 +10,7 @@ from tests.conftest import skipif_program_not_available
 @skipif_program_not_available("terachem")
 def test_terachem_energy(hydrogen):
     # Modify keywords
-    energy_inp = ProgramInput(
+    energy_inp = CalcSpec(
         structure=hydrogen,
         calctype=CalcType.energy,
         model={"method": "hf", "basis": "sto-3g"},
@@ -27,7 +27,7 @@ def test_terachem_energy(hydrogen):
 @skipif_program_not_available("terachem")
 def test_terachem_gradient(hydrogen):
     # Modify keywords
-    energy_inp = ProgramInput(
+    energy_inp = CalcSpec(
         structure=hydrogen,
         calctype=CalcType.gradient,
         model={"method": "hf", "basis": "sto-3g"},
@@ -59,7 +59,7 @@ def test_terachem_hessian():
             [1.147442147965631, -0.49902392855765926, -1.3798296942644486],
         ],
     )
-    energy_inp = ProgramInput(
+    energy_inp = CalcSpec(
         structure=h2o,
         calctype=CalcType.hessian,
         model={"method": "b3lyp", "basis": "6-31g"},
@@ -203,7 +203,7 @@ def test_terachem_hessian():
 @skipif_program_not_available("terachem")
 def test_terachem_optimization(water):
     # Modify keywords
-    energy_inp = ProgramInput(
+    energy_inp = CalcSpec(
         structure=water,
         calctype=CalcType.gradient,
         model={"method": "hf", "basis": "sto-3g"},

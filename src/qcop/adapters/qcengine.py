@@ -33,7 +33,7 @@ class QCEngineAdapter(ProgramAdapter):
                 message=f"QCEngine could not get version for program {self.external_program}.",
             ) from e
 
-    def compute_results(
+    def compute_data(
         self, input_data, *args, propagate_wfn=False, **kwargs
     ) -> tuple[SinglePointData, str]:
         from qcengine import compute as qcng_compute

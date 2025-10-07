@@ -1,9 +1,9 @@
 import pytest
 from qcio import (
+    CalcSpec,
     CalcType,
     CoreSpec,
     OptimizationData,
-    ProgramInput,
     ProgramOutput,
     SinglePointResults,
 )
@@ -80,7 +80,7 @@ def test_qcio_geometric_engine_exception_handling(
     # Create a failed ProgramOutput object
     po_dict = results.model_dump()
     po_dict.update({"success": False, "traceback": "fake traceback"})
-    po_failure = ProgramOutput[ProgramInput, SinglePointResults](**po_dict)
+    po_failure = ProgramOutput[CalcSpec, SinglePointResults](**po_dict)
 
     # Mock adapter to raise ExternalProgramExecutionError
     mocker.patch.object(
@@ -114,4 +114,4 @@ def test_geometric_exceptions_converted_to_qcop_exceptions(mocker, ccalcspec):
 
     prog_inp = ccalcspec(CalcType.optimization)
     with pytest.raises(ExternalProgramError):
-        adapter.compute_results(prog_inp, propagate_wfn=False)
+        adapter.compute_data(prog_inp, propagate_wfn=False)

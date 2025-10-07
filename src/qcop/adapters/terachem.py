@@ -49,7 +49,7 @@ class TeraChemAdapter(ProgramAdapter[CalcSpec, SinglePointResults]):
 
     # TODO: Need command line options for TeraChem e.g., -g 1 for GPUs MAYBE?
     # Try using it for a while without and see what roadblocks we run into
-    def compute_results(
+    def compute_data(
         self,
         input_data: CalcSpec,
         update_func: Optional[Callable] = None,
