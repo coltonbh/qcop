@@ -1,3 +1,9 @@
+"""Scripts for releasing a new version of the package.
+
+Usage:
+    python scripts/release.py <version>
+"""
+
 import re
 import subprocess
 import sys
