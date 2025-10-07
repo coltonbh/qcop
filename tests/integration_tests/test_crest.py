@@ -28,8 +28,8 @@ def test_crest():
 
     prog_output = compute("crest", input_data)
 
-    assert len(prog_output.results.conformers) == 1
-    assert np.isclose(prog_output.results.conformer_energies[0], -0.33568982, atol=1e-4)
+    assert len(prog_output.data.conformers) == 1
+    assert np.isclose(prog_output.data.conformer_energies[0], -0.33568982, atol=1e-4)
     # Solvent getting passed correctly
-    assert "alpb" in prog_output.stdout
-    assert "acetonitrile" in prog_output.stdout
+    assert "alpb" in prog_output.logs
+    assert "acetonitrile" in prog_output.logs

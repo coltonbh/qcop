@@ -45,7 +45,7 @@ def compute(
     try:
         adapter = get_adapter(program, input_data, qcng_fallback)
     except (AdapterNotFoundError, ProgramNotFoundError) as e:
-        # Add program_output to the exception
+        # Add results to the exception
         output_obj = Results[type(input_data), Files](  # type: ignore
             input_data=input_data,
             data=Files(),

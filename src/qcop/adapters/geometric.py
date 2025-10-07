@@ -281,7 +281,7 @@ class GeometricAdapter(ProgramAdapter[CompositeCalcSpec, OptimizationData]):
                 structure = Structure(
                     **{**self.qcio_structure.model_dump(), "geometry": coords}
                 )
-                prog_input = CalcSpec(
+                calcspec = CalcSpec(
                     calctype=CalcType.gradient,
                     structure=structure,
                     **self.qcio_program_args.model_dump(),
@@ -294,14 +294,14 @@ class GeometricAdapter(ProgramAdapter[CompositeCalcSpec, OptimizationData]):
                     and hasattr(self.qcio_adapter, "propagate_wfn")
                 ):
                     self.qcio_adapter.propagate_wfn(
-                        self.qcio_trajectory[-1], prog_input
+                        self.qcio_trajectory[-1], calcspec
                     )
 
                 # Calculate energy and gradient
                 try:
-                    output: Results[CalcSpec, SinglePointData] = (
+                    results: Results[CalcSpec, SinglePointData] = (
                         self.qcio_adapter.compute(
-                            prog_input,
+                            calcspec,
                             raise_exc=True,
                             collect_wfn=self.propagate_wfn,
                             update_func=self.update_func,
@@ -315,23 +315,23 @@ class GeometricAdapter(ProgramAdapter[CompositeCalcSpec, OptimizationData]):
                     data = OptimizationData(trajectory=self.qcio_trajectory)
                     e.data = data
                     # TODO: Add args/kwargs update for Celery serialization?
-                    # Maybe not because .results is folded into e.program_output in
+                    # Maybe not because .data is folded into e.results in
                     # BaseAdapter.compute()?
                     raise e
 
                 else:
-                    self.qcio_trajectory.append(output)
+                    self.qcio_trajectory.append(results)
 
                 assert (  # for mypy
-                    output.results is not None
-                    and output.results.energy is not None
-                    and output.results.gradient is not None
-                    and isinstance(output.results.gradient, np.ndarray)
+                    results.data is not None
+                    and results.data.energy is not None
+                    and results.data.gradient is not None
+                    and isinstance(results.data.gradient, np.ndarray)
                 )
                 return {
-                    "energy": output.results.energy,
+                    "energy": results.data.energy,
                     # geomeTRIC requires 1D array
-                    "gradient": output.results.gradient.flatten(),
+                    "gradient": results.data.gradient.flatten(),
                 }
 
         return QCOPGeometricEngine

@@ -65,7 +65,7 @@ class TeraChemFEAdapter(ProgramAdapter[CalcSpec, SinglePointData]):
                 program=self.program,
                 # Pass logs to .compute() via the exception
                 # Will only exist for TeraChemFrontendAdapter
-                logs=e.program_output.logs,
+                logs=e.results.logs,
             )
 
             raise exc

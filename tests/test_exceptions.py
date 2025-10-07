@@ -22,8 +22,8 @@ def test_exception_pickle(results, exc_class, args):
     # Instantiate the exception.
     exc_instance = exc_class(*args)
 
-    # Append program_output
-    exc_instance.program_output = results
+    # Append results
+    exc_instance.results = results
 
     # Perform a full pickle round-trip.
     pickled = pickle.dumps(exc_instance)

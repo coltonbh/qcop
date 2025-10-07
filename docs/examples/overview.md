@@ -14,7 +14,7 @@ structure = Structure(
     ],
 )
 
-# Define the program input
+# Define the calcspec
 prog_input = CalcSpec(
     structure=h2o,
     calctype="energy",

@@ -20,7 +20,7 @@ def test_terachem_energy(hydrogen):
     output = compute(program, energy_inp)
     assert output.input_data == energy_inp
     assert output.provenance.program == program
-    assert np.isclose(output.results.energy, -1.1167143325, atol=1e-6)
+    assert np.isclose(output.data.energy, -1.1167143325, atol=1e-6)
 
 
 @pytest.mark.integration
@@ -38,9 +38,9 @@ def test_terachem_gradient(hydrogen):
     output = compute(program, energy_inp)
     assert output.input_data == energy_inp
     assert output.provenance.program == program
-    assert np.isclose(output.results.energy, -1.1167143325, atol=1e-6)
+    assert np.isclose(output.data.energy, -1.1167143325, atol=1e-6)
     assert np.allclose(
-        output.results.gradient,
+        output.data.gradient,
         np.array([[0.0, 0.0, -0.02845402], [0.0, 0.0, 0.02845402]]),
         atol=1e-6,
     )
@@ -74,11 +74,11 @@ def test_terachem_hessian():
     assert result.provenance.program == program
 
     # Energy assertion
-    assert np.isclose(result.results.energy, -76.3861099088, atol=1e-6)
+    assert np.isclose(result.data.energy, -76.3861099088, atol=1e-6)
 
     # Gradient assertion
     assert np.allclose(
-        result.results.gradient,
+        result.data.gradient,
         np.array(
             [
                 [-2.69528e-05, -3.88595e-05, 3.06421e-05],
@@ -91,7 +91,7 @@ def test_terachem_hessian():
 
     # Hessian assertion
     assert np.allclose(
-        result.results.hessian,
+        result.data.hessian,
         np.array(
             [
                 [

@@ -14,18 +14,18 @@ structure = Structure.open("path/to/my/mol.xyz")
 xyz_str = structure.to_xyz()  # type: ignore
 
 # Create a FileSpec object for TeraChem
-file_inp = FileSpec(
+spec = FileSpec(
     files={"tc.in": inp_file, "coords.xyz": xyz_str}, cmdline_args=["tc.in"]
 )
 
 # This will write the files to disk in a temporary directory and then run
 # "terachem tc.in" in that directory.
-output = compute("terachem", file_inp, print_logs=True)
+results = compute("terachem", spec, print_logs=True)
 
 # Data
-output.stdout
-output.input_data
-output.results.files  # Has all the files terachem creates
-output.results.files.keys()  # Print out file names
+results.logs
+results.input_data
+results.data.files  # Has all the files terachem creates
+results.data.files.keys()  # Print out file names
 # Saves all outputs with the exact structure produced by the QC program
-output.results.save_files("to/this/directory")
+results.data.save_files("to/this/directory")

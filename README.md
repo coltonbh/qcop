@@ -38,8 +38,8 @@ from qcop.exceptions import ExternalProgramError
 # Create the Structure
 h2o = Structure.open("h2o.xyz")
 
-# Define the program input
-calcspec = CalcSpec(
+# Define the calcspec
+spec = CalcSpec(
     structure=h2o,
     calctype="energy",
     model={"method": "hf", "basis": "sto-3g"},
@@ -48,7 +48,7 @@ calcspec = CalcSpec(
 
 # Run the calculation; will return Results or raise an exception
 try:
-    result = compute("terachem", calcspec, collect_files=True)
+    result = compute("terachem", spec, collect_files=True)
 except ExternalProgramError as e:
     # External QQ program failed in some way
     result = e.results
@@ -56,8 +56,8 @@ except ExternalProgramError as e:
     result.success # Will be False
     result.data # Any half-computed results before the failure
     result.traceback # Stack trace from the calculation
-    result.ptraceback # Shortcut to print out the traceback in human readable format
     result.logs # Logs from the calculation
+    result.ptraceback # Shortcut to print out the traceback in human readable format
     raise e
 else:
     # Calculation succeeded
@@ -66,7 +66,7 @@ else:
     result.data # All structured data and files from the calculation
     result.data.files # Any files returned by the calculation
     result.logs # Logs from the calculation
-    result.pstdout # Shortcut to print out the stdout in human readable format
+    result.plogs # Shortcut to print out the logs in human readable format
     result.provenance # Provenance information about the calculation
     result.extras # Any extra information not in the schema
 
@@ -81,16 +81,16 @@ from qcop.exceptions import ExternalProgramError
 # Create the Structure
 h2o = Structure.open("h2o.xyz")
 
-# Define the program input
-calcspec = CalcSpec(
+# Define the calcspec
+spec = CalcSpec(
     structure=h2o,
     calctype="energy",
     model={"method": "hf", "basis": "sto-3g"},
     keywords={"purify": "no", "restricted": False},
 )
 
-# Run the calculation; will return a Results objects
-result = compute("terachem", calcspec, collect_files=True, raise_exc=False)
+# Run the calculation; will return a Results object
+result = compute("terachem", spec, collect_files=True, raise_exc=False)
 if not result.success:
     # Same as except block above
 
@@ -119,7 +119,7 @@ result = compute_args(
 )
 ```
 
-The behavior of `compute()` and `compute_args()` can be tuned by passing in keyword arguments like `collect_files` shown above. Arguments can modify which scratch directory location to use, whether to delete or keep the scratch files after a calculation completes, what files to collect from a calculation, whether to print the program stdout in real time as the program executes, and whether to propagate a wavefunction through a series of calculations. Arguments also include hooks for passing in update functions that can be called as a program executes in real time. See the [compute method docstring](https://github.com/coltonbh/qcop/blob/83868df51d241ffae3497981dfc3c72235319c6e/qcop/adapters/base.py#L57-L123) for more details.
+The behavior of `compute()` and `compute_args()` can be tuned by passing in keyword arguments like `collect_files` shown above. Arguments can modify which scratch directory location to use, whether to delete or keep the scratch files after a calculation completes, what files to collect from a calculation, whether to stream the program logs in real time as the program executes, and whether to propagate a wavefunction through a series of calculations. Arguments also include hooks for passing in update functions that can be called as a program executes in real time. See the [compute method docstring](https://github.com/coltonbh/qcop/blob/83868df51d241ffae3497981dfc3c72235319c6e/qcop/adapters/base.py#L57-L123) for more details.
 
 See the [/examples](https://github.com/coltonbh/qcop/tree/master/examples) directory for more examples.
 
@@ -136,7 +136,7 @@ python -m pip install qcio[view]
 or if your shell requires `''` around arguments with brackets:
 
 ```sh
-pythom -m pip install 'qcio[view]'
+python -m pip install 'qcio[view]'
 ```
 
 Then in a Jupyter notebook import the `qcio` view module and call `view.view(...)` passing it one or any number of `qcio` objects you want to visualizing including `Structure` objects or any `Results` object. You may also pass an array of `titles` and/or `subtitles` to add additional information to the molecular structure display. If no titles are passed `qcio` with look for `Structure` identifiers such as a name or SMILES to label the `Structure`.

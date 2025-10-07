@@ -14,8 +14,8 @@ structure = Structure(
     ],
 )
 
-# Define the program input
-prog_input = CalcSpec(
+# Define the calcspec
+spec = CalcSpec(
     structure=structure,
     # Can be "energy", "gradient", "hessian"
     calctype="energy",  # type: ignore
@@ -25,24 +25,24 @@ prog_input = CalcSpec(
 
 # Run the calculation
 try:
-    # prog_output is instance of Results
-    prog_output = compute("terachem", prog_input, collect_files=True)
+    # results is instance of Results
+    results = compute("terachem", spec, collect_files=True)
 except exceptions.QCOPBaseError as e:
-    prog_output = e.results
-    print(prog_output.stdout)  # or output.pstdout for short
-    print(f"Success: {prog_output.success}")  # False
-    print(prog_output.input_data)  # Input data used to generate the calculation
-    print(prog_output.provenance)  # Provenance of generated calculation
-    print(prog_output.traceback)  # or output.ptraceback for short
+    results = e.results
+    print(results.logs)
+    print(f"Success: {results.success}")  # False
+    print(results.input_data)  # Input data used to generate the calculation
+    print(results.provenance)  # Provenance of generated calculation
+    print(results.traceback)  # or output.ptraceback for short
     raise
 
 else:
     # Check results
-    print(prog_output.stdout)  # or output.pstdout for short
-    print(f"Success: {prog_output.success}")  # True
-    print("output.results: ", prog_output.results)
-    print("output.results.energy:", prog_output.results.energy)
-    print("output.results.gradient:", prog_output.results.gradient)
-    print("output.results.hessian:", prog_output.results.hessian)
-    print(prog_output.input_data)  # Input data used to generate the calculation
-    print(prog_output.provenance)  # Provenance of generated calculation
+    print(results.logs)
+    print(f"Success: {results.success}")  # True
+    print("output.data: ", results.data)
+    print("output.data.energy:", results.data.energy)
+    print("output.data.gradient:", results.data.gradient)
+    print("output.data.hessian:", results.data.hessian)
+    print(results.input_data)  # Input data used to generate the calculation
+    print(results.provenance)  # Provenance of generated calculation

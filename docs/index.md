@@ -32,85 +32,91 @@ pip install qcop
 The `compute` function is the main entry point for the library and is used to run a calculation.
 
 ```python
-from qcio import Structure, ProgramInput
+from qcio import Structure, CalcSpec
 from qcop import compute
 from qcop.exceptions import ExternalProgramError
 # Create the Structure
 h2o = Structure.open("h2o.xyz")
 
-# Define the program input
-prog_input = ProgramInput(
+# Define the calcspec
+spec = CalcSpec(
     structure=h2o,
     calctype="energy",
     model={"method": "hf", "basis": "sto-3g"},
     keywords={"purify": "no", "restricted": False},
 )
 
-# Run the calculation; will return ProgramOutput or raise an exception
+# Run the calculation; will return Results or raise an exception
 try:
-    po = compute("terachem", prog_input, collect_files=True)
+    result = compute("terachem", spec, collect_files=True)
 except ExternalProgramError as e:
     # External QQ program failed in some way
-    po = e.program_output
-    po.input_data # Input data used by the QC program
-    po.success # Will be False
-    po.results # Any half-computed results before the failure
-    po.traceback # Stack trace from the calculation
-    po.ptraceback # Shortcut to print out the traceback in human readable format
-    po.stdout # Stdout log from the calculation
+    result = e.results
+    result.input_data # Input data used by the QC program
+    result.success # Will be False
+    result.data # Any half-computed results before the failure
+    result.traceback # Stack trace from the calculation
+    result.logs # Logs from the calculation
+    result.ptraceback # Shortcut to print out the traceback in human readable format
     raise e
 else:
     # Calculation succeeded
-    po.input_data # Input data used by the QC program
-    po.success # Will be True
-    po.results # All structured results from the calculation
-    po.stdout # Stdout log from the calculation
-    po.pstdout # Shortcut to print out the stdout in human readable format
-    po.files # Any files returned by the calculation
-    po.provenance # Provenance information about the calculation
-    po.extras # Any extra information not in the schema
+    result.input_data # Input data used by the QC program
+    result.success # Will be True
+    result.data # All structured data and files from the calculation
+    result.data.files # Any files returned by the calculation
+    result.logs # Logs from the calculation
+    result.plogs # Shortcut to print out the logs in human readable format
+    result.provenance # Provenance information about the calculation
+    result.extras # Any extra information not in the schema
 
 ```
 
-One may also call `compute(..., raise_exc=False)` to return a `ProgramOutput` object rather than raising an exception when a calculation fails. This may allow easier handling of failures in some cases.
+One may also call `compute(..., raise_exc=False)` to return a `Results` object rather than raising an exception when a calculation fails. This may allow easier handling of failures in some cases.
 
 ```python
-from qcio import Structure, ProgramInput
+from qcio import Structure, CalcSpec
 from qcop import compute
 from qcop.exceptions import ExternalProgramError
 # Create the Structure
 h2o = Structure.open("h2o.xyz")
 
-# Define the program input
-prog_input = ProgramInput(
+# Define the calcspec
+spec = CalcSpec(
     structure=h2o,
     calctype="energy",
     model={"method": "hf", "basis": "sto-3g"},
     keywords={"purify": "no", "restricted": False},
 )
 
-# Run the calculation; will return a ProgramOutput objects
-po = compute("terachem", prog_input, collect_files=True, raise_exc=False)
-if not po.success:
-    # External QQ program failed in some way
-    po.input_data # Input data used by the QC program
-    po.success # Will be False
-    po.results # Any half-computed results before the failure
-    po.traceback # Stack trace from the calculation
-    po.ptraceback # Shortcut to print out the traceback in human readable format
-    po.stdout # Stdout log from the calculation
+# Run the calculation; will return a Results object
+result = compute("terachem", spec, collect_files=True, raise_exc=False)
+if not result.success:
+    # Same as except block above
 
 else:
-    # Calculation succeeded
-    po.input_data # Input data used by the QC program
-    po.success # Will be True
-    po.results # All structured results from the calculation
-    po.stdout # Stdout log from the calculation
-    po.pstdout # Shortcut to print out the stdout in human readable format
-    po.files # Any files returned by the calculation
-    po.provenance # Provenance information about the calculation
-    po.extras # Any extra information not in the schema
+    # Same as else block above
 
+```
+
+Alternatively, the `compute_args` function can be used to run a calculation with the input data structures passed in as arguments rather than as a single `CalcSpec` object.
+
+```python
+from qcio import Structure
+from qcop import compute_args
+# Create the Structure
+h2o = Structure.open("h2o.xyz")
+
+# Run the calculation
+result = compute_args(
+    "terachem",
+    h2o,
+    calctype="energy",
+    model={"method": "hf", "basis": "sto-3g"},
+    keywords={"purify": "no", "restricted": False},
+    files={...},
+    collect_files=True
+)
 ```
 
 Alternatively, the `compute_args` function can be used to run a calculation with the input data structures passed in as arguments rather than as a single `ProgramInput` object.
@@ -122,7 +128,7 @@ from qcop import compute_args
 h2o = Structure.open("h2o.xyz")
 
 # Run the calculation
-output = compute_args(
+result = compute_args(
     "terachem",
     h2o,
     calctype="energy",

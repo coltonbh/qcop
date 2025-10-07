@@ -13,8 +13,8 @@ h2 = Structure(
     geometry=[[0, 0.0, 0.0], [0, 0, 1.4]],  # type: ignore
 )
 
-# Define the program input
-prog_inp = CompositeCalcSpec(
+# Define the calcspec
+spec = CompositeCalcSpec(
     calctype="optimization",  # type: ignore
     structure=h2,
     subprogram="terachem",
@@ -36,26 +36,26 @@ prog_inp = CompositeCalcSpec(
 
 # Run calculation
 try:
-    output = compute("geometric", prog_inp, propagate_wfn=True, rm_scratch_dir=False)
+    results = compute("geometric", spec, propagate_wfn=True, rm_scratch_dir=False)
 except exceptions.QCOPBaseError as e:
     # Calculation failed
-    output = e.results
-    print(output.logs)
+    results = e.results
+    print(results.logs)
     # Input data used to generate the calculation
-    print(output.input_data)
+    print(results.input_data)
     # Provenance of generated calculation
-    print(output.provenance)
-    print(output.traceback)
+    print(results.provenance)
+    print(results.traceback)
     raise
 
 else:
     # Check results
-    print("Energies:", output.data.energies)
-    print("Structures:", output.data.structures)
-    print("Trajectory:", output.data.trajectory)
+    print("Energies:", results.data.energies)
+    print("Structures:", results.data.structures)
+    print("Trajectory:", results.data.trajectory)
     # Stdout from the program
-    print(output.logs)
+    print(results.logs)
     # Input data used to generate the calculation
-    print(output.input_data)
+    print(results.input_data)
     # Provenance of generated calculation
-    print(output.provenance)
+    print(results.provenance)

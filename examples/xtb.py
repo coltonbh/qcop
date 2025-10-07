@@ -16,8 +16,8 @@ structure = Structure(
     ],
 )
 
-# Define the program input
-prog_input = CalcSpec(
+# Define the calcspec
+spec = CalcSpec(
     structure=structure,
     calctype=CalcType.energy,
     model={"method": "GFN2xTB"},  # type: ignore
@@ -25,5 +25,5 @@ prog_input = CalcSpec(
 )
 
 
-prog_output = compute("xtb", prog_input)
-print(prog_output)
+results = compute("xtb", spec)
+print(results)
