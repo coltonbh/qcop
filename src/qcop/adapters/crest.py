@@ -1,7 +1,8 @@
 """Adapter for CREST package. https://crest-lab.github.io/crest-docs/"""
 
+from collections.abc import Callable
 from pathlib import Path
-from typing import Callable, Optional, Union
+from typing import Union
 
 import qccodec
 from qccodec.parsers.crest import parse_version
@@ -57,7 +58,7 @@ class CRESTAdapter(
     """Supported calculation types."""
     program = "crest"
 
-    def program_version(self, stdout: Optional[str] = None) -> str:
+    def program_version(self, stdout: str | None = None) -> str:
         """Get the program version.
 
         Args:
@@ -73,12 +74,12 @@ class CRESTAdapter(
     def compute_data(
         self,
         input_data: CalcSpec,
-        update_func: Optional[Callable] = None,
-        update_interval: Optional[float] = None,
+        update_func: Callable | None = None,
+        update_interval: float | None = None,
         collect_rotamers: bool = False,
         **kwargs,
     ) -> tuple[
-        Union[SinglePointData, OptimizationResults, ConformerSearchResults], str
+        SinglePointData | OptimizationResults | ConformerSearchResults, str
     ]:
         """Execute CREST on the given input.
 

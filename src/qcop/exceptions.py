@@ -1,6 +1,5 @@
 """Experimental exception hierarchy. This may be too complex and unhelpful for now"""
 
-from typing import Optional
 
 from qcio import Data, Results
 
@@ -19,8 +18,8 @@ class QCOPBaseError(Exception):
     def __init__(
         self,
         message: str,
-        results: Optional[Results] = None,
-        data: Optional[Data] = None,
+        results: Results | None = None,
+        data: Data | None = None,
     ):
         # Pass everything as positional arguments so they are captured in .args
         # Required for pickling and other serialization methods including celery.
@@ -54,8 +53,8 @@ class AdapterNotFoundError(AdapterError):
     def __init__(
         self,
         program: str,
-        message: Optional[str] = None,
-        results: Optional[Results] = None,
+        message: str | None = None,
+        results: Results | None = None,
     ):
         if message is None:
             message = f"No adapter found for program '{program}'."
@@ -72,8 +71,8 @@ class AdapterInputError(AdapterError):
     def __init__(
         self,
         program: str,
-        message: Optional[str] = None,
-        results: Optional[Results] = None,
+        message: str | None = None,
+        results: Results | None = None,
     ):
         if message is None:
             message = f"Invalid inputs for program '{program}'."
@@ -98,11 +97,11 @@ class ExternalProgramError(QCOPBaseError):
     def __init__(
         self,
         program: str,
-        message: Optional[str] = None,
-        results: Optional[Results] = None,
-        data: Optional[Data] = None,
-        original_exception: Optional[Exception] = None,
-        logs: Optional[str] = None,
+        message: str | None = None,
+        results: Results | None = None,
+        data: Data | None = None,
+        original_exception: Exception | None = None,
+        logs: str | None = None,
     ):
         if message is None:
             message = f"External program '{program}' failed."
@@ -124,9 +123,9 @@ class ProgramNotFoundError(ExternalProgramError):
     def __init__(
         self,
         program: str,
-        message: Optional[str] = None,
-        results: Optional[Results] = None,
-        install_msg: Optional[str] = None,
+        message: str | None = None,
+        results: Results | None = None,
+        install_msg: str | None = None,
     ):
         if message is None:
             message = (

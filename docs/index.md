@@ -14,15 +14,16 @@ A package for operating Quantum Chemistry programs using [qcio](https://github.c
 
 - [qcconst](https://github.com/coltonbh/qcconst) - Physical constants, conversion factors, and a periodic table with clear source information for every value.
 - [qcio](https://github.com/coltonbh/qcio) - Elegant and intuitive data structures for quantum chemistry, featuring seamless Jupyter Notebook visualizations.
+- [qcinf](https://github.com/coltonbh/qcinf) - Cheminformatics algorithms and structure utilities using standardized [qcio](https://qcio.coltonhicks.com/) data structures.
 - [qccodec](https://github.com/coltonbh/qccodec) - A library for efficient parsing of quantum chemistry data into structured `qcio` objects.
 - [qcop](https://github.com/coltonbh/qcop) - A package for operating quantum chemistry programs using `qcio` standardized data structures. Compatible with `TeraChem`, `psi4`, `QChem`, `NWChem`, `ORCA`, `Molpro`, `geomeTRIC`, and many more, featuring seamless Jupyter Notebook visualizations.
-- [BigChem](https://github.com/mtzgroup/bigchem) - A distributed application for running quantum chemistry calculations at scale across clusters of computers or the cloud. Bring multi-node scaling to your favorite quantum chemistry program, featuring seamless Jupyter Notebook visualizations.
+- [BigChem](https://github.com/mtzgroup/bigchem) - A distributed application for running quantum chemistry calculations at scale across clusters of computers or the cloud. Bring multi-node scaling to your favorite quantum chemistry program, featuring seamless Jupyter Notebook visualizations of your data.
 - `ChemCloud` - A [web application](https://github.com/mtzgroup/chemcloud-server) and associated [Python client](https://github.com/mtzgroup/chemcloud-client) for exposing a BigChem cluster securely over the internet, featuring seamless Jupyter Notebook visualizations.
 
 ## Installation
 
 ```sh
-pip install qcop
+python -m pip install qcop
 ```
 
 ## Quickstart
@@ -119,27 +120,7 @@ result = compute_args(
 )
 ```
 
-Alternatively, the `compute_args` function can be used to run a calculation with the input data structures passed in as arguments rather than as a single `ProgramInput` object.
-
-```python
-from qcio import Structure
-from qcop import compute_args
-# Create the Structure
-h2o = Structure.open("h2o.xyz")
-
-# Run the calculation
-result = compute_args(
-    "terachem",
-    h2o,
-    calctype="energy",
-    model={"method": "hf", "basis": "sto-3g"},
-    keywords={"purify": "no", "restricted": False},
-    files={...},
-    collect_files=True
-)
-```
-
-The behavior of `compute()` and `compute_args()` can be tuned by passing in keyword arguments like `collect_files` shown above. Keywords can modify which scratch directory location to use, whether to delete or keep the scratch files after a calculation completes, what files to collect from a calculation, whether to print the program stdout in real time as the program executes, and whether to propagate a wavefunction through a series of calculations. Keywords also include hooks for passing in update functions that can be called as a program executes in real time. See the [compute method docstring](https://github.com/coltonbh/qcop/blob/83868df51d241ffae3497981dfc3c72235319c6e/qcop/adapters/base.py#L57-L123) for more details.
+The behavior of `compute()` and `compute_args()` can be tuned by passing in keyword arguments like `collect_files` shown above. Arguments can modify which scratch directory location to use, whether to delete or keep the scratch files after a calculation completes, what files to collect from a calculation, whether to stream the program logs in real time as the program executes, and whether to propagate a wavefunction through a series of calculations. Arguments also include hooks for passing in update functions that can be called as a program executes in real time. See the [compute method docstring](https://github.com/coltonbh/qcop/blob/83868df51d241ffae3497981dfc3c72235319c6e/qcop/adapters/base.py#L57-L123) for more details.
 
 See the [/examples](https://github.com/coltonbh/qcop/tree/master/examples) directory for more examples.
 
@@ -150,26 +131,26 @@ Visualize all your results with a single line of code!
 First install the visualization module:
 
 ```sh
-pip install qcio[view]
+python -m pip install qcio[view]
 ```
 
 or if your shell requires `''` around arguments with brackets:
 
 ```sh
-pip install 'qcio[view]'
+python -m pip install 'qcio[view]'
 ```
 
-Then in a Jupyter notebook import the `qcio` view module and call `view.view(...)` passing it one or any number of `qcio` objects you want to visualizing including `Structure` objects or any `ProgramOutput` object. You may also pass an array of `titles` and/or `subtitles` to add additional information to the molecular structure display. If no titles are passed `qcio` with look for `Structure` identifiers such as a name or SMILES to label the `Structure`.
+Then in a Jupyter notebook import the `qcio` view module and call `view.view(...)` passing it one or any number of `qcio` objects you want to visualizing including `Structure` objects or any `Results` object. You may also pass an array of `titles` and/or `subtitles` to add additional information to the molecular structure display. If no titles are passed `qcio` with look for `Structure` identifiers such as a name or SMILES to label the `Structure`.
 
 ![Structure Viewer](https://public.coltonhicks.com/assets/qcio/structure_viewer.png)
 
-Seamless visualizations for `ProgramOutput` objects make results analysis easy!
+Seamless visualizations for `Results` objects make results analysis easy!
 
-![Optimization Viewer](https://public.coltonhicks.com/assets/qcio/optimization_viewer.png)
+![Optimization Viewer](./docs/assets/optimization_viewer.png)
 
 Single point calculations display their results in a table.
 
-![Single Point Viewer](https://public.coltonhicks.com/assets/qcio/single_point_viewer.png)
+![Single Point Viewer](./docs/assets/single_point_viewer.png)
 
 If you want to use the HTML generated by the viewer to build your own dashboards use the functions inside of `qcio.view.py` that begin with the word `generate_` to create HTML you can insert into any dashboard.
 

@@ -1,4 +1,3 @@
-from typing import Optional
 
 import numpy as np
 import pytest
@@ -111,7 +110,7 @@ def test_adapter():
         ):
             return SinglePointData(energy=0.0), "Some stdout."
 
-        def program_version(self, stdout: Optional[str] = None) -> str:
+        def program_version(self, stdout: str | None = None) -> str:
             return "v1.0.0"
 
     return TestAdapter()

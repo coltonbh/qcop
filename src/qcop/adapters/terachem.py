@@ -1,5 +1,5 @@
+from collections.abc import Callable
 from pathlib import Path
-from typing import Callable, Optional, Union
 
 import qccodec
 from qccodec import exceptions as qccodec_exceptions
@@ -25,7 +25,7 @@ class TeraChemAdapter(ProgramAdapter[CalcSpec, SinglePointData]):
     """Supported calculation types."""
     program = "terachem"
 
-    def program_version(self, stdout: Optional[str] = None) -> str:
+    def program_version(self, stdout: str | None = None) -> str:
         """Get the program version.
 
         Args:
@@ -52,8 +52,8 @@ class TeraChemAdapter(ProgramAdapter[CalcSpec, SinglePointData]):
     def compute_data(
         self,
         input_data: CalcSpec,
-        update_func: Optional[Callable] = None,
-        update_interval: Optional[float] = None,
+        update_func: Callable | None = None,
+        update_interval: float | None = None,
         **kwargs,
     ) -> tuple[SinglePointData, str]:
         """Execute TeraChem on the given input.
@@ -110,7 +110,7 @@ class TeraChemAdapter(ProgramAdapter[CalcSpec, SinglePointData]):
             ) from e
         return results, stdout
 
-    def collect_wfn(self) -> dict[str, Union[str, bytes]]:
+    def collect_wfn(self) -> dict[str, str | bytes]:
         """Append wavefunction data to the output."""
 
         # Naming conventions from TeraChem uses xyz filename as scratch dir postfix
@@ -122,7 +122,7 @@ class TeraChemAdapter(ProgramAdapter[CalcSpec, SinglePointData]):
         if not any(wfn_path.exists() for wfn_path in wfn_paths):
             raise AdapterError(f"No wavefunction files found in {Path.cwd()}")
 
-        wfns: dict[str, Union[str, bytes]] = {}
+        wfns: dict[str, str | bytes] = {}
         for wfn_path in wfn_paths:
             if wfn_path.exists():
                 wfns[str(wfn_path)] = wfn_path.read_bytes()

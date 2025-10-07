@@ -1,7 +1,8 @@
 """Top level compute functions for qcop."""
 
 import traceback
-from typing import Any, Callable, Optional, Union
+from collections.abc import Callable
+from typing import Any
 from warnings import warn
 
 from qcio import (
@@ -25,13 +26,13 @@ def compute(
     program: str,
     input_data: SpecType,
     *,
-    scratch_dir: Optional[StrOrPath] = None,
+    scratch_dir: StrOrPath | None = None,
     rm_scratch_dir: bool = True,
     collect_logs: bool = True,
     collect_files: bool = False,
     collect_wfn: bool = False,
-    update_func: Optional[Callable] = None,
-    update_interval: Optional[float] = None,
+    update_func: Callable | None = None,
+    update_interval: float | None = None,
     print_logs: bool = False,
     raise_exc: bool = True,
     propagate_wfn: bool = False,
@@ -93,11 +94,11 @@ def compute_args(
     program: str,
     structure: Structure,
     *,
-    calctype: Union[str, CalcType],
-    model: Union[dict[str, str], Model],
-    keywords: Optional[dict[str, Any]] = None,
-    files: Optional[Union[dict[str, Union[str, bytes]], Files]] = None,
-    extras: Optional[dict[str, Any]] = None,
+    calctype: str | CalcType,
+    model: dict[str, str] | Model,
+    keywords: dict[str, Any] | None = None,
+    files: dict[str, str | bytes] | Files | None = None,
+    extras: dict[str, Any] | None = None,
     **kwargs,
 ) -> Results:
     """Compute function that accepts independent argument for a CalcSpec.

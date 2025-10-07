@@ -1,4 +1,4 @@
-from typing import Callable, Optional
+from collections.abc import Callable
 
 from qcio import Files, FileSpec
 
@@ -21,8 +21,8 @@ class FileAdapter(BaseAdapter[FileSpec, Files]):
     def compute_data(
         self,
         input_data: FileSpec,
-        update_func: Optional[Callable] = None,
-        update_interval: Optional[float] = None,
+        update_func: Callable | None = None,
+        update_interval: float | None = None,
         **kwargs,
     ) -> tuple[Files, str]:
         """Compute the given program on the given files.

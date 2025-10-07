@@ -1,6 +1,5 @@
 import shutil
 from functools import lru_cache
-from typing import Optional
 
 from qcio import FileSpec, Specs
 
@@ -74,7 +73,7 @@ def check_qcng_support(program: str) -> None:
 
 
 def get_adapter(
-    program: str, input_data: Optional[Specs] = None, qcng_fallback: bool = False
+    program: str, input_data: Specs | None = None, qcng_fallback: bool = False
 ) -> BaseAdapter:
     """Get the adapter for a program.
 

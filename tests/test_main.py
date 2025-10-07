@@ -2,8 +2,8 @@
 refactored the compute() method to be in the BaseAdapter class. This works for now.
 """
 
+from collections.abc import Callable
 from pathlib import Path
-from typing import Callable
 
 import pytest
 from qcio import CalcSpec, Files, FileSpec, Results

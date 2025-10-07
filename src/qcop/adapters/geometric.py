@@ -1,7 +1,7 @@
 """Adapter for geomeTRIC program."""
 
+from collections.abc import Callable
 from pathlib import Path
-from typing import Callable, Optional, Union
 
 import numpy as np
 from qcio import (
@@ -75,8 +75,8 @@ class GeometricAdapter(ProgramAdapter[CompositeCalcSpec, OptimizationData]):
     def compute_data(
         self,
         input_data: CompositeCalcSpec,
-        update_func: Optional[Callable] = None,
-        update_interval: Optional[float] = None,
+        update_func: Callable | None = None,
+        update_interval: float | None = None,
         propagate_wfn: bool = True,
         **kwargs,
     ) -> tuple[OptimizationData, str]:
@@ -160,8 +160,8 @@ class GeometricAdapter(ProgramAdapter[CompositeCalcSpec, OptimizationData]):
         internal_coords_sys,
         qcio_adapter,
         propagate_wfn: bool = False,
-        update_func: Optional[Callable] = None,
-        update_interval: Optional[float] = None,
+        update_func: Callable | None = None,
+        update_interval: float | None = None,
         **kwargs,
     ):
         """Construct the geomeTRIC optimizer object
@@ -256,8 +256,8 @@ class GeometricAdapter(ProgramAdapter[CompositeCalcSpec, OptimizationData]):
                 qcio_structure: Structure,
                 geometric_structure,
                 propagate_wfn: bool = False,
-                update_func: Optional[Callable] = None,
-                update_interval: Optional[float] = None,
+                update_func: Callable | None = None,
+                update_interval: float | None = None,
             ):
                 super().__init__(geometric_structure)
                 self.qcio_adapter = qcio_adapter
@@ -268,7 +268,7 @@ class GeometricAdapter(ProgramAdapter[CompositeCalcSpec, OptimizationData]):
                 self.update_func = update_func
                 self.update_interval = update_interval
 
-            def calc_new(self, coords, *args) -> dict[str, Union[float, np.ndarray]]:
+            def calc_new(self, coords, *args) -> dict[str, float | np.ndarray]:
                 """Calculate the energy and gradient for a given geometry.
 
                 Args:

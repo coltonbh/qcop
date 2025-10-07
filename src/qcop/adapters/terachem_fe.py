@@ -1,5 +1,5 @@
 import importlib
-from typing import Callable, Optional
+from collections.abc import Callable
 
 from qcio import CalcSpec, CalcType, SinglePointData
 
@@ -35,15 +35,15 @@ class TeraChemFEAdapter(ProgramAdapter[CalcSpec, SinglePointData]):
                 ),
             )
 
-    def program_version(self, stdout: Optional[str] = None) -> str:
+    def program_version(self, stdout: str | None = None) -> str:
         """Program version is not available via the PB server."""
         return ""
 
     def compute_data(
         self,
         input_data: CalcSpec,
-        update_func: Optional[Callable] = None,
-        update_interval: Optional[float] = None,
+        update_func: Callable | None = None,
+        update_interval: float | None = None,
         **kwargs,
     ) -> tuple[SinglePointData, str]:
         """Execute TeraChem on the given input.

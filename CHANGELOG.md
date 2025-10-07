@@ -9,15 +9,15 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 ### Changed
 
 - 🚨 Dropped python 3.9 support. Minimum supported version is 3.10. [#67](https://github.com/coltonbh/qcop/pull/67)
-- 🚨 Upgraded to latest `qcio` `v0.15.0` with new data structure nomenclature.
-- 🚨 Removed `poetry` in favor of `uv` for package management.
-- 🚨 Renamed `compute` kwarg `collect_stdout` -> `collect_logs`.
-- 🚨 Renamed `compute` kwarg `print_stdout` -> `print_logs`.
-- 🚨 `qcop` Exception classes updated to `.results` and `.data` nomenclature.
+- 🚨 Upgraded to latest `qcio` `v0.15.0` with new data structure nomenclature. [#67](https://github.com/coltonbh/qcop/pull/67)
+- 🚨 Removed `poetry` in favor of `uv` for package management. [#67](https://github.com/coltonbh/qcop/pull/67)
+- 🚨 Renamed `compute` kwarg `collect_stdout` -> `collect_logs`. [#67](https://github.com/coltonbh/qcop/pull/67)
+- 🚨 Renamed `compute` kwarg `print_stdout` -> `print_logs`. [#67](https://github.com/coltonbh/qcop/pull/67)
+- 🚨 `qcop` Exception classes updated to `.results` and `.data` nomenclature. [#67](https://github.com/coltonbh/qcop/pull/67)
 
 ### Removed
 
-- 🚨 Removed `xtb` support from the installation options as it is no longer supported and cannot install on python 3.12+.
+- 🚨 Removed `xtb` support from the installation options as it is no longer supported and cannot install on python 3.12+. [#67](https://github.com/coltonbh/qcop/pull/67)
 
 ## [0.10.2] - 2025-04-01
 

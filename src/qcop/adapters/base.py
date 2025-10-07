@@ -1,7 +1,8 @@
 import traceback
 from abc import ABC, abstractmethod
+from collections.abc import Callable
 from time import time
-from typing import Any, Callable, Generic, Optional, Union
+from typing import Any, Generic
 
 from qcio import (
     CalcType,
@@ -40,7 +41,7 @@ class BaseAdapter(ABC, Generic[SpecType, DataType]):
     uses_files = True
     program: str  # All subclasses must define this attribute.
 
-    def program_version(self, stdout: Optional[str]) -> Optional[str]:
+    def program_version(self, stdout: str | None) -> str | None:
         """Return program version. Adapters should override this method.
 
         Args:
@@ -63,8 +64,8 @@ class BaseAdapter(ABC, Generic[SpecType, DataType]):
     def compute_data(
         self,
         input_data: SpecType,
-        update_func: Optional[Callable] = None,
-        update_interval: Optional[float] = None,
+        update_func: Callable | None = None,
+        update_interval: float | None = None,
         **kwargs,
     ) -> tuple[DataType, str]:
         """Subclasses should implement this method with custom compute logic."""
@@ -74,13 +75,13 @@ class BaseAdapter(ABC, Generic[SpecType, DataType]):
         self,
         input_data: SpecType,
         *,
-        scratch_dir: Optional[StrOrPath] = None,
+        scratch_dir: StrOrPath | None = None,
         rm_scratch_dir: bool = True,
         collect_logs: bool = True,
         collect_files: bool = False,
         collect_wfn: bool = False,
-        update_func: Optional[Callable] = None,
-        update_interval: Optional[float] = None,
+        update_func: Callable | None = None,
+        update_interval: float | None = None,
         print_logs: bool = False,
         raise_exc: bool = True,
         propagate_wfn: bool = False,
@@ -146,10 +147,10 @@ class BaseAdapter(ABC, Generic[SpecType, DataType]):
 
             # Define outputs
             output_dict: dict[str, Any] = {}
-            logs: Optional[str] = None
+            logs: str | None = None
             data: Data
-            exc: Optional[QCOPBaseError] = None
-            program_version: Optional[str] = None
+            exc: QCOPBaseError | None = None
+            program_version: str | None = None
 
             start = time()
             try:
@@ -233,7 +234,7 @@ class BaseAdapter(ABC, Generic[SpecType, DataType]):
 
         return results
 
-    def collect_wfn(self) -> dict[str, Union[str, bytes]]:
+    def collect_wfn(self) -> dict[str, str | bytes]:
         """Collect the wavefunction file(s) from the scratch_dir.
 
         Returns:
@@ -274,7 +275,7 @@ class ProgramAdapter(BaseAdapter, Generic[SpecType, DataType]):
             )
 
     @abstractmethod
-    def program_version(self, stdout: Optional[str]) -> str:
+    def program_version(self, stdout: str | None) -> str:
         """Get the version of the program.
 
         Args:
@@ -289,8 +290,8 @@ class ProgramAdapter(BaseAdapter, Generic[SpecType, DataType]):
     def compute_data(
         self,
         input_data: SpecType,
-        update_func: Optional[Callable] = None,
-        update_interval: Optional[float] = None,
+        update_func: Callable | None = None,
+        update_interval: float | None = None,
         **kwargs,
     ) -> tuple[DataType, str]:
         """All ProgramAdapters must return a DataType."""
