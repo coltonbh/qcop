@@ -113,7 +113,7 @@ class CRESTAdapter(
             raise ExternalProgramError(
                 program=self.program,
                 message=f"CREST calculation failed. See the stdout for more information.",
-                stdout=stdout,
+                logs=stdout,
             )
 
         # Parse the output
@@ -129,7 +129,7 @@ class CRESTAdapter(
             raise ExternalProgramError(
                 program="qccodec",
                 message="Failed to parse CREST output.",
-                stdout=stdout,
+                logs=stdout,
                 original_exception=e,
             ) from e
 

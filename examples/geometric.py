@@ -18,7 +18,7 @@ prog_inp = CompositeCalcSpec(
     calctype="optimization",  # type: ignore
     structure=h2,
     subprogram="terachem",
-    subprogram_args={  # type: ignore
+    subprogram_spec={  # type: ignore
         "model": {"method": "HF", "basis": "6-31g"},
         "keywords": {"purify": "no"},
     },
@@ -40,7 +40,7 @@ try:
 except exceptions.QCOPBaseError as e:
     # Calculation failed
     output = e.program_output
-    print(output.stdout)  # or output.pstdout for short
+    print(output.logs)
     # Input data used to generate the calculation
     print(output.input_data)
     # Provenance of generated calculation
@@ -50,11 +50,11 @@ except exceptions.QCOPBaseError as e:
 
 else:
     # Check results
-    print("Energies:", output.results.energies)
-    print("Structures:", output.results.structures)
-    print("Trajectory:", output.results.trajectory)
+    print("Energies:", output.data.energies)
+    print("Structures:", output.data.structures)
+    print("Trajectory:", output.data.trajectory)
     # Stdout from the program
-    print(output.stdout)  # or output.pstdout for short
+    print(output.logs)
     # Input data used to generate the calculation
     print(output.input_data)
     # Provenance of generated calculation

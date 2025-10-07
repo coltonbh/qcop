@@ -68,7 +68,7 @@ def ccalcspec(hydrogen):
             calctype=calctype,
             structure=hydrogen,
             subprogram="test",
-            subprogram_args=CoreSpec(
+            subprogram_spec=CoreSpec(
                 model={"method": "hf", "basis": "sto-3g"},
             ),
         )
@@ -88,7 +88,7 @@ def results(calcspec):
     return Results[CalcSpec, SinglePointData](
         input_data=sp_inp_energy,
         success=True,
-        stdout="program standard out...",
+        logs="program standard out...",
         data={
             "energy": energy,
             "gradient": gradient,

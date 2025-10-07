@@ -19,7 +19,7 @@ def test_file_adapter_works_inside_top_level_compute_function():
     file_inp.files["hello_world.py"] = "print('hello world')"
     result = compute("python", file_inp)
     isinstance(result, Results)
-    assert result.stdout == "hello world\n"
+    assert result.logs == "hello world\n"
 
 
 def test_compute_raises_adapter_not_found_error(calcspec):

@@ -87,7 +87,7 @@ def test_results_added_to_program_output_object_if_exception_contains_them(
 
     def raise_error(*args, **kwargs):
         raise ExternalProgramError(
-            program="terachem", stdout="some stdout", results=results.data
+            program="terachem", logs="some stdout", results=results.data
         )
 
     mocker.patch.object(
@@ -105,7 +105,7 @@ def test_results_added_to_program_output_object_if_exception_contains_them(
     # If no raise_exc=False, the results are added to the Results
     prog_failure = test_adapter.compute(energy_input, raise_exc=False)
     assert isinstance(prog_failure, Results)
-    assert prog_failure.results == results.data
+    assert prog_failure.data == results.data
 
 
 def test_program_output_object_added_to_exception(
@@ -117,7 +117,7 @@ def test_program_output_object_added_to_exception(
     def raise_error(*args, **kwargs):
         raise ExternalProgramError(
             program="terachem",
-            stdout="some stdout",
+            logs="some stdout",
             results=results.data,
         )
 
@@ -147,7 +147,7 @@ def test_stdout_collected_with_failed_execution(
     def raise_error(*args, **kwargs):
         raise ExternalProgramError(
             program="terachem",
-            stdout="some stdout",
+            logs="some stdout",
             results=results.data,
         )
 
@@ -163,9 +163,9 @@ def test_stdout_collected_with_failed_execution(
         test_adapter.compute(energy_input, raise_exc=True)
 
     # Added to exception
-    assert excinfo.value.stdout == "some stdout"
+    assert excinfo.value.logs == "some stdout"
     # Added to Results
-    assert excinfo.value.program_output.stdout == "some stdout"
+    assert excinfo.value.program_output.logs == "some stdout"
     # Added to exception
     assert excinfo.value.results == results.data
 

@@ -108,7 +108,7 @@ def execute_subprocess(
         raise ExternalProgramError(
             program=program,
             message=f"External program failed with return code {proc.returncode}. Command: '{cmd}'",
-            stdout=stdout,
+            logs=stdout,
         )
 
     return stdout

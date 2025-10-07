@@ -181,7 +181,7 @@ class GeometricAdapter(ProgramAdapter[CompositeCalcSpec, OptimizationData]):
             internal_coords_sys,
             engine=self._geometric_engine()(
                 qcio_adapter,
-                input_data.subprogram_args,
+                input_data.subprogram_spec,
                 input_data.structure,
                 geometric_molecule,
                 propagate_wfn,

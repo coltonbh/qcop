@@ -63,9 +63,9 @@ class TeraChemFEAdapter(ProgramAdapter[CalcSpec, SinglePointData]):
         except self.tcpb.exceptions.TCPBError as e:
             exc = ExternalProgramError(
                 program=self.program,
-                # Pass stdout to .compute() via the exception
+                # Pass logs to .compute() via the exception
                 # Will only exist for TeraChemFrontendAdapter
-                stdout=e.program_output.stdout,
+                logs=e.program_output.logs,
             )
 
             raise exc
@@ -73,6 +73,6 @@ class TeraChemFEAdapter(ProgramAdapter[CalcSpec, SinglePointData]):
         else:
             # Write files to disk to be collected by BaseAdapter.compute()
             # Used only for TeraChemFrontendAdapter
-            prog_output.results.save_files()
+            prog_output.data.save_files()
 
-        return prog_output.results, prog_output.stdout
+        return prog_output.data, prog_output.logs
