@@ -952,106 +952,93 @@
 <a href="https://pypi.python.org/pypi/qcop"><img alt="image" src="https://img.shields.io/pypi/l/qcop.svg" /></a>
 <a href="https://pypi.python.org/pypi/qcop"><img alt="image" src="https://img.shields.io/pypi/pyversions/qcop.svg" /></a>
 <a href="https://github.com/coltonbh/qcop/actions"><img alt="Actions status" src="https://github.com/coltonbh/qcop/workflows/Tests/badge.svg" /></a>
-<a href="https://github.com/coltonbh/qcop/actions"><img alt="Actions status" src="https://github.com/coltonbh/qcop/workflows/Basic%20Code%20Quality/badge.svg" /></a>
-<a href="https://github.com/charliermarsh/ruff"><img alt="Ruff" src="https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/charliermarsh/ruff/main/assets/badge/v1.json" /></a></p>
+<a href="https://github.com/coltonbh/qcop/actions"><img alt="Actions status" src="https://github.com/coltonbh/qcop/workflows/Basic%20Code%20Quality/badge.svg" /></a></p>
 <p><code>qcop</code> works in harmony with a suite of other quantum chemistry tools for fast, structured, and interoperable quantum chemistry.</p>
 <h2 id="the-qc-suite-of-programs">The QC Suite of Programs<a class="headerlink" href="#the-qc-suite-of-programs" title="Permanent link">&para;</a></h2>
 <ul>
+<li><a href="https://github.com/coltonbh/qcconst">qcconst</a> - Physical constants, conversion factors, and a periodic table with clear source information for every value.</li>
 <li><a href="https://github.com/coltonbh/qcio">qcio</a> - Elegant and intuitive data structures for quantum chemistry, featuring seamless Jupyter Notebook visualizations.</li>
-<li><a href="https://github.com/coltonbh/qcparse">qcparse</a> - A library for efficient parsing of quantum chemistry data into structured <code>qcio</code> objects.</li>
+<li><a href="https://github.com/coltonbh/qcinf">qcinf</a> - Cheminformatics algorithms and structure utilities using standardized <a href="https://qcio.coltonhicks.com/">qcio</a> data structures.</li>
+<li><a href="https://github.com/coltonbh/qccodec">qccodec</a> - A library for efficient parsing of quantum chemistry data into structured <code>qcio</code> objects.</li>
 <li><a href="https://github.com/coltonbh/qcop">qcop</a> - A package for operating quantum chemistry programs using <code>qcio</code> standardized data structures. Compatible with <code>TeraChem</code>, <code>psi4</code>, <code>QChem</code>, <code>NWChem</code>, <code>ORCA</code>, <code>Molpro</code>, <code>geomeTRIC</code>, and many more, featuring seamless Jupyter Notebook visualizations.</li>
-<li><a href="https://github.com/mtzgroup/bigchem">BigChem</a> - A distributed application for running quantum chemistry calculations at scale across clusters of computers or the cloud. Bring multi-node scaling to your favorite quantum chemistry program, featuring seamless Jupyter Notebook visualizations.</li>
+<li><a href="https://github.com/mtzgroup/bigchem">BigChem</a> - A distributed application for running quantum chemistry calculations at scale across clusters of computers or the cloud. Bring multi-node scaling to your favorite quantum chemistry program, featuring seamless Jupyter Notebook visualizations of your data.</li>
 <li><code>ChemCloud</code> - A <a href="https://github.com/mtzgroup/chemcloud-server">web application</a> and associated <a href="https://github.com/mtzgroup/chemcloud-client">Python client</a> for exposing a BigChem cluster securely over the internet, featuring seamless Jupyter Notebook visualizations.</li>
 </ul>
 <h2 id="installation">Installation<a class="headerlink" href="#installation" title="Permanent link">&para;</a></h2>
-<div class="language-sh highlight"><pre><span></span><code>pip<span class="w"> </span>install<span class="w"> </span>qcop
+<div class="language-sh highlight"><pre><span></span><code>python<span class="w"> </span>-m<span class="w"> </span>pip<span class="w"> </span>install<span class="w"> </span>qcop
 </code></pre></div>
 <h2 id="quickstart">Quickstart<a class="headerlink" href="#quickstart" title="Permanent link">&para;</a></h2>
 <p><code>qcop</code> uses the <code>qcio</code> data structures to drive quantum chemistry programs in a standardized way. This allows for a simple and consistent interface to a wide variety of quantum chemistry programs. See the <a href="https://github.com/coltonbh/qcio">qcio</a> library for documentation on the input and output data structures.</p>
 <p>The <code>compute</code> function is the main entry point for the library and is used to run a calculation.</p>
-<div class="language-python highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">qcio</span><span class="w"> </span><span class="kn">import</span> <span class="n">Structure</span><span class="p">,</span> <span class="n">ProgramInput</span>
+<div class="language-python highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">qcio</span><span class="w"> </span><span class="kn">import</span> <span class="n">Structure</span><span class="p">,</span> <span class="n">CalcSpec</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">qcop</span><span class="w"> </span><span class="kn">import</span> <span class="n">compute</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">qcop.exceptions</span><span class="w"> </span><span class="kn">import</span> <span class="n">ExternalProgramError</span>
 <span class="c1"># Create the Structure</span>
 <span class="n">h2o</span> <span class="o">=</span> <span class="n">Structure</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="s2">&quot;h2o.xyz&quot;</span><span class="p">)</span>
 
-<span class="c1"># Define the program input</span>
-<span class="n">prog_input</span> <span class="o">=</span> <span class="n">ProgramInput</span><span class="p">(</span>
+<span class="c1"># Define the calcspec</span>
+<span class="n">spec</span> <span class="o">=</span> <span class="n">CalcSpec</span><span class="p">(</span>
     <span class="n">structure</span><span class="o">=</span><span class="n">h2o</span><span class="p">,</span>
     <span class="n">calctype</span><span class="o">=</span><span class="s2">&quot;energy&quot;</span><span class="p">,</span>
     <span class="n">model</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;method&quot;</span><span class="p">:</span> <span class="s2">&quot;hf&quot;</span><span class="p">,</span> <span class="s2">&quot;basis&quot;</span><span class="p">:</span> <span class="s2">&quot;sto-3g&quot;</span><span class="p">},</span>
     <span class="n">keywords</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;purify&quot;</span><span class="p">:</span> <span class="s2">&quot;no&quot;</span><span class="p">,</span> <span class="s2">&quot;restricted&quot;</span><span class="p">:</span> <span class="kc">False</span><span class="p">},</span>
 <span class="p">)</span>
 
-<span class="c1"># Run the calculation; will return ProgramOutput or raise an exception</span>
+<span class="c1"># Run the calculation; will return Results or raise an exception</span>
 <span class="k">try</span><span class="p">:</span>
-    <span class="n">po</span> <span class="o">=</span> <span class="n">compute</span><span class="p">(</span><span class="s2">&quot;terachem&quot;</span><span class="p">,</span> <span class="n">prog_input</span><span class="p">,</span> <span class="n">collect_files</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">result</span> <span class="o">=</span> <span class="n">compute</span><span class="p">(</span><span class="s2">&quot;terachem&quot;</span><span class="p">,</span> <span class="n">spec</span><span class="p">,</span> <span class="n">collect_files</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 <span class="k">except</span> <span class="n">ExternalProgramError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
     <span class="c1"># External QQ program failed in some way</span>
-    <span class="n">po</span> <span class="o">=</span> <span class="n">e</span><span class="o">.</span><span class="n">program_output</span>
-    <span class="n">po</span><span class="o">.</span><span class="n">input_data</span> <span class="c1"># Input data used by the QC program</span>
-    <span class="n">po</span><span class="o">.</span><span class="n">success</span> <span class="c1"># Will be False</span>
-    <span class="n">po</span><span class="o">.</span><span class="n">results</span> <span class="c1"># Any half-computed results before the failure</span>
-    <span class="n">po</span><span class="o">.</span><span class="n">traceback</span> <span class="c1"># Stack trace from the calculation</span>
-    <span class="n">po</span><span class="o">.</span><span class="n">ptraceback</span> <span class="c1"># Shortcut to print out the traceback in human readable format</span>
-    <span class="n">po</span><span class="o">.</span><span class="n">stdout</span> <span class="c1"># Stdout log from the calculation</span>
+    <span class="n">result</span> <span class="o">=</span> <span class="n">e</span><span class="o">.</span><span class="n">results</span>
+    <span class="n">result</span><span class="o">.</span><span class="n">input_data</span> <span class="c1"># Input data used by the QC program</span>
+    <span class="n">result</span><span class="o">.</span><span class="n">success</span> <span class="c1"># Will be False</span>
+    <span class="n">result</span><span class="o">.</span><span class="n">data</span> <span class="c1"># Any half-computed results before the failure</span>
+    <span class="n">result</span><span class="o">.</span><span class="n">traceback</span> <span class="c1"># Stack trace from the calculation</span>
+    <span class="n">result</span><span class="o">.</span><span class="n">logs</span> <span class="c1"># Logs from the calculation</span>
+    <span class="n">result</span><span class="o">.</span><span class="n">ptraceback</span> <span class="c1"># Shortcut to print out the traceback in human readable format</span>
     <span class="k">raise</span> <span class="n">e</span>
 <span class="k">else</span><span class="p">:</span>
     <span class="c1"># Calculation succeeded</span>
-    <span class="n">po</span><span class="o">.</span><span class="n">input_data</span> <span class="c1"># Input data used by the QC program</span>
-    <span class="n">po</span><span class="o">.</span><span class="n">success</span> <span class="c1"># Will be True</span>
-    <span class="n">po</span><span class="o">.</span><span class="n">results</span> <span class="c1"># All structured results from the calculation</span>
-    <span class="n">po</span><span class="o">.</span><span class="n">stdout</span> <span class="c1"># Stdout log from the calculation</span>
-    <span class="n">po</span><span class="o">.</span><span class="n">pstdout</span> <span class="c1"># Shortcut to print out the stdout in human readable format</span>
-    <span class="n">po</span><span class="o">.</span><span class="n">files</span> <span class="c1"># Any files returned by the calculation</span>
-    <span class="n">po</span><span class="o">.</span><span class="n">provenance</span> <span class="c1"># Provenance information about the calculation</span>
-    <span class="n">po</span><span class="o">.</span><span class="n">extras</span> <span class="c1"># Any extra information not in the schema</span>
+    <span class="n">result</span><span class="o">.</span><span class="n">input_data</span> <span class="c1"># Input data used by the QC program</span>
+    <span class="n">result</span><span class="o">.</span><span class="n">success</span> <span class="c1"># Will be True</span>
+    <span class="n">result</span><span class="o">.</span><span class="n">data</span> <span class="c1"># All structured data and files from the calculation</span>
+    <span class="n">result</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">files</span> <span class="c1"># Any files returned by the calculation</span>
+    <span class="n">result</span><span class="o">.</span><span class="n">logs</span> <span class="c1"># Logs from the calculation</span>
+    <span class="n">result</span><span class="o">.</span><span class="n">plogs</span> <span class="c1"># Shortcut to print out the logs in human readable format</span>
+    <span class="n">result</span><span class="o">.</span><span class="n">provenance</span> <span class="c1"># Provenance information about the calculation</span>
+    <span class="n">result</span><span class="o">.</span><span class="n">extras</span> <span class="c1"># Any extra information not in the schema</span>
 </code></pre></div>
-<p>One may also call <code>compute(..., raise_exc=False)</code> to return a <code>ProgramOutput</code> object rather than raising an exception when a calculation fails. This may allow easier handling of failures in some cases.</p>
-<div class="language-python highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">qcio</span><span class="w"> </span><span class="kn">import</span> <span class="n">Structure</span><span class="p">,</span> <span class="n">ProgramInput</span>
+<p>One may also call <code>compute(..., raise_exc=False)</code> to return a <code>Results</code> object rather than raising an exception when a calculation fails. This may allow easier handling of failures in some cases.</p>
+<div class="language-python highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">qcio</span><span class="w"> </span><span class="kn">import</span> <span class="n">Structure</span><span class="p">,</span> <span class="n">CalcSpec</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">qcop</span><span class="w"> </span><span class="kn">import</span> <span class="n">compute</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">qcop.exceptions</span><span class="w"> </span><span class="kn">import</span> <span class="n">ExternalProgramError</span>
 <span class="c1"># Create the Structure</span>
 <span class="n">h2o</span> <span class="o">=</span> <span class="n">Structure</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="s2">&quot;h2o.xyz&quot;</span><span class="p">)</span>
 
-<span class="c1"># Define the program input</span>
-<span class="n">prog_input</span> <span class="o">=</span> <span class="n">ProgramInput</span><span class="p">(</span>
+<span class="c1"># Define the calcspec</span>
+<span class="n">spec</span> <span class="o">=</span> <span class="n">CalcSpec</span><span class="p">(</span>
     <span class="n">structure</span><span class="o">=</span><span class="n">h2o</span><span class="p">,</span>
     <span class="n">calctype</span><span class="o">=</span><span class="s2">&quot;energy&quot;</span><span class="p">,</span>
     <span class="n">model</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;method&quot;</span><span class="p">:</span> <span class="s2">&quot;hf&quot;</span><span class="p">,</span> <span class="s2">&quot;basis&quot;</span><span class="p">:</span> <span class="s2">&quot;sto-3g&quot;</span><span class="p">},</span>
     <span class="n">keywords</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;purify&quot;</span><span class="p">:</span> <span class="s2">&quot;no&quot;</span><span class="p">,</span> <span class="s2">&quot;restricted&quot;</span><span class="p">:</span> <span class="kc">False</span><span class="p">},</span>
 <span class="p">)</span>
 
-<span class="c1"># Run the calculation; will return a ProgramOutput objects</span>
-<span class="n">po</span> <span class="o">=</span> <span class="n">compute</span><span class="p">(</span><span class="s2">&quot;terachem&quot;</span><span class="p">,</span> <span class="n">prog_input</span><span class="p">,</span> <span class="n">collect_files</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">raise_exc</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
-<span class="k">if</span> <span class="ow">not</span> <span class="n">po</span><span class="o">.</span><span class="n">success</span><span class="p">:</span>
-    <span class="c1"># External QQ program failed in some way</span>
-    <span class="n">po</span><span class="o">.</span><span class="n">input_data</span> <span class="c1"># Input data used by the QC program</span>
-    <span class="n">po</span><span class="o">.</span><span class="n">success</span> <span class="c1"># Will be False</span>
-    <span class="n">po</span><span class="o">.</span><span class="n">results</span> <span class="c1"># Any half-computed results before the failure</span>
-    <span class="n">po</span><span class="o">.</span><span class="n">traceback</span> <span class="c1"># Stack trace from the calculation</span>
-    <span class="n">po</span><span class="o">.</span><span class="n">ptraceback</span> <span class="c1"># Shortcut to print out the traceback in human readable format</span>
-    <span class="n">po</span><span class="o">.</span><span class="n">stdout</span> <span class="c1"># Stdout log from the calculation</span>
+<span class="c1"># Run the calculation; will return a Results object</span>
+<span class="n">result</span> <span class="o">=</span> <span class="n">compute</span><span class="p">(</span><span class="s2">&quot;terachem&quot;</span><span class="p">,</span> <span class="n">spec</span><span class="p">,</span> <span class="n">collect_files</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">raise_exc</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<span class="k">if</span> <span class="ow">not</span> <span class="n">result</span><span class="o">.</span><span class="n">success</span><span class="p">:</span>
+    <span class="c1"># Same as except block above</span>
 
 <span class="k">else</span><span class="p">:</span>
-    <span class="c1"># Calculation succeeded</span>
-    <span class="n">po</span><span class="o">.</span><span class="n">input_data</span> <span class="c1"># Input data used by the QC program</span>
-    <span class="n">po</span><span class="o">.</span><span class="n">success</span> <span class="c1"># Will be True</span>
-    <span class="n">po</span><span class="o">.</span><span class="n">results</span> <span class="c1"># All structured results from the calculation</span>
-    <span class="n">po</span><span class="o">.</span><span class="n">stdout</span> <span class="c1"># Stdout log from the calculation</span>
-    <span class="n">po</span><span class="o">.</span><span class="n">pstdout</span> <span class="c1"># Shortcut to print out the stdout in human readable format</span>
-    <span class="n">po</span><span class="o">.</span><span class="n">files</span> <span class="c1"># Any files returned by the calculation</span>
-    <span class="n">po</span><span class="o">.</span><span class="n">provenance</span> <span class="c1"># Provenance information about the calculation</span>
-    <span class="n">po</span><span class="o">.</span><span class="n">extras</span> <span class="c1"># Any extra information not in the schema</span>
+    <span class="c1"># Same as else block above</span>
 </code></pre></div>
-<p>Alternatively, the <code>compute_args</code> function can be used to run a calculation with the input data structures passed in as arguments rather than as a single <code>ProgramInput</code> object.</p>
+<p>Alternatively, the <code>compute_args</code> function can be used to run a calculation with the input data structures passed in as arguments rather than as a single <code>CalcSpec</code> object.</p>
 <div class="language-python highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">qcio</span><span class="w"> </span><span class="kn">import</span> <span class="n">Structure</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">qcop</span><span class="w"> </span><span class="kn">import</span> <span class="n">compute_args</span>
 <span class="c1"># Create the Structure</span>
 <span class="n">h2o</span> <span class="o">=</span> <span class="n">Structure</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="s2">&quot;h2o.xyz&quot;</span><span class="p">)</span>
 
 <span class="c1"># Run the calculation</span>
-<span class="n">output</span> <span class="o">=</span> <span class="n">compute_args</span><span class="p">(</span>
+<span class="n">result</span> <span class="o">=</span> <span class="n">compute_args</span><span class="p">(</span>
     <span class="s2">&quot;terachem&quot;</span><span class="p">,</span>
     <span class="n">h2o</span><span class="p">,</span>
     <span class="n">calctype</span><span class="o">=</span><span class="s2">&quot;energy&quot;</span><span class="p">,</span>
@@ -1061,22 +1048,22 @@
     <span class="n">collect_files</span><span class="o">=</span><span class="kc">True</span>
 <span class="p">)</span>
 </code></pre></div>
-<p>The behavior of <code>compute()</code> and <code>compute_args()</code> can be tuned by passing in keyword arguments like <code>collect_files</code> shown above. Keywords can modify which scratch directory location to use, whether to delete or keep the scratch files after a calculation completes, what files to collect from a calculation, whether to print the program stdout in real time as the program executes, and whether to propagate a wavefunction through a series of calculations. Keywords also include hooks for passing in update functions that can be called as a program executes in real time. See the <a href="https://github.com/coltonbh/qcop/blob/83868df51d241ffae3497981dfc3c72235319c6e/qcop/adapters/base.py#L57-L123">compute method docstring</a> for more details.</p>
+<p>The behavior of <code>compute()</code> and <code>compute_args()</code> can be tuned by passing in keyword arguments like <code>collect_files</code> shown above. Arguments can modify which scratch directory location to use, whether to delete or keep the scratch files after a calculation completes, what files to collect from a calculation, whether to stream the program logs in real time as the program executes, and whether to propagate a wavefunction through a series of calculations. Arguments also include hooks for passing in update functions that can be called as a program executes in real time. See the <a href="https://github.com/coltonbh/qcop/blob/83868df51d241ffae3497981dfc3c72235319c6e/qcop/adapters/base.py#L57-L123">compute method docstring</a> for more details.</p>
 <p>See the <a href="https://github.com/coltonbh/qcop/tree/master/examples">/examples</a> directory for more examples.</p>
 <h2 id="visualization">✨ Visualization ✨<a class="headerlink" href="#visualization" title="Permanent link">&para;</a></h2>
 <p>Visualize all your results with a single line of code!</p>
 <p>First install the visualization module:</p>
-<div class="language-sh highlight"><pre><span></span><code>pip<span class="w"> </span>install<span class="w"> </span>qcio<span class="o">[</span>view<span class="o">]</span>
+<div class="language-sh highlight"><pre><span></span><code>python<span class="w"> </span>-m<span class="w"> </span>pip<span class="w"> </span>install<span class="w"> </span>qcio<span class="o">[</span>view<span class="o">]</span>
 </code></pre></div>
 <p>or if your shell requires <code>''</code> around arguments with brackets:</p>
-<div class="language-sh highlight"><pre><span></span><code>pip<span class="w"> </span>install<span class="w"> </span><span class="s1">&#39;qcio[view]&#39;</span>
+<div class="language-sh highlight"><pre><span></span><code>python<span class="w"> </span>-m<span class="w"> </span>pip<span class="w"> </span>install<span class="w"> </span><span class="s1">&#39;qcio[view]&#39;</span>
 </code></pre></div>
-<p>Then in a Jupyter notebook import the <code>qcio</code> view module and call <code>view.view(...)</code> passing it one or any number of <code>qcio</code> objects you want to visualizing including <code>Structure</code> objects or any <code>ProgramOutput</code> object. You may also pass an array of <code>titles</code> and/or <code>subtitles</code> to add additional information to the molecular structure display. If no titles are passed <code>qcio</code> with look for <code>Structure</code> identifiers such as a name or SMILES to label the <code>Structure</code>.</p>
+<p>Then in a Jupyter notebook import the <code>qcio</code> view module and call <code>view.view(...)</code> passing it one or any number of <code>qcio</code> objects you want to visualizing including <code>Structure</code> objects or any <code>Results</code> object. You may also pass an array of <code>titles</code> and/or <code>subtitles</code> to add additional information to the molecular structure display. If no titles are passed <code>qcio</code> with look for <code>Structure</code> identifiers such as a name or SMILES to label the <code>Structure</code>.</p>
 <p><img alt="Structure Viewer" src="https://public.coltonhicks.com/assets/qcio/structure_viewer.png" /></p>
-<p>Seamless visualizations for <code>ProgramOutput</code> objects make results analysis easy!</p>
-<p><img alt="Optimization Viewer" src="https://public.coltonhicks.com/assets/qcio/optimization_viewer.png" /></p>
+<p>Seamless visualizations for <code>Results</code> objects make results analysis easy!</p>
+<p><img alt="Optimization Viewer" src="./docs/assets/optimization_viewer.png" /></p>
 <p>Single point calculations display their results in a table.</p>
-<p><img alt="Single Point Viewer" src="https://public.coltonhicks.com/assets/qcio/single_point_viewer.png" /></p>
+<p><img alt="Single Point Viewer" src="./docs/assets/single_point_viewer.png" /></p>
 <p>If you want to use the HTML generated by the viewer to build your own dashboards use the functions inside of <code>qcio.view.py</code> that begin with the word <code>generate_</code> to create HTML you can insert into any dashboard.</p>
 <h2 id="support">Support<a class="headerlink" href="#support" title="Permanent link">&para;</a></h2>
 <p>If you have any issues with <code>qcop</code> or would like to request a feature, please open an <a href="https://github.com/coltonbh/qcop/issues">issue</a>.</p>

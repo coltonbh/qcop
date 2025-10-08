@@ -597,9 +597,9 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#qcop.adapters.geometric.GeometricAdapter.compute_results" class="md-nav__link">
+  <a href="#qcop.adapters.geometric.GeometricAdapter.compute_data" class="md-nav__link">
     <span class="md-ellipsis">
-      <code class="doc-symbol doc-symbol-toc doc-symbol-method"></code>&nbsp;compute_results
+      <code class="doc-symbol doc-symbol-toc doc-symbol-method"></code>&nbsp;compute_data
     </span>
   </a>
   
@@ -904,9 +904,9 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#qcop.adapters.geometric.GeometricAdapter.compute_results" class="md-nav__link">
+  <a href="#qcop.adapters.geometric.GeometricAdapter.compute_data" class="md-nav__link">
     <span class="md-ellipsis">
-      <code class="doc-symbol doc-symbol-toc doc-symbol-method"></code>&nbsp;compute_results
+      <code class="doc-symbol doc-symbol-toc doc-symbol-method"></code>&nbsp;compute_data
     </span>
   </a>
   
@@ -956,7 +956,7 @@
       <p>Adapter for geomeTRIC.</p>
 
                   <details class="quote">
-                    <summary>Source code in <code>qcop/adapters/geometric.py</code></summary>
+                    <summary>Source code in <code>src/qcop/adapters/geometric.py</code></summary>
                     <div class="language-python highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">37</span>
 <span class="normal">38</span>
 <span class="normal">39</span>
@@ -1059,7 +1059,7 @@
       <p>Get the program version.</p>
 
             <details class="quote">
-              <summary>Source code in <code>qcop/adapters/geometric.py</code></summary>
+              <summary>Source code in <code>src/qcop/adapters/geometric.py</code></summary>
               <div class="language-python highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">71</span>
 <span class="normal">72</span>
 <span class="normal">73</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">program_version</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
@@ -1074,18 +1074,12 @@
 <div class="doc doc-object doc-function">
 
 
-<h3 id="qcop.adapters.geometric.GeometricAdapter.compute_results" class="doc doc-heading">
-<code class="doc-symbol doc-symbol-heading doc-symbol-method"></code>            <span class="doc doc-object-name doc-function-name">compute_results</span>
+<h3 id="qcop.adapters.geometric.GeometricAdapter.compute_data" class="doc doc-heading">
+<code class="doc-symbol doc-symbol-heading doc-symbol-method"></code>            <span class="doc doc-object-name doc-function-name">compute_data</span>
 
 
-<a href="#qcop.adapters.geometric.GeometricAdapter.compute_results" class="headerlink" title="Permanent link">&para;</a></h3>
-<div class="language-python doc-signature highlight"><pre><span></span><code><span class="nf">compute_results</span><span class="p">(</span>
-    <span class="n">inp_obj</span><span class="p">:</span> <span class="n"><span title="qcio.DualProgramInput">DualProgramInput</span></span><span class="p">,</span>
-    <span class="n">update_func</span><span class="p">:</span> <span class="n"><span title="typing.Optional">Optional</span></span><span class="p">[</span><span class="n"><span title="typing.Callable">Callable</span></span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
-    <span class="n">update_interval</span><span class="p">:</span> <span class="n"><span title="typing.Optional">Optional</span></span><span class="p">[</span><span class="n"><span title="float">float</span></span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
-    <span class="n">propagate_wfn</span><span class="p">:</span> <span class="n"><span title="bool">bool</span></span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
-    <span class="o">**</span><span class="n">kwargs</span>
-<span class="p">)</span> <span class="o">-&gt;</span> <span class="n"><span title="tuple">tuple</span></span><span class="p">[</span><span class="n"><span title="qcio.OptimizationResults">OptimizationResults</span></span><span class="p">,</span> <span class="n"><span title="str">str</span></span><span class="p">]</span>
+<a href="#qcop.adapters.geometric.GeometricAdapter.compute_data" class="headerlink" title="Permanent link">&para;</a></h3>
+<div class="language-python doc-signature highlight"><pre><span></span><code><span class="nf">compute_data</span><span class="p">(</span><span class="n">input_data</span><span class="p">:</span> <span class="n"><span title="qcio.CompositeCalcSpec">CompositeCalcSpec</span></span><span class="p">,</span> <span class="n">update_func</span><span class="p">:</span> <span class="n"><span title="collections.abc.Callable">Callable</span></span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">update_interval</span><span class="p">:</span> <span class="n"><span title="float">float</span></span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">propagate_wfn</span><span class="p">:</span> <span class="n"><span title="bool">bool</span></span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n"><span title="tuple">tuple</span></span><span class="p">[</span><span class="n"><span title="qcio.OptimizationData">OptimizationData</span></span><span class="p">,</span> <span class="n"><span title="str">str</span></span><span class="p">]</span>
 </code></pre></div>
 
     <div class="doc doc-contents ">
@@ -1105,13 +1099,13 @@
       </thead>
       <tbody>
           <tr class="doc-section-item">
-            <td><code>inp_obj</code></td>
+            <td><code>input_data</code></td>
             <td>
-                  <code><span title="qcio.DualProgramInput">DualProgramInput</span></code>
+                  <code><span title="qcio.CompositeCalcSpec">CompositeCalcSpec</span></code>
             </td>
             <td>
               <div class="doc-md-description">
-                <p>The qcio DualProgramInput object for a computation.</p>
+                <p>The qcio CompositeCalcSpec object for a computation.</p>
               </div>
             </td>
             <td>
@@ -1137,7 +1131,7 @@ optimization.</p>
     </table>
 
             <details class="quote">
-              <summary>Source code in <code>qcop/adapters/geometric.py</code></summary>
+              <summary>Source code in <code>src/qcop/adapters/geometric.py</code></summary>
               <div class="language-python highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 75</span>
 <span class="normal"> 76</span>
 <span class="normal"> 77</span>
@@ -1185,29 +1179,33 @@ optimization.</p>
 <span class="normal">119</span>
 <span class="normal">120</span>
 <span class="normal">121</span>
-<span class="normal">122</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">compute_results</span><span class="p">(</span>
+<span class="normal">122</span>
+<span class="normal">123</span>
+<span class="normal">124</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">compute_data</span><span class="p">(</span>
     <span class="bp">self</span><span class="p">,</span>
-    <span class="n">inp_obj</span><span class="p">:</span> <span class="n">DualProgramInput</span><span class="p">,</span>
-    <span class="n">update_func</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Callable</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
-    <span class="n">update_interval</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">float</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">input_data</span><span class="p">:</span> <span class="n">CompositeCalcSpec</span><span class="p">,</span>
+    <span class="n">update_func</span><span class="p">:</span> <span class="n">Callable</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">update_interval</span><span class="p">:</span> <span class="nb">float</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="n">propagate_wfn</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
     <span class="o">**</span><span class="n">kwargs</span><span class="p">,</span>
-<span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="n">OptimizationResults</span><span class="p">,</span> <span class="nb">str</span><span class="p">]:</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="n">OptimizationData</span><span class="p">,</span> <span class="nb">str</span><span class="p">]:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Compute the requested calculation.</span>
 
 <span class="sd">    Args:</span>
-<span class="sd">        inp_obj: The qcio DualProgramInput object for a computation.</span>
+<span class="sd">        input_data: The qcio CompositeCalcSpec object for a computation.</span>
 <span class="sd">        propagate_wfn: Whether to propagate the wavefunction between steps of the</span>
 <span class="sd">            optimization.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="c1"># Update the input object based on its calctype</span>
-    <span class="bp">self</span><span class="o">.</span><span class="n">_update_inp_obj</span><span class="p">(</span><span class="n">inp_obj</span><span class="p">)</span>
-    <span class="n">geometric_molecule</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_create_geometric_molecule</span><span class="p">(</span><span class="n">inp_obj</span><span class="o">.</span><span class="n">structure</span><span class="p">)</span>
-    <span class="n">internal_coords_sys</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_setup_coords</span><span class="p">(</span><span class="n">inp_obj</span><span class="p">,</span> <span class="n">geometric_molecule</span><span class="p">)</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">_update_input_data</span><span class="p">(</span><span class="n">input_data</span><span class="p">)</span>
+    <span class="n">geometric_molecule</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_create_geometric_molecule</span><span class="p">(</span><span class="n">input_data</span><span class="o">.</span><span class="n">structure</span><span class="p">)</span>
+    <span class="n">internal_coords_sys</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_setup_coords</span><span class="p">(</span><span class="n">input_data</span><span class="p">,</span> <span class="n">geometric_molecule</span><span class="p">)</span>
 
-    <span class="n">qcio_adapter</span> <span class="o">=</span> <span class="n">get_adapter</span><span class="p">(</span><span class="n">inp_obj</span><span class="o">.</span><span class="n">subprogram</span><span class="p">,</span> <span class="n">inp_obj</span><span class="p">,</span> <span class="n">qcng_fallback</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">qcio_adapter</span> <span class="o">=</span> <span class="n">get_adapter</span><span class="p">(</span>
+        <span class="n">input_data</span><span class="o">.</span><span class="n">subprogram</span><span class="p">,</span> <span class="n">input_data</span><span class="p">,</span> <span class="n">qcng_fallback</span><span class="o">=</span><span class="kc">True</span>
+    <span class="p">)</span>
     <span class="n">optimizer</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_construct_optimizer</span><span class="p">(</span>
-        <span class="n">inp_obj</span><span class="p">,</span>
+        <span class="n">input_data</span><span class="p">,</span>
         <span class="n">geometric_molecule</span><span class="p">,</span>
         <span class="n">internal_coords_sys</span><span class="p">,</span>
         <span class="n">qcio_adapter</span><span class="p">,</span>
@@ -1228,7 +1226,7 @@ optimization.</p>
             <span class="p">)</span> <span class="kn">from</span><span class="w"> </span><span class="nn">e</span>
 
     <span class="k">return</span> <span class="p">(</span>
-        <span class="n">OptimizationResults</span><span class="p">(</span>
+        <span class="n">OptimizationData</span><span class="p">(</span>
             <span class="n">trajectory</span><span class="o">=</span><span class="n">optimizer</span><span class="o">.</span><span class="n">engine</span><span class="o">.</span><span class="n">qcio_trajectory</span><span class="p">,</span>
         <span class="p">),</span>
         <span class="n">log_string</span><span class="o">.</span><span class="n">getvalue</span><span class="p">(),</span>

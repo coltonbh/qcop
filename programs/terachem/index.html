@@ -553,9 +553,9 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#qcop.adapters.terachem.TeraChemAdapter.compute_results" class="md-nav__link">
+  <a href="#qcop.adapters.terachem.TeraChemAdapter.compute_data" class="md-nav__link">
     <span class="md-ellipsis">
-      <code class="doc-symbol doc-symbol-toc doc-symbol-method"></code>&nbsp;compute_results
+      <code class="doc-symbol doc-symbol-toc doc-symbol-method"></code>&nbsp;compute_data
     </span>
   </a>
   
@@ -613,9 +613,9 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#qcop.adapters.terachem_fe.TeraChemFEAdapter.compute_results" class="md-nav__link">
+  <a href="#qcop.adapters.terachem_fe.TeraChemFEAdapter.compute_data" class="md-nav__link">
     <span class="md-ellipsis">
-      <code class="doc-symbol doc-symbol-toc doc-symbol-method"></code>&nbsp;compute_results
+      <code class="doc-symbol doc-symbol-toc doc-symbol-method"></code>&nbsp;compute_data
     </span>
   </a>
   
@@ -973,9 +973,9 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#qcop.adapters.terachem.TeraChemAdapter.compute_results" class="md-nav__link">
+  <a href="#qcop.adapters.terachem.TeraChemAdapter.compute_data" class="md-nav__link">
     <span class="md-ellipsis">
-      <code class="doc-symbol doc-symbol-toc doc-symbol-method"></code>&nbsp;compute_results
+      <code class="doc-symbol doc-symbol-toc doc-symbol-method"></code>&nbsp;compute_data
     </span>
   </a>
   
@@ -1033,9 +1033,9 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#qcop.adapters.terachem_fe.TeraChemFEAdapter.compute_results" class="md-nav__link">
+  <a href="#qcop.adapters.terachem_fe.TeraChemFEAdapter.compute_data" class="md-nav__link">
     <span class="md-ellipsis">
-      <code class="doc-symbol doc-symbol-toc doc-symbol-method"></code>&nbsp;compute_results
+      <code class="doc-symbol doc-symbol-toc doc-symbol-method"></code>&nbsp;compute_data
     </span>
   </a>
   
@@ -1117,12 +1117,7 @@
   </span>
 
 <a href="#qcop.adapters.terachem.TeraChemAdapter.supported_calctypes" class="headerlink" title="Permanent link">&para;</a></h3>
-<div class="language-python doc-signature highlight"><pre><span></span><code><span class="n">supported_calctypes</span> <span class="o">=</span> <span class="p">[</span>
-    <span class="n"><span title="qcio.CalcType.energy">energy</span></span><span class="p">,</span>
-    <span class="n"><span title="qcio.CalcType.gradient">gradient</span></span><span class="p">,</span>
-    <span class="n"><span title="qcio.CalcType.hessian">hessian</span></span><span class="p">,</span>
-    <span class="n"><span title="qcio.CalcType.optimization">optimization</span></span><span class="p">,</span>
-<span class="p">]</span>
+<div class="language-python doc-signature highlight"><pre><span></span><code><span class="n">supported_calctypes</span> <span class="o">=</span> <span class="p">[</span><span class="n"><span title="qcio.CalcType.energy">energy</span></span><span class="p">,</span> <span class="n"><span title="qcio.CalcType.gradient">gradient</span></span><span class="p">,</span> <span class="n"><span title="qcio.CalcType.hessian">hessian</span></span><span class="p">,</span> <span class="n"><span title="qcio.CalcType.optimization">optimization</span></span><span class="p">]</span>
 </code></pre></div>
 
     <div class="doc doc-contents ">
@@ -1142,7 +1137,7 @@
 
 
 <a href="#qcop.adapters.terachem.TeraChemAdapter.program_version" class="headerlink" title="Permanent link">&para;</a></h3>
-<div class="language-python doc-signature highlight"><pre><span></span><code><span class="nf">program_version</span><span class="p">(</span><span class="n">stdout</span><span class="p">:</span> <span class="n"><span title="typing.Optional">Optional</span></span><span class="p">[</span><span class="n"><span title="str">str</span></span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n"><span title="str">str</span></span>
+<div class="language-python doc-signature highlight"><pre><span></span><code><span class="nf">program_version</span><span class="p">(</span><span class="n">stdout</span><span class="p">:</span> <span class="n"><span title="str">str</span></span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n"><span title="str">str</span></span>
 </code></pre></div>
 
     <div class="doc doc-contents ">
@@ -1164,7 +1159,7 @@
           <tr class="doc-section-item">
             <td><code>stdout</code></td>
             <td>
-                  <code><span title="typing.Optional">Optional</span>[<span title="str">str</span>]</code>
+                  <code><span title="str">str</span> | None</code>
             </td>
             <td>
               <div class="doc-md-description">
@@ -1202,7 +1197,7 @@
     </table>
 
             <details class="quote">
-              <summary>Source code in <code>qcop/adapters/terachem.py</code></summary>
+              <summary>Source code in <code>src/qcop/adapters/terachem.py</code></summary>
               <div class="language-python highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">28</span>
 <span class="normal">29</span>
 <span class="normal">30</span>
@@ -1223,7 +1218,7 @@
 <span class="normal">45</span>
 <span class="normal">46</span>
 <span class="normal">47</span>
-<span class="normal">48</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">program_version</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">stdout</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="normal">48</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">program_version</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">stdout</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Get the program version.</span>
 
 <span class="sd">    Args:</span>
@@ -1234,8 +1229,8 @@
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">if</span> <span class="n">stdout</span><span class="p">:</span>
         <span class="k">try</span><span class="p">:</span>
-            <span class="k">return</span> <span class="n">parse_version_string</span><span class="p">(</span><span class="n">stdout</span><span class="p">)</span>
-        <span class="k">except</span> <span class="n">qcparse_exceptions</span><span class="o">.</span><span class="n">ParserError</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">parse_version</span><span class="p">(</span><span class="n">stdout</span><span class="p">)</span>
+        <span class="k">except</span> <span class="n">qccodec_exceptions</span><span class="o">.</span><span class="n">ParserError</span><span class="p">:</span>
             <span class="c1"># If the version string is not found. Happens when libcuda.so is not</span>
             <span class="c1"># found and TeraChem fails to start. terachem --version will fail too.</span>
             <span class="k">return</span> <span class="s2">&quot;Could not parse version&quot;</span>
@@ -1253,17 +1248,12 @@
 <div class="doc doc-object doc-function">
 
 
-<h3 id="qcop.adapters.terachem.TeraChemAdapter.compute_results" class="doc doc-heading">
-<code class="doc-symbol doc-symbol-heading doc-symbol-method"></code>            <span class="doc doc-object-name doc-function-name">compute_results</span>
+<h3 id="qcop.adapters.terachem.TeraChemAdapter.compute_data" class="doc doc-heading">
+<code class="doc-symbol doc-symbol-heading doc-symbol-method"></code>            <span class="doc doc-object-name doc-function-name">compute_data</span>
 
 
-<a href="#qcop.adapters.terachem.TeraChemAdapter.compute_results" class="headerlink" title="Permanent link">&para;</a></h3>
-<div class="language-python doc-signature highlight"><pre><span></span><code><span class="nf">compute_results</span><span class="p">(</span>
-    <span class="n">inp_obj</span><span class="p">:</span> <span class="n"><span title="qcio.ProgramInput">ProgramInput</span></span><span class="p">,</span>
-    <span class="n">update_func</span><span class="p">:</span> <span class="n"><span title="typing.Optional">Optional</span></span><span class="p">[</span><span class="n"><span title="typing.Callable">Callable</span></span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
-    <span class="n">update_interval</span><span class="p">:</span> <span class="n"><span title="typing.Optional">Optional</span></span><span class="p">[</span><span class="n"><span title="float">float</span></span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
-    <span class="o">**</span><span class="n">kwargs</span>
-<span class="p">)</span> <span class="o">-&gt;</span> <span class="n"><span title="tuple">tuple</span></span><span class="p">[</span><span class="n"><span title="qcio.SinglePointResults">SinglePointResults</span></span><span class="p">,</span> <span class="n"><span title="str">str</span></span><span class="p">]</span>
+<a href="#qcop.adapters.terachem.TeraChemAdapter.compute_data" class="headerlink" title="Permanent link">&para;</a></h3>
+<div class="language-python doc-signature highlight"><pre><span></span><code><span class="nf">compute_data</span><span class="p">(</span><span class="n">input_data</span><span class="p">:</span> <span class="n"><span title="qcio.CalcSpec">CalcSpec</span></span><span class="p">,</span> <span class="n">update_func</span><span class="p">:</span> <span class="n"><span title="collections.abc.Callable">Callable</span></span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">update_interval</span><span class="p">:</span> <span class="n"><span title="float">float</span></span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n"><span title="tuple">tuple</span></span><span class="p">[</span><span class="n"><span title="qcio.SinglePointData">SinglePointData</span></span><span class="p">,</span> <span class="n"><span title="str">str</span></span><span class="p">]</span>
 </code></pre></div>
 
     <div class="doc doc-contents ">
@@ -1283,13 +1273,13 @@
       </thead>
       <tbody>
           <tr class="doc-section-item">
-            <td><code>inp_obj</code></td>
+            <td><code>input_data</code></td>
             <td>
-                  <code><span title="qcio.ProgramInput">ProgramInput</span></code>
+                  <code><span title="qcio.CalcSpec">CalcSpec</span></code>
             </td>
             <td>
               <div class="doc-md-description">
-                <p>The qcio ProgramInput object for a computation.</p>
+                <p>The qcio CalcSpec object for a computation.</p>
               </div>
             </td>
             <td>
@@ -1299,7 +1289,7 @@
           <tr class="doc-section-item">
             <td><code>update_func</code></td>
             <td>
-                  <code><span title="typing.Optional">Optional</span>[<span title="typing.Callable">Callable</span>]</code>
+                  <code><span title="collections.abc.Callable">Callable</span> | None</code>
             </td>
             <td>
               <div class="doc-md-description">
@@ -1313,7 +1303,7 @@
           <tr class="doc-section-item">
             <td><code>update_interval</code></td>
             <td>
-                  <code><span title="typing.Optional">Optional</span>[<span title="float">float</span>]</code>
+                  <code><span title="float">float</span> | None</code>
             </td>
             <td>
               <div class="doc-md-description">
@@ -1340,11 +1330,11 @@ update_func.</p>
       <tbody>
           <tr class="doc-section-item">
             <td>
-                  <code><span title="tuple">tuple</span>[<span title="qcio.SinglePointResults">SinglePointResults</span>, <span title="str">str</span>]</code>
+                  <code><span title="tuple">tuple</span>[<span title="qcio.SinglePointData">SinglePointData</span>, <span title="str">str</span>]</code>
             </td>
             <td>
               <div class="doc-md-description">
-                <p>A tuple of SinglePointResults and the stdout str.</p>
+                <p>A tuple of SinglePointData and the stdout str.</p>
               </div>
             </td>
           </tr>
@@ -1352,7 +1342,7 @@ update_func.</p>
     </table>
 
             <details class="quote">
-              <summary>Source code in <code>qcop/adapters/terachem.py</code></summary>
+              <summary>Source code in <code>src/qcop/adapters/terachem.py</code></summary>
               <div class="language-python highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 52</span>
 <span class="normal"> 53</span>
 <span class="normal"> 54</span>
@@ -1401,30 +1391,42 @@ update_func.</p>
 <span class="normal"> 97</span>
 <span class="normal"> 98</span>
 <span class="normal"> 99</span>
-<span class="normal">100</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">compute_results</span><span class="p">(</span>
+<span class="normal">100</span>
+<span class="normal">101</span>
+<span class="normal">102</span>
+<span class="normal">103</span>
+<span class="normal">104</span>
+<span class="normal">105</span>
+<span class="normal">106</span>
+<span class="normal">107</span>
+<span class="normal">108</span>
+<span class="normal">109</span>
+<span class="normal">110</span>
+<span class="normal">111</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">compute_data</span><span class="p">(</span>
     <span class="bp">self</span><span class="p">,</span>
-    <span class="n">inp_obj</span><span class="p">:</span> <span class="n">ProgramInput</span><span class="p">,</span>
-    <span class="n">update_func</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Callable</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
-    <span class="n">update_interval</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">float</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">input_data</span><span class="p">:</span> <span class="n">CalcSpec</span><span class="p">,</span>
+    <span class="n">update_func</span><span class="p">:</span> <span class="n">Callable</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">update_interval</span><span class="p">:</span> <span class="nb">float</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="o">**</span><span class="n">kwargs</span><span class="p">,</span>
-<span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="n">SinglePointResults</span><span class="p">,</span> <span class="nb">str</span><span class="p">]:</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="n">SinglePointData</span><span class="p">,</span> <span class="nb">str</span><span class="p">]:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Execute TeraChem on the given input.</span>
 
 <span class="sd">    Args:</span>
-<span class="sd">        inp_obj: The qcio ProgramInput object for a computation.</span>
+<span class="sd">        input_data: The qcio CalcSpec object for a computation.</span>
 <span class="sd">        update_func: A callback function to call as the program executes.</span>
 <span class="sd">        update_interval: The minimum time in seconds between calls to the</span>
 <span class="sd">            update_func.</span>
 
 <span class="sd">    Returns:</span>
-<span class="sd">        A tuple of SinglePointResults and the stdout str.</span>
+<span class="sd">        A tuple of SinglePointData and the stdout str.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="c1"># Construct and write input file and xyz file to disk</span>
+    <span class="c1"># Construct TeraChem native input files</span>
     <span class="k">try</span><span class="p">:</span>
-        <span class="n">native_input</span> <span class="o">=</span> <span class="n">qcparse</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="n">inp_obj</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">program</span><span class="p">)</span>
-    <span class="k">except</span> <span class="n">qcparse</span><span class="o">.</span><span class="n">exceptions</span><span class="o">.</span><span class="n">EncoderError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+        <span class="n">native_input</span> <span class="o">=</span> <span class="n">qccodec</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="n">input_data</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">program</span><span class="p">)</span>
+    <span class="k">except</span> <span class="n">qccodec</span><span class="o">.</span><span class="n">exceptions</span><span class="o">.</span><span class="n">EncoderError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
         <span class="k">raise</span> <span class="n">AdapterInputError</span><span class="p">(</span><span class="n">program</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">program</span><span class="p">)</span> <span class="kn">from</span><span class="w"> </span><span class="nn">e</span>
 
+    <span class="c1"># Write the input files to disk</span>
     <span class="n">input_filename</span> <span class="o">=</span> <span class="s2">&quot;tc.in&quot;</span>
     <span class="n">Path</span><span class="p">(</span><span class="n">input_filename</span><span class="p">)</span><span class="o">.</span><span class="n">write_text</span><span class="p">(</span><span class="n">native_input</span><span class="o">.</span><span class="n">input_file</span><span class="p">)</span>
     <span class="n">Path</span><span class="p">(</span><span class="n">native_input</span><span class="o">.</span><span class="n">geometry_filename</span><span class="p">)</span><span class="o">.</span><span class="n">write_text</span><span class="p">(</span><span class="n">native_input</span><span class="o">.</span><span class="n">geometry_file</span><span class="p">)</span>
@@ -1434,22 +1436,32 @@ update_func.</p>
         <span class="bp">self</span><span class="o">.</span><span class="n">program</span><span class="p">,</span> <span class="p">[</span><span class="n">input_filename</span><span class="p">],</span> <span class="n">update_func</span><span class="p">,</span> <span class="n">update_interval</span>
     <span class="p">)</span>
 
+    <span class="c1"># Get the scratch output directory</span>
+    <span class="n">parent</span> <span class="o">=</span> <span class="n">Path</span><span class="o">.</span><span class="n">cwd</span><span class="p">()</span>
+    <span class="c1"># TeraChem creates a directory named scr.&lt;xyz_filename&gt; in the current working</span>
+    <span class="n">scr_dir</span> <span class="o">=</span> <span class="nb">next</span><span class="p">(</span><span class="n">parent</span><span class="o">.</span><span class="n">glob</span><span class="p">(</span><span class="s2">&quot;scr.*&quot;</span><span class="p">),</span> <span class="kc">None</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">scr_dir</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="n">ExternalProgramError</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">program</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;TeraChem did not create a &#39;scr.&#39; directory in </span><span class="si">{</span><span class="n">parent</span><span class="si">}</span><span class="s2">.&quot;</span>
+        <span class="p">)</span>
+
     <span class="c1"># Parse output</span>
     <span class="k">try</span><span class="p">:</span>
-        <span class="k">if</span> <span class="n">inp_obj</span><span class="o">.</span><span class="n">calctype</span> <span class="o">==</span> <span class="n">CalcType</span><span class="o">.</span><span class="n">optimization</span><span class="p">:</span>
-            <span class="n">parsed_output</span> <span class="o">=</span> <span class="n">parse_optimization_dir</span><span class="p">(</span>
-                <span class="sa">f</span><span class="s2">&quot;scr.</span><span class="si">{</span><span class="n">XYZ_FILENAME</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;.&#39;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">stdout</span><span class="p">,</span> <span class="n">inp_obj</span><span class="o">=</span><span class="n">inp_obj</span>
-            <span class="p">)</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="n">parsed_output</span> <span class="o">=</span> <span class="n">qcparse</span><span class="o">.</span><span class="n">parse</span><span class="p">(</span><span class="n">stdout</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">program</span><span class="p">,</span> <span class="s2">&quot;stdout&quot;</span><span class="p">)</span>
-    <span class="k">except</span> <span class="n">qcparse_exceptions</span><span class="o">.</span><span class="n">ParserError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
-        <span class="k">raise</span> <span class="n">ExternalProgramError</span><span class="p">(</span>
-            <span class="n">program</span><span class="o">=</span><span class="s2">&quot;qcparse&quot;</span><span class="p">,</span>
-            <span class="n">message</span><span class="o">=</span><span class="s2">&quot;Failed to parse TeraChem output.&quot;</span><span class="p">,</span>
+        <span class="n">results</span> <span class="o">=</span> <span class="n">qccodec</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">program</span><span class="p">,</span>
+            <span class="n">input_data</span><span class="o">.</span><span class="n">calctype</span><span class="p">,</span>
             <span class="n">stdout</span><span class="o">=</span><span class="n">stdout</span><span class="p">,</span>
+            <span class="n">directory</span><span class="o">=</span><span class="n">scr_dir</span><span class="p">,</span>
+            <span class="n">input_data</span><span class="o">=</span><span class="n">input_data</span><span class="p">,</span>
+        <span class="p">)</span>
+    <span class="k">except</span> <span class="n">qccodec_exceptions</span><span class="o">.</span><span class="n">ParserError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="n">ExternalProgramError</span><span class="p">(</span>
+            <span class="n">program</span><span class="o">=</span><span class="s2">&quot;qccodec&quot;</span><span class="p">,</span>
+            <span class="n">message</span><span class="o">=</span><span class="s2">&quot;Failed to parse TeraChem output.&quot;</span><span class="p">,</span>
+            <span class="n">logs</span><span class="o">=</span><span class="n">stdout</span><span class="p">,</span>
             <span class="n">original_exception</span><span class="o">=</span><span class="n">e</span><span class="p">,</span>
         <span class="p">)</span> <span class="kn">from</span><span class="w"> </span><span class="nn">e</span>
-    <span class="k">return</span> <span class="n">parsed_output</span><span class="p">,</span> <span class="n">stdout</span>
+    <span class="k">return</span> <span class="n">results</span><span class="p">,</span> <span class="n">stdout</span>
 </code></pre></div></td></tr></table></div>
             </details>
     </div>
@@ -1464,7 +1476,7 @@ update_func.</p>
 
 
 <a href="#qcop.adapters.terachem.TeraChemAdapter.collect_wfn" class="headerlink" title="Permanent link">&para;</a></h3>
-<div class="language-python doc-signature highlight"><pre><span></span><code><span class="nf">collect_wfn</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n"><span title="dict">dict</span></span><span class="p">[</span><span class="n"><span title="str">str</span></span><span class="p">,</span> <span class="n"><span title="typing.Union">Union</span></span><span class="p">[</span><span class="n"><span title="str">str</span></span><span class="p">,</span> <span class="n"><span title="bytes">bytes</span></span><span class="p">]]</span>
+<div class="language-python doc-signature highlight"><pre><span></span><code><span class="nf">collect_wfn</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n"><span title="dict">dict</span></span><span class="p">[</span><span class="n"><span title="str">str</span></span><span class="p">,</span> <span class="n"><span title="str">str</span></span> <span class="o">|</span> <span class="n"><span title="bytes">bytes</span></span><span class="p">]</span>
 </code></pre></div>
 
     <div class="doc doc-contents ">
@@ -1472,24 +1484,24 @@ update_func.</p>
       <p>Append wavefunction data to the output.</p>
 
             <details class="quote">
-              <summary>Source code in <code>qcop/adapters/terachem.py</code></summary>
-              <div class="language-python highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">102</span>
-<span class="normal">103</span>
-<span class="normal">104</span>
-<span class="normal">105</span>
-<span class="normal">106</span>
-<span class="normal">107</span>
-<span class="normal">108</span>
-<span class="normal">109</span>
-<span class="normal">110</span>
-<span class="normal">111</span>
-<span class="normal">112</span>
-<span class="normal">113</span>
+              <summary>Source code in <code>src/qcop/adapters/terachem.py</code></summary>
+              <div class="language-python highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">113</span>
 <span class="normal">114</span>
 <span class="normal">115</span>
 <span class="normal">116</span>
 <span class="normal">117</span>
-<span class="normal">118</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">collect_wfn</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">bytes</span><span class="p">]]:</span>
+<span class="normal">118</span>
+<span class="normal">119</span>
+<span class="normal">120</span>
+<span class="normal">121</span>
+<span class="normal">122</span>
+<span class="normal">123</span>
+<span class="normal">124</span>
+<span class="normal">125</span>
+<span class="normal">126</span>
+<span class="normal">127</span>
+<span class="normal">128</span>
+<span class="normal">129</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">collect_wfn</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span> <span class="o">|</span> <span class="nb">bytes</span><span class="p">]:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Append wavefunction data to the output.&quot;&quot;&quot;</span>
 
     <span class="c1"># Naming conventions from TeraChem uses xyz filename as scratch dir postfix</span>
@@ -1501,7 +1513,7 @@ update_func.</p>
     <span class="k">if</span> <span class="ow">not</span> <span class="nb">any</span><span class="p">(</span><span class="n">wfn_path</span><span class="o">.</span><span class="n">exists</span><span class="p">()</span> <span class="k">for</span> <span class="n">wfn_path</span> <span class="ow">in</span> <span class="n">wfn_paths</span><span class="p">):</span>
         <span class="k">raise</span> <span class="n">AdapterError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;No wavefunction files found in </span><span class="si">{</span><span class="n">Path</span><span class="o">.</span><span class="n">cwd</span><span class="p">()</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
 
-    <span class="n">wfns</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">bytes</span><span class="p">]]</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="n">wfns</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span> <span class="o">|</span> <span class="nb">bytes</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>
     <span class="k">for</span> <span class="n">wfn_path</span> <span class="ow">in</span> <span class="n">wfn_paths</span><span class="p">:</span>
         <span class="k">if</span> <span class="n">wfn_path</span><span class="o">.</span><span class="n">exists</span><span class="p">():</span>
             <span class="n">wfns</span><span class="p">[</span><span class="nb">str</span><span class="p">(</span><span class="n">wfn_path</span><span class="p">)]</span> <span class="o">=</span> <span class="n">wfn_path</span><span class="o">.</span><span class="n">read_bytes</span><span class="p">()</span>
@@ -1520,9 +1532,7 @@ update_func.</p>
 
 
 <a href="#qcop.adapters.terachem.TeraChemAdapter.propagate_wfn" class="headerlink" title="Permanent link">&para;</a></h3>
-<div class="language-python doc-signature highlight"><pre><span></span><code><span class="nf">propagate_wfn</span><span class="p">(</span>
-    <span class="n">output</span><span class="p">:</span> <span class="n"><span title="qcio.ProgramOutput">ProgramOutput</span></span><span class="p">,</span> <span class="n">prog_inp</span><span class="p">:</span> <span class="n"><span title="qcio.ProgramInput">ProgramInput</span></span>
-<span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span>
+<div class="language-python doc-signature highlight"><pre><span></span><code><span class="nf">propagate_wfn</span><span class="p">(</span><span class="n">output</span><span class="p">:</span> <span class="n"><span title="qcio.Results">Results</span></span><span class="p">,</span> <span class="n">calcspec</span><span class="p">:</span> <span class="n"><span title="qcio.CalcSpec">CalcSpec</span></span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span>
 </code></pre></div>
 
     <div class="doc doc-contents ">
@@ -1544,7 +1554,7 @@ update_func.</p>
           <tr class="doc-section-item">
             <td><code>output</code></td>
             <td>
-                  <code><span title="qcio.ProgramOutput">ProgramOutput</span></code>
+                  <code><span title="qcio.Results">Results</span></code>
             </td>
             <td>
               <div class="doc-md-description">
@@ -1556,13 +1566,13 @@ update_func.</p>
             </td>
           </tr>
           <tr class="doc-section-item">
-            <td><code>prog_inp</code></td>
+            <td><code>calcspec</code></td>
             <td>
-                  <code><span title="qcio.ProgramInput">ProgramInput</span></code>
+                  <code><span title="qcio.CalcSpec">CalcSpec</span></code>
             </td>
             <td>
               <div class="doc-md-description">
-                <p>The ProgramInput object on which to place the wavefunction data.</p>
+                <p>The CalcSpec object on which to place the wavefunction data.</p>
               </div>
             </td>
             <td>
@@ -1588,7 +1598,7 @@ update_func.</p>
             </td>
             <td>
               <div class="doc-md-description">
-                <p>None. Modifies the prog_inp object in place.</p>
+                <p>None. Modifies the calcspec object in place.</p>
               </div>
             </td>
           </tr>
@@ -1596,19 +1606,8 @@ update_func.</p>
     </table>
 
             <details class="quote">
-              <summary>Source code in <code>qcop/adapters/terachem.py</code></summary>
-              <div class="language-python highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">120</span>
-<span class="normal">121</span>
-<span class="normal">122</span>
-<span class="normal">123</span>
-<span class="normal">124</span>
-<span class="normal">125</span>
-<span class="normal">126</span>
-<span class="normal">127</span>
-<span class="normal">128</span>
-<span class="normal">129</span>
-<span class="normal">130</span>
-<span class="normal">131</span>
+              <summary>Source code in <code>src/qcop/adapters/terachem.py</code></summary>
+              <div class="language-python highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">131</span>
 <span class="normal">132</span>
 <span class="normal">133</span>
 <span class="normal">134</span>
@@ -1634,15 +1633,27 @@ update_func.</p>
 <span class="normal">154</span>
 <span class="normal">155</span>
 <span class="normal">156</span>
-<span class="normal">157</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">propagate_wfn</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">output</span><span class="p">:</span> <span class="n">ProgramOutput</span><span class="p">,</span> <span class="n">prog_inp</span><span class="p">:</span> <span class="n">ProgramInput</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="normal">157</span>
+<span class="normal">158</span>
+<span class="normal">159</span>
+<span class="normal">160</span>
+<span class="normal">161</span>
+<span class="normal">162</span>
+<span class="normal">163</span>
+<span class="normal">164</span>
+<span class="normal">165</span>
+<span class="normal">166</span>
+<span class="normal">167</span>
+<span class="normal">168</span>
+<span class="normal">169</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">propagate_wfn</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">output</span><span class="p">:</span> <span class="n">Results</span><span class="p">,</span> <span class="n">calcspec</span><span class="p">:</span> <span class="n">CalcSpec</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Propagate the wavefunction from the previous calculation.</span>
 
 <span class="sd">    Args:</span>
 <span class="sd">        output: The output from a previous calculation containing wavefunction data.</span>
-<span class="sd">        prog_inp: The ProgramInput object on which to place the wavefunction data.</span>
+<span class="sd">        calcspec: The CalcSpec object on which to place the wavefunction data.</span>
 
 <span class="sd">    Returns:</span>
-<span class="sd">        None. Modifies the prog_inp object in place.</span>
+<span class="sd">        None. Modifies the calcspec object in place.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="c1"># Naming conventions from TeraChem uses xyz filename as scratch dir postfix</span>
@@ -1651,9 +1662,10 @@ update_func.</p>
     <span class="c1"># Wavefunction filenames</span>
     <span class="n">c0</span><span class="p">,</span> <span class="n">ca0</span><span class="p">,</span> <span class="n">cb0</span> <span class="o">=</span> <span class="s2">&quot;c0&quot;</span><span class="p">,</span> <span class="s2">&quot;ca0&quot;</span><span class="p">,</span> <span class="s2">&quot;cb0&quot;</span>
 
-    <span class="n">c0_bytes</span> <span class="o">=</span> <span class="n">output</span><span class="o">.</span><span class="n">results</span><span class="o">.</span><span class="n">files</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;scr.</span><span class="si">{</span><span class="n">scr_postfix</span><span class="si">}</span><span class="s2">/</span><span class="si">{</span><span class="n">c0</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-    <span class="n">ca0_bytes</span> <span class="o">=</span> <span class="n">output</span><span class="o">.</span><span class="n">results</span><span class="o">.</span><span class="n">files</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;scr.</span><span class="si">{</span><span class="n">scr_postfix</span><span class="si">}</span><span class="s2">/</span><span class="si">{</span><span class="n">ca0</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-    <span class="n">cb0_bytes</span> <span class="o">=</span> <span class="n">output</span><span class="o">.</span><span class="n">results</span><span class="o">.</span><span class="n">files</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;scr.</span><span class="si">{</span><span class="n">scr_postfix</span><span class="si">}</span><span class="s2">/</span><span class="si">{</span><span class="n">cb0</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="n">files</span> <span class="o">=</span> <span class="n">output</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">files</span>
+    <span class="n">c0_bytes</span> <span class="o">=</span> <span class="n">files</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;scr.</span><span class="si">{</span><span class="n">scr_postfix</span><span class="si">}</span><span class="s2">/</span><span class="si">{</span><span class="n">c0</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="n">ca0_bytes</span> <span class="o">=</span> <span class="n">files</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;scr.</span><span class="si">{</span><span class="n">scr_postfix</span><span class="si">}</span><span class="s2">/</span><span class="si">{</span><span class="n">ca0</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="n">cb0_bytes</span> <span class="o">=</span> <span class="n">files</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;scr.</span><span class="si">{</span><span class="n">scr_postfix</span><span class="si">}</span><span class="s2">/</span><span class="si">{</span><span class="n">cb0</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
 
     <span class="k">if</span> <span class="ow">not</span> <span class="n">c0_bytes</span> <span class="ow">and</span> <span class="ow">not</span> <span class="p">(</span><span class="n">ca0_bytes</span> <span class="ow">and</span> <span class="n">cb0_bytes</span><span class="p">):</span>
         <span class="k">raise</span> <span class="n">AdapterInputError</span><span class="p">(</span>
@@ -1661,17 +1673,17 @@ update_func.</p>
             <span class="n">message</span><span class="o">=</span><span class="s2">&quot;Could not find c0 or ca/b0 files in output.&quot;</span><span class="p">,</span>
         <span class="p">)</span>
 
-    <span class="c1"># Load wavefunction data onto ProgramInput object</span>
+    <span class="c1"># Load wavefunction data onto CalcSpec object</span>
 
     <span class="k">if</span> <span class="n">c0_bytes</span><span class="p">:</span>
-        <span class="n">prog_inp</span><span class="o">.</span><span class="n">files</span><span class="p">[</span><span class="n">c0</span><span class="p">]</span> <span class="o">=</span> <span class="n">c0_bytes</span>
-        <span class="n">prog_inp</span><span class="o">.</span><span class="n">keywords</span><span class="p">[</span><span class="s2">&quot;guess&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">c0</span>
+        <span class="n">calcspec</span><span class="o">.</span><span class="n">files</span><span class="p">[</span><span class="n">c0</span><span class="p">]</span> <span class="o">=</span> <span class="n">c0_bytes</span>
+        <span class="n">calcspec</span><span class="o">.</span><span class="n">keywords</span><span class="p">[</span><span class="s2">&quot;guess&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">c0</span>
 
     <span class="k">else</span><span class="p">:</span>  <span class="c1"># ca0_bytes and cb0_bytes</span>
         <span class="k">assert</span> <span class="n">ca0_bytes</span> <span class="ow">and</span> <span class="n">cb0_bytes</span>  <span class="c1"># for mypy</span>
-        <span class="n">prog_inp</span><span class="o">.</span><span class="n">files</span><span class="p">[</span><span class="n">ca0</span><span class="p">]</span> <span class="o">=</span> <span class="n">ca0_bytes</span>
-        <span class="n">prog_inp</span><span class="o">.</span><span class="n">files</span><span class="p">[</span><span class="n">cb0</span><span class="p">]</span> <span class="o">=</span> <span class="n">cb0_bytes</span>
-        <span class="n">prog_inp</span><span class="o">.</span><span class="n">keywords</span><span class="p">[</span><span class="s2">&quot;guess&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">ca0</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="n">cb0</span><span class="si">}</span><span class="s2">&quot;</span>
+        <span class="n">calcspec</span><span class="o">.</span><span class="n">files</span><span class="p">[</span><span class="n">ca0</span><span class="p">]</span> <span class="o">=</span> <span class="n">ca0_bytes</span>
+        <span class="n">calcspec</span><span class="o">.</span><span class="n">files</span><span class="p">[</span><span class="n">cb0</span><span class="p">]</span> <span class="o">=</span> <span class="n">cb0_bytes</span>
+        <span class="n">calcspec</span><span class="o">.</span><span class="n">keywords</span><span class="p">[</span><span class="s2">&quot;guess&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">ca0</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="n">cb0</span><span class="si">}</span><span class="s2">&quot;</span>
 </code></pre></div></td></tr></table></div>
             </details>
     </div>
@@ -1704,7 +1716,7 @@ update_func.</p>
       <p>Adapter for TeraChem's Protocol Buffer Server and Frontend file server.</p>
 
                   <details class="quote">
-                    <summary>Source code in <code>qcop/adapters/terachem_fe.py</code></summary>
+                    <summary>Source code in <code>src/qcop/adapters/terachem_fe.py</code></summary>
                     <div class="language-python highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">18</span>
 <span class="normal">19</span>
 <span class="normal">20</span>
@@ -1761,7 +1773,7 @@ update_func.</p>
 
 
 <a href="#qcop.adapters.terachem_fe.TeraChemFEAdapter.program_version" class="headerlink" title="Permanent link">&para;</a></h3>
-<div class="language-python doc-signature highlight"><pre><span></span><code><span class="nf">program_version</span><span class="p">(</span><span class="n">stdout</span><span class="p">:</span> <span class="n"><span title="typing.Optional">Optional</span></span><span class="p">[</span><span class="n"><span title="str">str</span></span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n"><span title="str">str</span></span>
+<div class="language-python doc-signature highlight"><pre><span></span><code><span class="nf">program_version</span><span class="p">(</span><span class="n">stdout</span><span class="p">:</span> <span class="n"><span title="str">str</span></span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n"><span title="str">str</span></span>
 </code></pre></div>
 
     <div class="doc doc-contents ">
@@ -1769,10 +1781,10 @@ update_func.</p>
       <p>Program version is not available via the PB server.</p>
 
             <details class="quote">
-              <summary>Source code in <code>qcop/adapters/terachem_fe.py</code></summary>
+              <summary>Source code in <code>src/qcop/adapters/terachem_fe.py</code></summary>
               <div class="language-python highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">38</span>
 <span class="normal">39</span>
-<span class="normal">40</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">program_version</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">stdout</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="normal">40</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">program_version</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">stdout</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Program version is not available via the PB server.&quot;&quot;&quot;</span>
     <span class="k">return</span> <span class="s2">&quot;&quot;</span>
 </code></pre></div></td></tr></table></div>
@@ -1784,17 +1796,12 @@ update_func.</p>
 <div class="doc doc-object doc-function">
 
 
-<h3 id="qcop.adapters.terachem_fe.TeraChemFEAdapter.compute_results" class="doc doc-heading">
-<code class="doc-symbol doc-symbol-heading doc-symbol-method"></code>            <span class="doc doc-object-name doc-function-name">compute_results</span>
+<h3 id="qcop.adapters.terachem_fe.TeraChemFEAdapter.compute_data" class="doc doc-heading">
+<code class="doc-symbol doc-symbol-heading doc-symbol-method"></code>            <span class="doc doc-object-name doc-function-name">compute_data</span>
 
 
-<a href="#qcop.adapters.terachem_fe.TeraChemFEAdapter.compute_results" class="headerlink" title="Permanent link">&para;</a></h3>
-<div class="language-python doc-signature highlight"><pre><span></span><code><span class="nf">compute_results</span><span class="p">(</span>
-    <span class="n">inp_obj</span><span class="p">:</span> <span class="n"><span title="qcio.ProgramInput">ProgramInput</span></span><span class="p">,</span>
-    <span class="n">update_func</span><span class="p">:</span> <span class="n"><span title="typing.Optional">Optional</span></span><span class="p">[</span><span class="n"><span title="typing.Callable">Callable</span></span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
-    <span class="n">update_interval</span><span class="p">:</span> <span class="n"><span title="typing.Optional">Optional</span></span><span class="p">[</span><span class="n"><span title="float">float</span></span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
-    <span class="o">**</span><span class="n">kwargs</span>
-<span class="p">)</span> <span class="o">-&gt;</span> <span class="n"><span title="tuple">tuple</span></span><span class="p">[</span><span class="n"><span title="qcio.SinglePointResults">SinglePointResults</span></span><span class="p">,</span> <span class="n"><span title="str">str</span></span><span class="p">]</span>
+<a href="#qcop.adapters.terachem_fe.TeraChemFEAdapter.compute_data" class="headerlink" title="Permanent link">&para;</a></h3>
+<div class="language-python doc-signature highlight"><pre><span></span><code><span class="nf">compute_data</span><span class="p">(</span><span class="n">input_data</span><span class="p">:</span> <span class="n"><span title="qcio.CalcSpec">CalcSpec</span></span><span class="p">,</span> <span class="n">update_func</span><span class="p">:</span> <span class="n"><span title="collections.abc.Callable">Callable</span></span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">update_interval</span><span class="p">:</span> <span class="n"><span title="float">float</span></span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n"><span title="tuple">tuple</span></span><span class="p">[</span><span class="n"><span title="qcio.SinglePointData">SinglePointData</span></span><span class="p">,</span> <span class="n"><span title="str">str</span></span><span class="p">]</span>
 </code></pre></div>
 
     <div class="doc doc-contents ">
@@ -1814,13 +1821,13 @@ update_func.</p>
       </thead>
       <tbody>
           <tr class="doc-section-item">
-            <td><code>inp_obj</code></td>
+            <td><code>input_data</code></td>
             <td>
-                  <code><span title="qcio.ProgramInput">ProgramInput</span></code>
+                  <code><span title="qcio.CalcSpec">CalcSpec</span></code>
             </td>
             <td>
               <div class="doc-md-description">
-                <p>The qcio ProgramInput object for a computation.</p>
+                <p>The qcio CalcSpec object for a computation.</p>
               </div>
             </td>
             <td>
@@ -1830,7 +1837,7 @@ update_func.</p>
           <tr class="doc-section-item">
             <td><code>update_func</code></td>
             <td>
-                  <code><span title="typing.Optional">Optional</span>[<span title="typing.Callable">Callable</span>]</code>
+                  <code><span title="collections.abc.Callable">Callable</span> | None</code>
             </td>
             <td>
               <div class="doc-md-description">
@@ -1844,7 +1851,7 @@ update_func.</p>
           <tr class="doc-section-item">
             <td><code>update_interval</code></td>
             <td>
-                  <code><span title="typing.Optional">Optional</span>[<span title="float">float</span>]</code>
+                  <code><span title="float">float</span> | None</code>
             </td>
             <td>
               <div class="doc-md-description">
@@ -1871,11 +1878,11 @@ update_func.</p>
       <tbody>
           <tr class="doc-section-item">
             <td>
-                  <code><span title="tuple">tuple</span>[<span title="qcio.SinglePointResults">SinglePointResults</span>, <span title="str">str</span>]</code>
+                  <code><span title="tuple">tuple</span>[<span title="qcio.SinglePointData">SinglePointData</span>, <span title="str">str</span>]</code>
             </td>
             <td>
               <div class="doc-md-description">
-                <p>A tuple of SinglePointResults and the stdout str.</p>
+                <p>A tuple of SinglePointData and the stdout str.</p>
               </div>
             </td>
           </tr>
@@ -1883,7 +1890,7 @@ update_func.</p>
     </table>
 
             <details class="quote">
-              <summary>Source code in <code>qcop/adapters/terachem_fe.py</code></summary>
+              <summary>Source code in <code>src/qcop/adapters/terachem_fe.py</code></summary>
               <div class="language-python highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">42</span>
 <span class="normal">43</span>
 <span class="normal">44</span>
@@ -1920,33 +1927,33 @@ update_func.</p>
 <span class="normal">75</span>
 <span class="normal">76</span>
 <span class="normal">77</span>
-<span class="normal">78</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">compute_results</span><span class="p">(</span>
+<span class="normal">78</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">compute_data</span><span class="p">(</span>
     <span class="bp">self</span><span class="p">,</span>
-    <span class="n">inp_obj</span><span class="p">:</span> <span class="n">ProgramInput</span><span class="p">,</span>
-    <span class="n">update_func</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Callable</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
-    <span class="n">update_interval</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">float</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">input_data</span><span class="p">:</span> <span class="n">CalcSpec</span><span class="p">,</span>
+    <span class="n">update_func</span><span class="p">:</span> <span class="n">Callable</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">update_interval</span><span class="p">:</span> <span class="nb">float</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="o">**</span><span class="n">kwargs</span><span class="p">,</span>
-<span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="n">SinglePointResults</span><span class="p">,</span> <span class="nb">str</span><span class="p">]:</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="n">SinglePointData</span><span class="p">,</span> <span class="nb">str</span><span class="p">]:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Execute TeraChem on the given input.</span>
 
 <span class="sd">    Args:</span>
-<span class="sd">        inp_obj: The qcio ProgramInput object for a computation.</span>
+<span class="sd">        input_data: The qcio CalcSpec object for a computation.</span>
 <span class="sd">        update_func: A callback function to call as the program executes.</span>
 <span class="sd">        update_interval: The minimum time in seconds between calls to the</span>
 <span class="sd">            update_func.</span>
 
 <span class="sd">    Returns:</span>
-<span class="sd">        A tuple of SinglePointResults and the stdout str.</span>
+<span class="sd">        A tuple of SinglePointData and the stdout str.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">try</span><span class="p">:</span>
         <span class="k">with</span> <span class="bp">self</span><span class="o">.</span><span class="n">client</span><span class="p">()</span> <span class="k">as</span> <span class="n">client</span><span class="p">:</span>
-            <span class="n">prog_output</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">compute</span><span class="p">(</span><span class="n">inp_obj</span><span class="p">)</span>
+            <span class="n">prog_output</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">compute</span><span class="p">(</span><span class="n">input_data</span><span class="p">)</span>
     <span class="k">except</span> <span class="bp">self</span><span class="o">.</span><span class="n">tcpb</span><span class="o">.</span><span class="n">exceptions</span><span class="o">.</span><span class="n">TCPBError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
         <span class="n">exc</span> <span class="o">=</span> <span class="n">ExternalProgramError</span><span class="p">(</span>
             <span class="n">program</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">program</span><span class="p">,</span>
-            <span class="c1"># Pass stdout to .compute() via the exception</span>
+            <span class="c1"># Pass logs to .compute() via the exception</span>
             <span class="c1"># Will only exist for TeraChemFrontendAdapter</span>
-            <span class="n">stdout</span><span class="o">=</span><span class="n">e</span><span class="o">.</span><span class="n">program_output</span><span class="o">.</span><span class="n">stdout</span><span class="p">,</span>
+            <span class="n">logs</span><span class="o">=</span><span class="n">e</span><span class="o">.</span><span class="n">results</span><span class="o">.</span><span class="n">logs</span><span class="p">,</span>
         <span class="p">)</span>
 
         <span class="k">raise</span> <span class="n">exc</span>
@@ -1954,9 +1961,9 @@ update_func.</p>
     <span class="k">else</span><span class="p">:</span>
         <span class="c1"># Write files to disk to be collected by BaseAdapter.compute()</span>
         <span class="c1"># Used only for TeraChemFrontendAdapter</span>
-        <span class="n">prog_output</span><span class="o">.</span><span class="n">results</span><span class="o">.</span><span class="n">save_files</span><span class="p">()</span>
+        <span class="n">prog_output</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">save_files</span><span class="p">()</span>
 
-    <span class="k">return</span> <span class="n">prog_output</span><span class="o">.</span><span class="n">results</span><span class="p">,</span> <span class="n">prog_output</span><span class="o">.</span><span class="n">stdout</span>
+    <span class="k">return</span> <span class="n">prog_output</span><span class="o">.</span><span class="n">data</span><span class="p">,</span> <span class="n">prog_output</span><span class="o">.</span><span class="n">logs</span>
 </code></pre></div></td></tr></table></div>
             </details>
     </div>
@@ -1989,14 +1996,14 @@ update_func.</p>
       <p>Adapter for TeraChem's Protocol Buffer Server.</p>
 
                   <details class="quote">
-                    <summary>Source code in <code>qcop/adapters/terachem_pbs.py</code></summary>
+                    <summary>Source code in <code>src/qcop/adapters/terachem_pbs.py</code></summary>
                     <div class="language-python highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 9</span>
 <span class="normal">10</span>
 <span class="normal">11</span>
 <span class="normal">12</span>
 <span class="normal">13</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
     <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
-    <span class="c1"># Check that xtb-python is installed.</span>
+    <span class="c1"># Check that tcpb is installed.</span>
     <span class="bp">self</span><span class="o">.</span><span class="n">tcpb</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_ensure_tcpb</span><span class="p">()</span>
     <span class="bp">self</span><span class="o">.</span><span class="n">client</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">tcpb</span><span class="o">.</span><span class="n">TCProtobufClient</span>
 </code></pre></div></td></tr></table></div>
