@@ -958,7 +958,7 @@
 <ul>
 <li><a href="https://github.com/coltonbh/qcconst">qcconst</a> - Physical constants, conversion factors, and a periodic table with clear source information for every value.</li>
 <li><a href="https://github.com/coltonbh/qcio">qcio</a> - Elegant and intuitive data structures for quantum chemistry, featuring seamless Jupyter Notebook visualizations.</li>
-<li><a href="https://github.com/coltonbh/qcinf">qcinf</a> - Cheminformatics algorithms and structure utilities using standardized <a href="https://qcio.coltonhicks.com/">qcio</a> data structures.</li>
+<li><a href="https://github.com/coltonbh/qcinf">qcinf</a> - Cheminformatics algorithms and structure utilities such as <code>rmsd</code> and alignment, using standardized <a href="https://qcio.coltonhicks.com/">qcio</a> data structures.</li>
 <li><a href="https://github.com/coltonbh/qccodec">qccodec</a> - A library for efficient parsing of quantum chemistry data into structured <code>qcio</code> objects.</li>
 <li><a href="https://github.com/coltonbh/qcop">qcop</a> - A package for operating quantum chemistry programs using <code>qcio</code> standardized data structures. Compatible with <code>TeraChem</code>, <code>psi4</code>, <code>QChem</code>, <code>NWChem</code>, <code>ORCA</code>, <code>Molpro</code>, <code>geomeTRIC</code>, and many more, featuring seamless Jupyter Notebook visualizations.</li>
 <li><a href="https://github.com/mtzgroup/bigchem">BigChem</a> - A distributed application for running quantum chemistry calculations at scale across clusters of computers or the cloud. Bring multi-node scaling to your favorite quantum chemistry program, featuring seamless Jupyter Notebook visualizations of your data.</li>
@@ -970,14 +970,14 @@
 <h2 id="quickstart">Quickstart<a class="headerlink" href="#quickstart" title="Permanent link">&para;</a></h2>
 <p><code>qcop</code> uses the <code>qcio</code> data structures to drive quantum chemistry programs in a standardized way. This allows for a simple and consistent interface to a wide variety of quantum chemistry programs. See the <a href="https://github.com/coltonbh/qcio">qcio</a> library for documentation on the input and output data structures.</p>
 <p>The <code>compute</code> function is the main entry point for the library and is used to run a calculation.</p>
-<div class="language-python highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">qcio</span><span class="w"> </span><span class="kn">import</span> <span class="n">Structure</span><span class="p">,</span> <span class="n">CalcSpec</span>
+<div class="language-python highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">qcio</span><span class="w"> </span><span class="kn">import</span> <span class="n">Structure</span><span class="p">,</span> <span class="n">ProgramInput</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">qcop</span><span class="w"> </span><span class="kn">import</span> <span class="n">compute</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">qcop.exceptions</span><span class="w"> </span><span class="kn">import</span> <span class="n">ExternalProgramError</span>
 <span class="c1"># Create the Structure</span>
 <span class="n">h2o</span> <span class="o">=</span> <span class="n">Structure</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="s2">&quot;h2o.xyz&quot;</span><span class="p">)</span>
 
-<span class="c1"># Define the calcspec</span>
-<span class="n">spec</span> <span class="o">=</span> <span class="n">CalcSpec</span><span class="p">(</span>
+<span class="c1"># Define the program input</span>
+<span class="n">prog_input</span> <span class="o">=</span> <span class="n">ProgramInput</span><span class="p">(</span>
     <span class="n">structure</span><span class="o">=</span><span class="n">h2o</span><span class="p">,</span>
     <span class="n">calctype</span><span class="o">=</span><span class="s2">&quot;energy&quot;</span><span class="p">,</span>
     <span class="n">model</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;method&quot;</span><span class="p">:</span> <span class="s2">&quot;hf&quot;</span><span class="p">,</span> <span class="s2">&quot;basis&quot;</span><span class="p">:</span> <span class="s2">&quot;sto-3g&quot;</span><span class="p">},</span>
@@ -986,7 +986,7 @@
 
 <span class="c1"># Run the calculation; will return Results or raise an exception</span>
 <span class="k">try</span><span class="p">:</span>
-    <span class="n">result</span> <span class="o">=</span> <span class="n">compute</span><span class="p">(</span><span class="s2">&quot;terachem&quot;</span><span class="p">,</span> <span class="n">spec</span><span class="p">,</span> <span class="n">collect_files</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">result</span> <span class="o">=</span> <span class="n">compute</span><span class="p">(</span><span class="s2">&quot;terachem&quot;</span><span class="p">,</span> <span class="n">prog_input</span><span class="p">,</span> <span class="n">collect_files</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 <span class="k">except</span> <span class="n">ExternalProgramError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
     <span class="c1"># External QQ program failed in some way</span>
     <span class="n">result</span> <span class="o">=</span> <span class="n">e</span><span class="o">.</span><span class="n">results</span>
@@ -1009,14 +1009,14 @@
     <span class="n">result</span><span class="o">.</span><span class="n">extras</span> <span class="c1"># Any extra information not in the schema</span>
 </code></pre></div>
 <p>One may also call <code>compute(..., raise_exc=False)</code> to return a <code>Results</code> object rather than raising an exception when a calculation fails. This may allow easier handling of failures in some cases.</p>
-<div class="language-python highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">qcio</span><span class="w"> </span><span class="kn">import</span> <span class="n">Structure</span><span class="p">,</span> <span class="n">CalcSpec</span>
+<div class="language-python highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">qcio</span><span class="w"> </span><span class="kn">import</span> <span class="n">Structure</span><span class="p">,</span> <span class="n">ProgramInput</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">qcop</span><span class="w"> </span><span class="kn">import</span> <span class="n">compute</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">qcop.exceptions</span><span class="w"> </span><span class="kn">import</span> <span class="n">ExternalProgramError</span>
 <span class="c1"># Create the Structure</span>
 <span class="n">h2o</span> <span class="o">=</span> <span class="n">Structure</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="s2">&quot;h2o.xyz&quot;</span><span class="p">)</span>
 
-<span class="c1"># Define the calcspec</span>
-<span class="n">spec</span> <span class="o">=</span> <span class="n">CalcSpec</span><span class="p">(</span>
+<span class="c1"># Define the program input</span>
+<span class="n">prog_input</span> <span class="o">=</span> <span class="n">ProgramInput</span><span class="p">(</span>
     <span class="n">structure</span><span class="o">=</span><span class="n">h2o</span><span class="p">,</span>
     <span class="n">calctype</span><span class="o">=</span><span class="s2">&quot;energy&quot;</span><span class="p">,</span>
     <span class="n">model</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;method&quot;</span><span class="p">:</span> <span class="s2">&quot;hf&quot;</span><span class="p">,</span> <span class="s2">&quot;basis&quot;</span><span class="p">:</span> <span class="s2">&quot;sto-3g&quot;</span><span class="p">},</span>
@@ -1024,14 +1024,14 @@
 <span class="p">)</span>
 
 <span class="c1"># Run the calculation; will return a Results object</span>
-<span class="n">result</span> <span class="o">=</span> <span class="n">compute</span><span class="p">(</span><span class="s2">&quot;terachem&quot;</span><span class="p">,</span> <span class="n">spec</span><span class="p">,</span> <span class="n">collect_files</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">raise_exc</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<span class="n">result</span> <span class="o">=</span> <span class="n">compute</span><span class="p">(</span><span class="s2">&quot;terachem&quot;</span><span class="p">,</span> <span class="n">prog_input</span><span class="p">,</span> <span class="n">collect_files</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">raise_exc</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
 <span class="k">if</span> <span class="ow">not</span> <span class="n">result</span><span class="o">.</span><span class="n">success</span><span class="p">:</span>
     <span class="c1"># Same as except block above</span>
 
 <span class="k">else</span><span class="p">:</span>
     <span class="c1"># Same as else block above</span>
 </code></pre></div>
-<p>Alternatively, the <code>compute_args</code> function can be used to run a calculation with the input data structures passed in as arguments rather than as a single <code>CalcSpec</code> object.</p>
+<p>Alternatively, the <code>compute_args</code> function can be used to run a calculation with the input data structures passed in as arguments rather than as a single <code>ProgramInput</code> object.</p>
 <div class="language-python highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">qcio</span><span class="w"> </span><span class="kn">import</span> <span class="n">Structure</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">qcop</span><span class="w"> </span><span class="kn">import</span> <span class="n">compute_args</span>
 <span class="c1"># Create the Structure</span>
@@ -1061,9 +1061,9 @@
 <p>Then in a Jupyter notebook import the <code>qcio</code> view module and call <code>view.view(...)</code> passing it one or any number of <code>qcio</code> objects you want to visualizing including <code>Structure</code> objects or any <code>Results</code> object. You may also pass an array of <code>titles</code> and/or <code>subtitles</code> to add additional information to the molecular structure display. If no titles are passed <code>qcio</code> with look for <code>Structure</code> identifiers such as a name or SMILES to label the <code>Structure</code>.</p>
 <p><img alt="Structure Viewer" src="https://public.coltonhicks.com/assets/qcio/structure_viewer.png" /></p>
 <p>Seamless visualizations for <code>Results</code> objects make results analysis easy!</p>
-<p><img alt="Optimization Viewer" src="./docs/assets/optimization_viewer.png" /></p>
+<p><img alt="Optimization Viewer" src="assets/optimization_viewer.png" /></p>
 <p>Single point calculations display their results in a table.</p>
-<p><img alt="Single Point Viewer" src="./docs/assets/single_point_viewer.png" /></p>
+<p><img alt="Single Point Viewer" src="assets/single_point_viewer.png" /></p>
 <p>If you want to use the HTML generated by the viewer to build your own dashboards use the functions inside of <code>qcio.view.py</code> that begin with the word <code>generate_</code> to create HTML you can insert into any dashboard.</p>
 <h2 id="support">Support<a class="headerlink" href="#support" title="Permanent link">&para;</a></h2>
 <p>If you have any issues with <code>qcop</code> or would like to request a feature, please open an <a href="https://github.com/coltonbh/qcop/issues">issue</a>.</p>

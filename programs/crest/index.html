@@ -963,7 +963,7 @@
 
 <details class="note" open>
   <summary>Note</summary>
-  <p>The <code>CalcSpec.keywords</code> attribute is used to create the input file for
+  <p>The <code>ProgramInput.keywords</code> attribute is used to create the input file for
 CREST. This means that the structure of the <code>keywords</code> attribute should match
 that of <a href="https://crest-lab.github.io/crest-docs/page/documentation/inputfiles.html">CREST's input specification</a>.
 Keywords such as method, charge, and uhf (which are stored on the <code>Model</code> and
@@ -1128,7 +1128,7 @@ still valid because they are translationally invariant.</p>
 
 
 <a href="#qcop.adapters.crest.CRESTAdapter.compute_data" class="headerlink" title="Permanent link">&para;</a></h3>
-<div class="language-python doc-signature highlight"><pre><span></span><code><span class="nf">compute_data</span><span class="p">(</span><span class="n">input_data</span><span class="p">:</span> <span class="n"><span title="qcio.CalcSpec">CalcSpec</span></span><span class="p">,</span> <span class="n">update_func</span><span class="p">:</span> <span class="n"><span title="collections.abc.Callable">Callable</span></span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">update_interval</span><span class="p">:</span> <span class="n"><span title="float">float</span></span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">collect_rotamers</span><span class="p">:</span> <span class="n"><span title="bool">bool</span></span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n"><span title="tuple">tuple</span></span><span class="p">[</span><span class="n"><span title="qcio.SinglePointData">SinglePointData</span></span> <span class="o">|</span> <span class="n"><span title="qcio.OptimizationResults">OptimizationResults</span></span> <span class="o">|</span> <span class="n"><span title="qcio.ConformerSearchResults">ConformerSearchResults</span></span><span class="p">,</span> <span class="n"><span title="str">str</span></span><span class="p">]</span>
+<div class="language-python doc-signature highlight"><pre><span></span><code><span class="nf">compute_data</span><span class="p">(</span><span class="n">input_data</span><span class="p">:</span> <span class="n"><span title="qcio.ProgramInput">ProgramInput</span></span><span class="p">,</span> <span class="n">update_func</span><span class="p">:</span> <span class="n"><span title="collections.abc.Callable">Callable</span></span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">update_interval</span><span class="p">:</span> <span class="n"><span title="float">float</span></span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">collect_rotamers</span><span class="p">:</span> <span class="n"><span title="bool">bool</span></span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n"><span title="tuple">tuple</span></span><span class="p">[</span><span class="n"><span title="qcio.SinglePointData">SinglePointData</span></span> <span class="o">|</span> <span class="n"><span title="qcio.OptimizationResults">OptimizationResults</span></span> <span class="o">|</span> <span class="n"><span title="qcio.ConformerSearchResults">ConformerSearchResults</span></span><span class="p">,</span> <span class="n"><span title="str">str</span></span><span class="p">]</span>
 </code></pre></div>
 
     <div class="doc doc-contents ">
@@ -1150,11 +1150,11 @@ still valid because they are translationally invariant.</p>
           <tr class="doc-section-item">
             <td><code>input_data</code></td>
             <td>
-                  <code><span title="qcio.CalcSpec">CalcSpec</span></code>
+                  <code><span title="qcio.ProgramInput">ProgramInput</span></code>
             </td>
             <td>
               <div class="doc-md-description">
-                <p>The qcio CalcSpec object for a computation.</p>
+                <p>The qcio ProgramInput object for a computation.</p>
               </div>
             </td>
             <td>
@@ -1295,7 +1295,7 @@ False since rotamers are usually not of interest and there will be many.</p>
 <span class="normal">133</span>
 <span class="normal">134</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">compute_data</span><span class="p">(</span>
     <span class="bp">self</span><span class="p">,</span>
-    <span class="n">input_data</span><span class="p">:</span> <span class="n">CalcSpec</span><span class="p">,</span>
+    <span class="n">input_data</span><span class="p">:</span> <span class="n">ProgramInput</span><span class="p">,</span>
     <span class="n">update_func</span><span class="p">:</span> <span class="n">Callable</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="n">update_interval</span><span class="p">:</span> <span class="nb">float</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="n">collect_rotamers</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
@@ -1304,7 +1304,7 @@ False since rotamers are usually not of interest and there will be many.</p>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Execute CREST on the given input.</span>
 
 <span class="sd">    Args:</span>
-<span class="sd">        input_data: The qcio CalcSpec object for a computation.</span>
+<span class="sd">        input_data: The qcio ProgramInput object for a computation.</span>
 <span class="sd">        update_func: A function to call with the stdout at regular intervals.</span>
 <span class="sd">        update_interval: The interval at which to call the update function.</span>
 <span class="sd">        collect_rotamers: Collect rotamers if doing a conformer_search. Defaults to</span>

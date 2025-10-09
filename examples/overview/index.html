@@ -873,7 +873,7 @@
   <h1>Overview</h1>
 
 <p>Calculations are run by calling the <code>qcop.compute()</code> function with the relevant arguments and keywords like this:</p>
-<div class="language-python highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">qcio</span><span class="w"> </span><span class="kn">import</span> <span class="n">Structure</span><span class="p">,</span> <span class="n">CalcSpec</span>
+<div class="language-python highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">qcio</span><span class="w"> </span><span class="kn">import</span> <span class="n">Structure</span><span class="p">,</span> <span class="n">ProgramInput</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">qcop</span><span class="w"> </span><span class="kn">import</span> <span class="n">compute</span>
 
 <span class="c1"># Create the Structure</span>
@@ -886,8 +886,8 @@
     <span class="p">],</span>
 <span class="p">)</span>
 
-<span class="c1"># Define the calcspec</span>
-<span class="n">spec</span> <span class="o">=</span> <span class="n">CalcSpec</span><span class="p">(</span>
+<span class="c1"># Define the program input</span>
+<span class="n">prog_input</span> <span class="o">=</span> <span class="n">ProgramInput</span><span class="p">(</span>
     <span class="n">structure</span><span class="o">=</span><span class="n">h2o</span><span class="p">,</span>
     <span class="n">calctype</span><span class="o">=</span><span class="s2">&quot;energy&quot;</span><span class="p">,</span>
     <span class="n">model</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;method&quot;</span><span class="p">:</span> <span class="s2">&quot;hf&quot;</span><span class="p">,</span> <span class="s2">&quot;basis&quot;</span><span class="p">:</span> <span class="s2">&quot;sto-3g&quot;</span><span class="p">},</span>
@@ -895,7 +895,7 @@
 <span class="p">)</span>
 
 <span class="c1"># Run the calculation; will return Results or raise an exception</span>
-<span class="n">result</span> <span class="o">=</span> <span class="n">compute</span><span class="p">(</span><span class="s2">&quot;terachem&quot;</span><span class="p">,</span> <span class="n">spec</span><span class="p">,</span> <span class="n">collect_files</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">result</span> <span class="o">=</span> <span class="n">compute</span><span class="p">(</span><span class="s2">&quot;terachem&quot;</span><span class="p">,</span> <span class="n">prog_input</span><span class="p">,</span> <span class="n">collect_files</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 </code></pre></div>
 <p>The <code>compute</code> selects the correct program adapter and then calls <code>adapter.compute()</code>. The available arguments and keywords for the top level <code>compute()</code> function match those shown here:</p>
 
@@ -908,7 +908,7 @@
 
 
 <a href="#qcop.adapters.BaseAdapter.compute" class="headerlink" title="Permanent link">&para;</a></h2>
-<div class="language-python doc-signature highlight"><pre><span></span><code><span class="nf">compute</span><span class="p">(</span><span class="n">input_data</span><span class="p">:</span> <span class="n"><span title="qcio.SpecType">SpecType</span></span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">scratch_dir</span><span class="p">:</span> <span class="n"><span title="qcio.helper_types.StrOrPath">StrOrPath</span></span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">rm_scratch_dir</span><span class="p">:</span> <span class="n"><span title="bool">bool</span></span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span> <span class="n">collect_logs</span><span class="p">:</span> <span class="n"><span title="bool">bool</span></span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span> <span class="n">collect_files</span><span class="p">:</span> <span class="n"><span title="bool">bool</span></span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span> <span class="n">collect_wfn</span><span class="p">:</span> <span class="n"><span title="bool">bool</span></span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span> <span class="n">update_func</span><span class="p">:</span> <span class="n"><span title="collections.abc.Callable">Callable</span></span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">update_interval</span><span class="p">:</span> <span class="n"><span title="float">float</span></span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">print_logs</span><span class="p">:</span> <span class="n"><span title="bool">bool</span></span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span> <span class="n">raise_exc</span><span class="p">:</span> <span class="n"><span title="bool">bool</span></span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span> <span class="n">propagate_wfn</span><span class="p">:</span> <span class="n"><span title="bool">bool</span></span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span> <span class="o">**</span><span class="n">adapter_kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n"><span title="qcio.Results">Results</span></span><span class="p">[</span><span class="n"><span title="qcio.SpecType">SpecType</span></span><span class="p">,</span> <span class="n"><span title="qcio.DataType">DataType</span></span><span class="p">]</span>
+<div class="language-python doc-signature highlight"><pre><span></span><code><span class="nf">compute</span><span class="p">(</span><span class="n">input_data</span><span class="p">:</span> <span class="n"><span title="qcio.InputType">InputType</span></span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">scratch_dir</span><span class="p">:</span> <span class="n"><span title="qcio.helper_types.StrOrPath">StrOrPath</span></span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">rm_scratch_dir</span><span class="p">:</span> <span class="n"><span title="bool">bool</span></span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span> <span class="n">collect_logs</span><span class="p">:</span> <span class="n"><span title="bool">bool</span></span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span> <span class="n">collect_files</span><span class="p">:</span> <span class="n"><span title="bool">bool</span></span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span> <span class="n">collect_wfn</span><span class="p">:</span> <span class="n"><span title="bool">bool</span></span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span> <span class="n">update_func</span><span class="p">:</span> <span class="n"><span title="collections.abc.Callable">Callable</span></span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">update_interval</span><span class="p">:</span> <span class="n"><span title="float">float</span></span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">print_logs</span><span class="p">:</span> <span class="n"><span title="bool">bool</span></span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span> <span class="n">raise_exc</span><span class="p">:</span> <span class="n"><span title="bool">bool</span></span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span> <span class="n">propagate_wfn</span><span class="p">:</span> <span class="n"><span title="bool">bool</span></span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span> <span class="o">**</span><span class="n">adapter_kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n"><span title="qcio.Results">Results</span></span><span class="p">[</span><span class="n"><span title="qcio.InputType">InputType</span></span><span class="p">,</span> <span class="n"><span title="qcio.DataType">DataType</span></span><span class="p">]</span>
 </code></pre></div>
 
     <div class="doc doc-contents first">
@@ -930,12 +930,12 @@
           <tr class="doc-section-item">
             <td><code>input_data</code></td>
             <td>
-                  <code><span title="qcio.SpecType">SpecType</span></code>
+                  <code><span title="qcio.InputType">InputType</span></code>
             </td>
             <td>
               <div class="doc-md-description">
-                <p>A qcio input object for a computation. E.g. A FileSpec,
-CalcSpec or CompositeCalcSpec.</p>
+                <p>A qcio input object for a computation. E.g. A FileInput,
+ProgramInput or DualProgramInput.</p>
               </div>
             </td>
             <td>
@@ -1126,7 +1126,7 @@ qcng.compute().</p>
       <tbody>
           <tr class="doc-section-item">
             <td>
-                  <code><span title="qcio.Results">Results</span>[<span title="qcio.SpecType">SpecType</span>, <span title="qcio.DataType">DataType</span>]</code>
+                  <code><span title="qcio.Results">Results</span>[<span title="qcio.InputType">InputType</span>, <span title="qcio.DataType">DataType</span>]</code>
             </td>
             <td>
               <div class="doc-md-description">
@@ -1364,7 +1364,7 @@ or not available on the $PATH.</p>
 <span class="normal">230</span>
 <span class="normal">231</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">compute</span><span class="p">(</span>
     <span class="bp">self</span><span class="p">,</span>
-    <span class="n">input_data</span><span class="p">:</span> <span class="n">SpecType</span><span class="p">,</span>
+    <span class="n">input_data</span><span class="p">:</span> <span class="n">InputType</span><span class="p">,</span>
     <span class="o">*</span><span class="p">,</span>
     <span class="n">scratch_dir</span><span class="p">:</span> <span class="n">StrOrPath</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="n">rm_scratch_dir</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
@@ -1377,12 +1377,12 @@ or not available on the $PATH.</p>
     <span class="n">raise_exc</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
     <span class="n">propagate_wfn</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
     <span class="o">**</span><span class="n">adapter_kwargs</span><span class="p">,</span>
-<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Results</span><span class="p">[</span><span class="n">SpecType</span><span class="p">,</span> <span class="n">DataType</span><span class="p">]:</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Results</span><span class="p">[</span><span class="n">InputType</span><span class="p">,</span> <span class="n">DataType</span><span class="p">]:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Compute the given input using the adapter&#39;s program.</span>
 
 <span class="sd">    Args:</span>
-<span class="sd">        input_data: A qcio input object for a computation. E.g. A FileSpec,</span>
-<span class="sd">            CalcSpec or CompositeCalcSpec.</span>
+<span class="sd">        input_data: A qcio input object for a computation. E.g. A FileInput,</span>
+<span class="sd">            ProgramInput or DualProgramInput.</span>
 <span class="sd">        scratch_dir: The scratch directory for the program. If None, a new directory</span>
 <span class="sd">            is created in the system default temporary directory. If rm_scratch_dir</span>
 <span class="sd">            is True this directory will be deleted after the program finishes.</span>
@@ -1448,7 +1448,7 @@ or not available on the $PATH.</p>
             <span class="c1"># Validate input object</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">validate_input</span><span class="p">(</span><span class="n">input_data</span><span class="p">)</span>
 
-            <span class="c1"># Execute the program. results will be None if FileSpec</span>
+            <span class="c1"># Execute the program. results will be None if FileInput</span>
             <span class="n">data</span><span class="p">,</span> <span class="n">logs</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">compute_data</span><span class="p">(</span>
                 <span class="n">input_data</span><span class="p">,</span>
                 <span class="n">update_func</span><span class="p">,</span>
@@ -1456,7 +1456,7 @@ or not available on the $PATH.</p>
                 <span class="n">propagate_wfn</span><span class="o">=</span><span class="n">propagate_wfn</span><span class="p">,</span>
                 <span class="o">**</span><span class="n">adapter_kwargs</span><span class="p">,</span>
             <span class="p">)</span>
-            <span class="c1"># None value covers FileSpec case</span>
+            <span class="c1"># None value covers FileInput case</span>
             <span class="n">results_dict</span><span class="p">[</span><span class="s2">&quot;success&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="kc">True</span>
 
             <span class="c1"># Optionally collect wavefunction file</span>
@@ -1503,10 +1503,10 @@ or not available on the $PATH.</p>
                 <span class="s2">&quot;provenance&quot;</span><span class="p">:</span> <span class="n">provenance</span><span class="p">,</span>
             <span class="p">}</span>
         <span class="p">)</span>
-        <span class="n">results</span> <span class="o">=</span> <span class="n">Results</span><span class="p">[</span><span class="n">SpecType</span><span class="p">,</span> <span class="n">DataType</span><span class="p">](</span><span class="o">**</span><span class="n">results_dict</span><span class="p">)</span>
+        <span class="n">results</span> <span class="o">=</span> <span class="n">Results</span><span class="p">[</span><span class="n">InputType</span><span class="p">,</span> <span class="n">DataType</span><span class="p">](</span><span class="o">**</span><span class="n">results_dict</span><span class="p">)</span>
 
         <span class="c1"># Collect files generated by the program</span>
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">uses_files</span> <span class="ow">and</span> <span class="p">(</span><span class="n">collect_files</span> <span class="ow">or</span> <span class="nb">type</span><span class="p">(</span><span class="n">input_data</span><span class="p">)</span> <span class="ow">is</span> <span class="n">FileSpec</span><span class="p">):</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">uses_files</span> <span class="ow">and</span> <span class="p">(</span><span class="n">collect_files</span> <span class="ow">or</span> <span class="nb">type</span><span class="p">(</span><span class="n">input_data</span><span class="p">)</span> <span class="ow">is</span> <span class="n">FileInput</span><span class="p">):</span>
             <span class="n">results</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">add_files</span><span class="p">(</span>
                 <span class="n">final_scratch_dir</span><span class="p">,</span>
                 <span class="n">recursive</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>

@@ -1047,7 +1047,7 @@
 
 
 <a href="#qcop.adapters.xtb.XTBAdapter.validate_input" class="headerlink" title="Permanent link">&para;</a></h3>
-<div class="language-python doc-signature highlight"><pre><span></span><code><span class="nf">validate_input</span><span class="p">(</span><span class="n">input_data</span><span class="p">:</span> <span class="n"><span title="qcio.CalcSpec">CalcSpec</span></span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span>
+<div class="language-python doc-signature highlight"><pre><span></span><code><span class="nf">validate_input</span><span class="p">(</span><span class="n">input_data</span><span class="p">:</span> <span class="n"><span title="qcio.ProgramInput">ProgramInput</span></span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span>
 </code></pre></div>
 
     <div class="doc doc-contents ">
@@ -1066,7 +1066,7 @@
 <span class="normal">50</span>
 <span class="normal">51</span>
 <span class="normal">52</span>
-<span class="normal">53</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">validate_input</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">input_data</span><span class="p">:</span> <span class="n">CalcSpec</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="normal">53</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">validate_input</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">input_data</span><span class="p">:</span> <span class="n">ProgramInput</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Validate the input for xtb-python.&quot;&quot;&quot;</span>
     <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">validate_input</span><span class="p">(</span><span class="n">input_data</span><span class="p">)</span>
     <span class="c1"># Check that xtb supports the method.</span>
@@ -1191,7 +1191,7 @@
 
 
 <a href="#qcop.adapters.xtb.XTBAdapter.compute_data" class="headerlink" title="Permanent link">&para;</a></h3>
-<div class="language-python doc-signature highlight"><pre><span></span><code><span class="nf">compute_data</span><span class="p">(</span><span class="n">input_data</span><span class="p">:</span> <span class="n"><span title="qcio.CalcSpec">CalcSpec</span></span><span class="p">,</span> <span class="n">update_func</span><span class="p">:</span> <span class="n"><span title="collections.abc.Callable">Callable</span></span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">update_interval</span><span class="p">:</span> <span class="n"><span title="float">float</span></span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n"><span title="tuple">tuple</span></span><span class="p">[</span><span class="n"><span title="qcio.SinglePointData">SinglePointData</span></span><span class="p">,</span> <span class="n"><span title="str">str</span></span><span class="p">]</span>
+<div class="language-python doc-signature highlight"><pre><span></span><code><span class="nf">compute_data</span><span class="p">(</span><span class="n">input_data</span><span class="p">:</span> <span class="n"><span title="qcio.ProgramInput">ProgramInput</span></span><span class="p">,</span> <span class="n">update_func</span><span class="p">:</span> <span class="n"><span title="collections.abc.Callable">Callable</span></span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">update_interval</span><span class="p">:</span> <span class="n"><span title="float">float</span></span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n"><span title="tuple">tuple</span></span><span class="p">[</span><span class="n"><span title="qcio.SinglePointData">SinglePointData</span></span><span class="p">,</span> <span class="n"><span title="str">str</span></span><span class="p">]</span>
 </code></pre></div>
 
     <div class="doc doc-contents ">
@@ -1213,11 +1213,11 @@
           <tr class="doc-section-item">
             <td><code>input_data</code></td>
             <td>
-                  <code><span title="qcio.CalcSpec">CalcSpec</span></code>
+                  <code><span title="qcio.ProgramInput">ProgramInput</span></code>
             </td>
             <td>
               <div class="doc-md-description">
-                <p>The qcio CalcSpec object for a computation.</p>
+                <p>The qcio ProgramInput object for a computation.</p>
               </div>
             </td>
             <td>
@@ -1339,7 +1339,7 @@ update_func.</p>
 <span class="normal">155</span>
 <span class="normal">156</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">compute_data</span><span class="p">(</span>
     <span class="bp">self</span><span class="p">,</span>
-    <span class="n">input_data</span><span class="p">:</span> <span class="n">CalcSpec</span><span class="p">,</span>
+    <span class="n">input_data</span><span class="p">:</span> <span class="n">ProgramInput</span><span class="p">,</span>
     <span class="n">update_func</span><span class="p">:</span> <span class="n">Callable</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="n">update_interval</span><span class="p">:</span> <span class="nb">float</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="o">**</span><span class="n">kwargs</span><span class="p">,</span>
@@ -1347,7 +1347,7 @@ update_func.</p>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Execute xtb on the given input.</span>
 
 <span class="sd">    Args:</span>
-<span class="sd">        input_data: The qcio CalcSpec object for a computation.</span>
+<span class="sd">        input_data: The qcio ProgramInput object for a computation.</span>
 <span class="sd">        update_func: A callback function to call as the program executes.</span>
 <span class="sd">        update_interval: The minimum time in seconds between calls to the</span>
 <span class="sd">            update_func.</span>
@@ -1409,7 +1409,7 @@ update_func.</p>
 </div><h2 id="example">Example<a class="headerlink" href="#example" title="Permanent link">&para;</a></h2>
 <div class="language-python highlight"><pre><span></span><code><span class="sd">&quot;&quot;&quot;Must run script like this: python -m examples.xtb&quot;&quot;&quot;</span>
 
-<span class="kn">from</span><span class="w"> </span><span class="nn">qcio</span><span class="w"> </span><span class="kn">import</span> <span class="n">CalcSpec</span><span class="p">,</span> <span class="n">CalcType</span><span class="p">,</span> <span class="n">Structure</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">qcio</span><span class="w"> </span><span class="kn">import</span> <span class="n">CalcType</span><span class="p">,</span> <span class="n">ProgramInput</span><span class="p">,</span> <span class="n">Structure</span>
 
 <span class="kn">from</span><span class="w"> </span><span class="nn">qcop</span><span class="w"> </span><span class="kn">import</span> <span class="n">compute</span>
 
@@ -1425,8 +1425,8 @@ update_func.</p>
     <span class="p">],</span>
 <span class="p">)</span>
 
-<span class="c1"># Define the calcspec</span>
-<span class="n">spec</span> <span class="o">=</span> <span class="n">CalcSpec</span><span class="p">(</span>
+<span class="c1"># Define the program input</span>
+<span class="n">prog_input</span> <span class="o">=</span> <span class="n">ProgramInput</span><span class="p">(</span>
     <span class="n">structure</span><span class="o">=</span><span class="n">structure</span><span class="p">,</span>
     <span class="n">calctype</span><span class="o">=</span><span class="n">CalcType</span><span class="o">.</span><span class="n">energy</span><span class="p">,</span>
     <span class="n">model</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;method&quot;</span><span class="p">:</span> <span class="s2">&quot;GFN2xTB&quot;</span><span class="p">},</span>  <span class="c1"># type: ignore</span>
@@ -1434,8 +1434,8 @@ update_func.</p>
 <span class="p">)</span>
 
 
-<span class="n">results</span> <span class="o">=</span> <span class="n">compute</span><span class="p">(</span><span class="s2">&quot;xtb&quot;</span><span class="p">,</span> <span class="n">spec</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="n">results</span><span class="p">)</span>
+<span class="n">result</span> <span class="o">=</span> <span class="n">compute</span><span class="p">(</span><span class="s2">&quot;xtb&quot;</span><span class="p">,</span> <span class="n">prog_input</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">result</span><span class="p">)</span>
 </code></pre></div>
 
 
