@@ -9,7 +9,7 @@ import os
 from collections.abc import Callable
 
 import numpy as np
-from qcio import CalcSpec, CalcType, SinglePointData, Wavefunction
+from qcio import CalcType, ProgramInput, SinglePointData, Wavefunction
 
 from qcop.exceptions import (
     AdapterInputError,
@@ -27,7 +27,7 @@ from .utils import capture_sys_stdout, set_env_variable
 CACHED_XTB_VERSION = None
 
 
-class XTBAdapter(ProgramAdapter[CalcSpec, SinglePointData]):
+class XTBAdapter(ProgramAdapter[ProgramInput, SinglePointData]):
     """Adapter for xtb-python."""
 
     supported_calctypes = [CalcType.energy, CalcType.gradient]
@@ -40,7 +40,7 @@ class XTBAdapter(ProgramAdapter[CalcSpec, SinglePointData]):
         # Check that xtb-python is installed.
         self.xtb = self._ensure_xtb()
 
-    def validate_input(self, input_data: CalcSpec) -> None:
+    def validate_input(self, input_data: ProgramInput) -> None:
         """Validate the input for xtb-python."""
         super().validate_input(input_data)
         # Check that xtb supports the method.
@@ -99,7 +99,7 @@ class XTBAdapter(ProgramAdapter[CalcSpec, SinglePointData]):
 
     def compute_data(
         self,
-        input_data: CalcSpec,
+        input_data: ProgramInput,
         update_func: Callable | None = None,
         update_interval: float | None = None,
         **kwargs,
@@ -107,7 +107,7 @@ class XTBAdapter(ProgramAdapter[CalcSpec, SinglePointData]):
         """Execute xtb on the given input.
 
         Args:
-            input_data: The qcio CalcSpec object for a computation.
+            input_data: The qcio ProgramInput object for a computation.
             update_func: A callback function to call as the program executes.
             update_interval: The minimum time in seconds between calls to the
                 update_func.

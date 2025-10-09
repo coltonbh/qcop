@@ -1015,16 +1015,16 @@ wheels = [
 
 [[package]]
 name = "qccodec"
-version = "0.8.0"
+version = "0.9.0"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "qcconst" },
     { name = "qcio" },
     { name = "tomli-w" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/92/39/750de8d81b0af4f36f95977aff985c150bf52636cdfa9ba7683272ec782e/qccodec-0.8.0.tar.gz", hash = "sha256:7314630f9f2772678c3c02baa3e1b629a77588e6fed51b7aa3264b4cbf6baf9c", size = 391902 }
+sdist = { url = "https://files.pythonhosted.org/packages/2f/17/0083b860463e1ca22b2772634f91c28f45b717f53d1d1f58e86e06b6243b/qccodec-0.9.0.tar.gz", hash = "sha256:f1fe3630093a47ae24047db670e5da5fd470fbef09e29f0aff93fb7135437e6e", size = 401329 }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/3a/15/28cd286e9829888f164a012522b288cfe1430545c2ada1e3b03c1818e022/qccodec-0.8.0-py3-none-any.whl", hash = "sha256:929422e24af575f9f0891e8ed9bd7957b70612531f33377f4ec611798a88d0ca", size = 24567 },
+    { url = "https://files.pythonhosted.org/packages/c8/f3/c927721458c8cd84e3cf0554cf55497c0f879f608ca17944a1c8d5189725/qccodec-0.9.0-py3-none-any.whl", hash = "sha256:953d27230e3d954daaa8aa1c0869f228ea4741cee3b624c780684b0d681a080f", size = 24626 },
 ]
 
 [[package]]
@@ -1068,7 +1068,7 @@ wheels = [
 
 [[package]]
 name = "qcio"
-version = "0.15.0"
+version = "0.16.0"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "eval-type-backport" },
@@ -1079,9 +1079,9 @@ dependencies = [
     { name = "toml" },
     { name = "typing-extensions" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/78/01/5545b830bcbe36400b65ae3a628e5bed26c616db306b58fecfa408a2fd3b/qcio-0.15.0.tar.gz", hash = "sha256:b9e8b0f06e420fa9efc779d21f0430036f60deee1ffd9d57136302c94a08356d", size = 1474383 }
+sdist = { url = "https://files.pythonhosted.org/packages/ad/93/870c0e5ee6f4879e6942094d563ba0ad61fe5ccb0af24b6d2049534c1e87/qcio-0.16.0.tar.gz", hash = "sha256:5b803e9d831fb2280ac43c48f87b76e0c8150391c1d4d561f749f0a4f4c5e0cb", size = 1473997 }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/c3/89/c23dd362ef4704a17e956f48f7450a15f82e7bafe53002924d72ca80fd8d/qcio-0.15.0-py3-none-any.whl", hash = "sha256:7604a8783d844608ee714232f24fac85b94c0a64059378dd52fa9adc0b7b8106", size = 36945 },
+    { url = "https://files.pythonhosted.org/packages/b2/d3/42d945e34abc54af2eb4454824dc63d29316b87cb58f72d4248fabff2278/qcio-0.16.0-py3-none-any.whl", hash = "sha256:d8fbd19d32a19ff2c3843b004cdc80b014ce2d8eff8714406fe4a9387143b6b7", size = 36723 },
 ]
 
 [[package]]
@@ -1134,12 +1134,12 @@ docs = [
 requires-dist = [
     { name = "geometric", marker = "extra == 'all'", specifier = ">=1.0.1,<2" },
     { name = "geometric", marker = "extra == 'geometric'", specifier = ">=1.0.1,<2" },
-    { name = "qccodec", specifier = ">=0.8.0" },
+    { name = "qccodec", specifier = ">=0.9.0" },
     { name = "qcelemental", marker = "extra == 'all'", specifier = ">=0.26.0,<0.27" },
     { name = "qcelemental", marker = "extra == 'qcengine'", specifier = ">=0.26.0,<0.27" },
     { name = "qcengine", marker = "extra == 'all'", specifier = ">=0.27.0,<0.28" },
     { name = "qcengine", marker = "extra == 'qcengine'", specifier = ">=0.27.0,<0.28" },
-    { name = "qcio", specifier = ">=0.15.0" },
+    { name = "qcio", specifier = ">=0.16.0" },
     { name = "tcpb", marker = "extra == 'all'", specifier = ">=0.14.1" },
     { name = "tomli-w", specifier = ">=1.0.0,<2" },
 ]

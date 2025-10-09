@@ -5,11 +5,11 @@ from pathlib import Path
 
 import numpy as np
 from qcio import (
-    CalcSpec,
     CalcType,
-    CompositeCalcSpec,
-    CoreSpec,
+    DualProgramInput,
     OptimizationData,
+    ProgramArgs,
+    ProgramInput,
     Results,
     SinglePointData,
     Structure,
@@ -27,7 +27,7 @@ from .base import ProgramAdapter
 from .utils import capture_logs
 
 
-class GeometricAdapter(ProgramAdapter[CompositeCalcSpec, OptimizationData]):
+class GeometricAdapter(ProgramAdapter[DualProgramInput, OptimizationData]):
     """Adapter for geomeTRIC."""
 
     program = "geometric"
@@ -74,7 +74,7 @@ class GeometricAdapter(ProgramAdapter[CompositeCalcSpec, OptimizationData]):
 
     def compute_data(
         self,
-        input_data: CompositeCalcSpec,
+        input_data: DualProgramInput,
         update_func: Callable | None = None,
         update_interval: float | None = None,
         propagate_wfn: bool = True,
@@ -83,7 +83,7 @@ class GeometricAdapter(ProgramAdapter[CompositeCalcSpec, OptimizationData]):
         """Compute the requested calculation.
 
         Args:
-            input_data: The qcio CompositeCalcSpec object for a computation.
+            input_data: The qcio DualProgramInput object for a computation.
             propagate_wfn: Whether to propagate the wavefunction between steps of the
                 optimization.
         """
@@ -123,11 +123,11 @@ class GeometricAdapter(ProgramAdapter[CompositeCalcSpec, OptimizationData]):
             log_string.getvalue(),
         )
 
-    def _update_input_data(self, input_data: CompositeCalcSpec) -> None:
+    def _update_input_data(self, input_data: DualProgramInput) -> None:
         """Update the input_data based on its calctype
 
         Args:
-            input_data: The qcio CompositeCalcSpec object for a computation.
+            input_data: The qcio DualProgramInput object for a computation.
 
         Returns:
             None. The input_data is updated in place.
@@ -167,7 +167,7 @@ class GeometricAdapter(ProgramAdapter[CompositeCalcSpec, OptimizationData]):
         """Construct the geomeTRIC optimizer object
 
         Args:
-            input_data: The qcio CompositeCalcSpec object for a computation.
+            input_data: The qcio DualProgramInput object for a computation.
             geometric_molecule: The geomeTRIC Molecule object.
             internal_coords_sys: The geomeTRIC internal coordinate system.
             qcio_adapter: The qcio adapter for the subprogram.
@@ -181,7 +181,7 @@ class GeometricAdapter(ProgramAdapter[CompositeCalcSpec, OptimizationData]):
             internal_coords_sys,
             engine=self._geometric_engine()(
                 qcio_adapter,
-                input_data.subprogram_spec,
+                input_data.subprogram_args,
                 input_data.structure,
                 geometric_molecule,
                 propagate_wfn,
@@ -201,7 +201,7 @@ class GeometricAdapter(ProgramAdapter[CompositeCalcSpec, OptimizationData]):
         """Setup the internal coordinate system.
 
         Args:
-            input_data: The qcio CompositeCalcSpec object for a computation.
+            input_data: The qcio DualProgramInput object for a computation.
             geometric_structure: The geomeTRIC Structure object.
 
         Returns:
@@ -252,7 +252,7 @@ class GeometricAdapter(ProgramAdapter[CompositeCalcSpec, OptimizationData]):
             def __init__(
                 self,
                 qcio_adapter: ProgramAdapter,
-                qcio_program_args: CoreSpec,
+                qcio_program_args: ProgramArgs,
                 qcio_structure: Structure,
                 geometric_structure,
                 propagate_wfn: bool = False,
@@ -281,7 +281,7 @@ class GeometricAdapter(ProgramAdapter[CompositeCalcSpec, OptimizationData]):
                 structure = Structure(
                     **{**self.qcio_structure.model_dump(), "geometry": coords}
                 )
-                calcspec = CalcSpec(
+                program_input = ProgramInput(
                     calctype=CalcType.gradient,
                     structure=structure,
                     **self.qcio_program_args.model_dump(),
@@ -294,14 +294,14 @@ class GeometricAdapter(ProgramAdapter[CompositeCalcSpec, OptimizationData]):
                     and hasattr(self.qcio_adapter, "propagate_wfn")
                 ):
                     self.qcio_adapter.propagate_wfn(
-                        self.qcio_trajectory[-1], calcspec
+                        self.qcio_trajectory[-1], program_input
                     )
 
                 # Calculate energy and gradient
                 try:
-                    results: Results[CalcSpec, SinglePointData] = (
+                    results: Results[ProgramInput, SinglePointData] = (
                         self.qcio_adapter.compute(
-                            calcspec,
+                            program_input,
                             raise_exc=True,
                             collect_wfn=self.propagate_wfn,
                             update_func=self.update_func,

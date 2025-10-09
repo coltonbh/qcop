@@ -6,7 +6,7 @@ from collections.abc import Callable
 from pathlib import Path
 
 import pytest
-from qcio import CalcSpec, Files, FileSpec, Results
+from qcio import FileInput, Files, ProgramInput, Results
 
 from qcop.adapters import registry
 from qcop.exceptions import AdapterInputError, AdapterNotFoundError, QCOPBaseError
@@ -14,33 +14,33 @@ from qcop.main import compute, compute_args
 
 
 def test_file_adapter_works_inside_top_level_compute_function():
-    # Create FileSpec
-    file_inp = FileSpec(cmdline_args=["hello_world.py"])
+    # Create FileInput
+    file_inp = FileInput(cmdline_args=["hello_world.py"])
     file_inp.files["hello_world.py"] = "print('hello world')"
     result = compute("python", file_inp)
     isinstance(result, Results)
     assert result.logs == "hello world\n"
 
 
-def test_compute_raises_adapter_not_found_error(calcspec):
+def test_compute_raises_adapter_not_found_error(prog_input_factory):
     """Test that compute raises an AdapterNotFoundError if the adapter is not
     found."""
-    energy_inp = calcspec("energy")
+    energy_inp = prog_input_factory("energy")
     with pytest.raises(AdapterNotFoundError):
         # Will check qcop and qcng
         compute("not-a-real-program", energy_inp)
 
 
-def test_compute_raises_adapter_not_found_error_no_qcng_fallback(calcspec):
+def test_compute_raises_adapter_not_found_error_no_qcng_fallback(prog_input_factory):
     """Test that compute raises an AdapterNotFoundError if the adapter is not
     found."""
-    energy_inp = calcspec("energy")
+    energy_inp = prog_input_factory("energy")
     with pytest.raises(AdapterNotFoundError):
         compute("not-a-real-program", energy_inp, qcng_fallback=False)
 
 
-def test_print_logs(test_adapter, calcspec, mocker):
-    energy_inp = calcspec("energy")
+def test_print_logs(test_adapter, prog_input_factory, mocker):
+    energy_inp = prog_input_factory("energy")
 
     spy = mocker.spy(type(test_adapter), "compute_data")
 
@@ -51,8 +51,8 @@ def test_print_logs(test_adapter, calcspec, mocker):
     assert isinstance(spy.call_args.args[3], float)  # update_interval passed
 
 
-def test_update_func_preferred_over_print_logs(test_adapter, calcspec, mocker):
-    energy_inp = calcspec("energy")
+def test_update_func_preferred_over_print_logs(test_adapter, prog_input_factory, mocker):
+    energy_inp = prog_input_factory("energy")
 
     spy = mocker.spy(type(test_adapter), "compute_data")
 
@@ -64,11 +64,11 @@ def test_update_func_preferred_over_print_logs(test_adapter, calcspec, mocker):
     assert spy.call_args.args[3] is None
 
 
-def test_compute_uses_files_if_adaptor_uses_files_set(calcspec):
+def test_compute_uses_files_if_adaptor_uses_files_set(prog_input_factory):
     """Test that compute writes files if the adaptor has uses_files set to True."""
 
     # Set adapter.uses_files is True by default
-    energy_inp = calcspec("energy")
+    energy_inp = prog_input_factory("energy")
     filename, contents = "hello_world.py", "print('hello world')"
     energy_inp.files[filename] = contents
 
@@ -77,31 +77,31 @@ def test_compute_uses_files_if_adaptor_uses_files_set(calcspec):
         assert f.read() == contents
 
 
-def test_compute_does_not_uses_files_if_adaptor_uses_files_set(calcspec):
+def test_compute_does_not_uses_files_if_adaptor_uses_files_set(prog_input_factory):
     """Test that compute writes files if the adaptor has uses_files set to True."""
 
     # Set adapter.uses_files to False
     adapter = registry["test"]
     adapter.uses_files = False
 
-    energy_inp = calcspec("energy")
+    energy_inp = prog_input_factory("energy")
     filename, contents = "hello_world.py", "print('hello world')"
     energy_inp.files[filename] = contents
     with pytest.raises(AdapterInputError):
         compute("test", energy_inp, rm_scratch_dir=False)
 
 
-def test_compute_raises_exception_if_program_fails_raise_exec_true(calcspec):
+def test_compute_raises_exception_if_program_fails_raise_exec_true(prog_input_factory):
     """Test that compute raises an exception if the program fails."""
-    opt_input = calcspec("optimization")
+    opt_input = prog_input_factory("optimization")
 
     with pytest.raises(AdapterInputError):
         compute("test", opt_input, raise_exc=True)
 
 
-def test_compute_does_not_raise_exception_if_raise_exec_false(calcspec, mocker):
+def test_compute_does_not_raise_exception_if_raise_exec_false(prog_input_factory, mocker):
     """Test that compute does not raise an exception if the program fails."""
-    grad_input = calcspec("energy")
+    grad_input = prog_input_factory("energy")
     adapter = registry["test"]
     mocker.patch.object(
         adapter,
@@ -112,14 +112,14 @@ def test_compute_does_not_raise_exception_if_raise_exec_false(calcspec, mocker):
     assert po.success is False
 
 
-def test_qcengine_import_error(mocker, calcspec):
+def test_qcengine_import_error(mocker, prog_input_factory):
     """Test that an ImportError is raised when qcengine is not installed."""
     # Mock sys.modules to simulate qcengine not being installed
     mocker.patch.dict("sys.modules", {"qcengine": None})
 
     with pytest.raises(ModuleNotFoundError):
         # The code that attempts to import qcengine goes here
-        energy_inp = calcspec("energy")
+        energy_inp = prog_input_factory("energy")
         compute("no-adaptor-for-program", energy_inp, qcng_fallback=True)
 
 
@@ -137,7 +137,7 @@ def test_compute_args(hydrogen, mocker):
     }
     compute_args("test", extra_thing=123, **values_dict)
     compute_spy.assert_called_once_with(
-        "test", CalcSpec(**values_dict), extra_thing=123
+        "test", ProgramInput(**values_dict), extra_thing=123
     )
 
 
@@ -154,8 +154,8 @@ def test_compute_args_file_object_passed(hydrogen, mocker):
         "extras": {"fake": "things"},
     }
     compute_args("test", extra_thing=123, **values_dict)
-    # Convert back for CalcSpec instantiation
+    # Convert back for ProgramInput instantiation
     values_dict["files"] = {"fake.py": "print('hello world')"}
     compute_spy.assert_called_once_with(
-        "test", CalcSpec(**values_dict), extra_thing=123
+        "test", ProgramInput(**values_dict), extra_thing=123
     )

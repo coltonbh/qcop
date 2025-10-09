@@ -1,4 +1,4 @@
-from qcio import CalcSpec, Structure
+from qcio import ProgramInput, Structure
 
 from qcop import compute, exceptions
 
@@ -14,8 +14,8 @@ structure = Structure(
     ],
 )
 
-# Define the calcspec
-spec = CalcSpec(
+# Define the program input
+prog_input = ProgramInput(
     structure=structure,
     calctype="conformer_search",  # type: ignore
     model={"method": "gfnff"},  # type: ignore
@@ -24,28 +24,28 @@ spec = CalcSpec(
 
 # Run the calculation
 try:
-    # results is instance of Results
-    results = compute(
-        "crest", spec, collect_files=True, collect_rotamers=False
+    # result is instance of Results
+    result = compute(
+        "crest", prog_input, collect_files=True, collect_rotamers=False
     )
 except exceptions.QCOPBaseError as e:
-    results = e.results
-    print(results.logs)
-    print(f"Success: {results.success}")  # False
-    print(results.input_data)  # Input data used to generate the calculation
-    print(results.provenance)  # Provenance of generated calculation
-    print(results.traceback)  # or output.ptraceback for short
+    result = e.results
+    print(result.logs)
+    print(f"Success: {result.success}")  # False
+    print(result.input_data)  # Input data used to generate the calculation
+    print(result.provenance)  # Provenance of generated calculation
+    print(result.traceback)  # or output.ptraceback for short
     raise
 
 else:
     # Check results
-    print(results.logs)
-    print(f"Success: {results.success}")  # True
-    print("output.data: ", results.data)
-    print("output.data.conformer_energies:", results.data.conformer_energies)
+    print(result.logs)
+    print(f"Success: {result.success}")  # True
+    print("output.data: ", result.data)
+    print("output.data.conformer_energies:", result.data.conformer_energies)
     print(
         "output.data.conformer_energies_relative:",
-        results.data.conformer_energies_relative,
+        result.data.conformer_energies_relative,
     )
-    print(results.input_data)  # Input data used to generate the calculation
-    print(results.provenance)  # Provenance of generated calculation
+    print(result.input_data)  # Input data used to generate the calculation
+    print(result.provenance)  # Provenance of generated calculation

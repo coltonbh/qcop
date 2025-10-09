@@ -1,26 +1,26 @@
 from collections.abc import Callable
 
-from qcio import Files, FileSpec
+from qcio import FileInput, Files
 
 from qcop.adapters.base import BaseAdapter
 
 from .utils import execute_subprocess
 
 
-class FileAdapter(BaseAdapter[FileSpec, Files]):
+class FileAdapter(BaseAdapter[FileInput, Files]):
     """adapter for running a program on files."""
 
     def __init__(self, program: str) -> None:
         super().__init__()
         self.program = program
 
-    def validate_input(self, input_data: FileSpec) -> None:
+    def validate_input(self, input_data: FileInput) -> None:
         """No validation checks performed for FileAdapter"""
         pass
 
     def compute_data(
         self,
-        input_data: FileSpec,
+        input_data: FileInput,
         update_func: Callable | None = None,
         update_interval: float | None = None,
         **kwargs,
@@ -28,7 +28,7 @@ class FileAdapter(BaseAdapter[FileSpec, Files]):
         """Compute the given program on the given files.
 
         Args:
-            input_data: The qcio FileSpec object for a computation.
+            input_data: The qcio FileInput object for a computation.
             update_func: A callback function to call as the program executes.
             update_interval: The minimum time in seconds between calls to the
             update_func.

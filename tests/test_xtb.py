@@ -1,6 +1,6 @@
 import numpy as np
 import pytest
-from qcio import CalcSpec, CalcType, Structure
+from qcio import CalcType, ProgramInput, Structure
 
 from qcop import compute
 from qcop.adapters import XTBAdapter
@@ -11,11 +11,11 @@ from tests.conftest import skipif_program_not_available
 @pytest.mark.skip(
     reason="xtb-python is no longer installable on python 3.12+. So test is skipped since _ensure_xtb() will fail."
 )
-def test_validate_input(mocker, calcspec):
+def test_validate_input(mocker, prog_input_factory):
     valid_method = "GFN2xTB"
-    inp_dict = calcspec(CalcType.gradient).model_dump()
+    inp_dict = prog_input_factory(CalcType.gradient).model_dump()
     inp_dict["model"]["method"] = "some_invalid_method"
-    invalid_method = CalcSpec(**inp_dict)
+    invalid_method = ProgramInput(**inp_dict)
 
     adapter = XTBAdapter()
 
@@ -23,14 +23,14 @@ def test_validate_input(mocker, calcspec):
         adapter.validate_input(invalid_method)
 
     inp_dict["model"]["method"] = valid_method
-    valid_method = CalcSpec(**inp_dict)
+    valid_method = ProgramInput(**inp_dict)
     adapter.validate_input(valid_method)
 
 
 @pytest.mark.integration
 @skipif_program_not_available("xtb")
 def test_xtb():
-    input_data = CalcSpec(
+    input_data = ProgramInput(
         structure=Structure(
             symbols=["O", "H", "H"],
             # Integration test depend upon this geometry; do not change
