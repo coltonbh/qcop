@@ -2,10 +2,10 @@
 import numpy as np
 import pytest
 from qcio import (
-    CalcSpec,
     CalcType,
-    CompositeCalcSpec,
-    CoreSpec,
+    DualProgramInput,
+    ProgramArgs,
+    ProgramInput,
     Results,
     SinglePointData,
     Structure,
@@ -40,12 +40,11 @@ def water():
 
 
 @pytest.fixture(scope="session")
-def calcspec(hydrogen):
-    """Create a function that returns a CalcSpec object with a specified
-    calculation type."""
+def prog_input_factory(hydrogen):
+    """Return a factory that creates ProgramInput instances with specified calctypes."""
 
-    def create_calctype(calctype):
-        return CalcSpec(
+    def create_program_input(calctype):
+        return ProgramInput(
             structure=hydrogen,
             calctype=calctype,
             # Integration tests depend up this model; do not change
@@ -57,34 +56,34 @@ def calcspec(hydrogen):
             },
         )
 
-    return create_calctype
+    return create_program_input
 
 
 @pytest.fixture(scope="function")
-def ccalcspec(hydrogen):
-    def create_calcspec(calctype):
-        return CompositeCalcSpec(
+def dual_prog_input_factory(hydrogen):
+    def create_dual_prog_input(calctype):
+        return DualProgramInput(
             calctype=calctype,
             structure=hydrogen,
             subprogram="test",
-            subprogram_spec=CoreSpec(
+            subprogram_args=ProgramArgs(
                 model={"method": "hf", "basis": "sto-3g"},
             ),
         )
 
-    return create_calcspec
+    return create_dual_prog_input
 
 
 @pytest.fixture
-def results(calcspec):
+def results(prog_input_factory):
     """Create Results object"""
-    sp_inp_energy = calcspec("energy")
+    sp_inp_energy = prog_input_factory("energy")
     energy = 1.0
     n_atoms = len(sp_inp_energy.structure.symbols)
     gradient = np.arange(n_atoms * 3).reshape(n_atoms, 3)
     hessian = np.arange(n_atoms**2 * 3**2).reshape(n_atoms * 3, n_atoms * 3)
 
-    return Results[CalcSpec, SinglePointData](
+    return Results[ProgramInput, SinglePointData](
         input_data=sp_inp_energy,
         success=True,
         logs="program standard out...",

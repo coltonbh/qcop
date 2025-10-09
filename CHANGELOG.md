@@ -6,6 +6,11 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## [unreleased]
 
+### Changed
+
+- Aligned adapters, utilities, tests, docs, and examples with qcio's renamed data objects (`ProgramInput`, `DualProgramInput`, `ProgramArgs`, etc.) and standardized `prog_input` terminology across the codebase.
+- Bumped core dependencies to `qcio>=0.16.0` and `qccodec>=0.9.0` to match the updated naming scheme.
+
 ## [0.11.0] - 2025-10-07
 
 ### Changed

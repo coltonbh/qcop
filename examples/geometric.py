@@ -3,7 +3,7 @@
 Constraints docs: https://geometric.readthedocs.io/en/latest/constraints.html
 """
 
-from qcio import CompositeCalcSpec, Structure
+from qcio import DualProgramInput, Structure
 
 from qcop import compute, exceptions
 
@@ -13,12 +13,12 @@ h2 = Structure(
     geometry=[[0, 0.0, 0.0], [0, 0, 1.4]],  # type: ignore
 )
 
-# Define the calcspec
-spec = CompositeCalcSpec(
+# Define the program input
+prog_input = DualProgramInput(
     calctype="optimization",  # type: ignore
     structure=h2,
     subprogram="terachem",
-    subprogram_spec={  # type: ignore
+    subprogram_args={  # type: ignore
         "model": {"method": "HF", "basis": "6-31g"},
         "keywords": {"purify": "no"},
     },
@@ -36,26 +36,26 @@ spec = CompositeCalcSpec(
 
 # Run calculation
 try:
-    results = compute("geometric", spec, propagate_wfn=True, rm_scratch_dir=False)
+    result = compute("geometric", prog_input, propagate_wfn=True, rm_scratch_dir=False)
 except exceptions.QCOPBaseError as e:
     # Calculation failed
-    results = e.results
-    print(results.logs)
+    result = e.results
+    print(result.logs)
     # Input data used to generate the calculation
-    print(results.input_data)
+    print(result.input_data)
     # Provenance of generated calculation
-    print(results.provenance)
-    print(results.traceback)
+    print(result.provenance)
+    print(result.traceback)
     raise
 
 else:
     # Check results
-    print("Energies:", results.data.energies)
-    print("Structures:", results.data.structures)
-    print("Trajectory:", results.data.trajectory)
+    print("Energies:", result.data.energies)
+    print("Structures:", result.data.structures)
+    print("Trajectory:", result.data.trajectory)
     # Stdout from the program
-    print(results.logs)
+    print(result.logs)
     # Input data used to generate the calculation
-    print(results.input_data)
+    print(result.input_data)
     # Provenance of generated calculation
-    print(results.provenance)
+    print(result.provenance)

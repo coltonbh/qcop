@@ -1,7 +1,7 @@
 Calculations are run by calling the `qcop.compute()` function with the relevant arguments and keywords like this:
 
 ```python
-from qcio import Structure, CalcSpec
+from qcio import Structure, ProgramInput
 from qcop import compute
 
 # Create the Structure
@@ -14,8 +14,8 @@ structure = Structure(
     ],
 )
 
-# Define the calcspec
-spec = CalcSpec(
+# Define the program input
+prog_input = ProgramInput(
     structure=h2o,
     calctype="energy",
     model={"method": "hf", "basis": "sto-3g"},
@@ -23,7 +23,7 @@ spec = CalcSpec(
 )
 
 # Run the calculation; will return Results or raise an exception
-result = compute("terachem", spec, collect_files=True)
+result = compute("terachem", prog_input, collect_files=True)
 ```
 
 The `compute` selects the correct program adapter and then calls `adapter.compute()`. The available arguments and keywords for the top level `compute()` function match those shown here:

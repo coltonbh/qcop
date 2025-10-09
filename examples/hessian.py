@@ -1,4 +1,4 @@
-from qcio import CalcSpec, CalcType, Structure
+from qcio import CalcType, ProgramInput, Structure
 
 from qcop import compute, exceptions
 
@@ -14,8 +14,8 @@ structure = Structure(
     ],
 )
 
-# Define the calcspec
-spec = CalcSpec(
+# Define the program input
+prog_input = ProgramInput(
     structure=structure,
     calctype=CalcType.hessian,
     model={"method": "b3lyp", "basis": "6-31g"},  # type: ignore
@@ -25,21 +25,21 @@ spec = CalcSpec(
 # Run the calculation
 try:
     # results is instance of Results
-    results = compute("terachem", spec, collect_files=True)
+    result = compute("terachem", prog_input, collect_files=True)
 except exceptions.QCOPBaseError as e:
-    results = e.results
-    print(results.logs)
-    print(f"Success: {results.success}")  # False
-    print(results.input_data)  # Input data used to generate the calculation
-    print(results.provenance)  # Provenance of generated calculation
-    print(results.traceback)  # or output.ptraceback for short
+    result = e.results
+    print(result.logs)
+    print(f"Success: {result.success}")  # False
+    print(result.input_data)  # Input data used to generate the calculation
+    print(result.provenance)  # Provenance of generated calculation
+    print(result.traceback)  # or output.ptraceback for short
     raise
 
 else:
     # Check results
-    print(results.logs)
-    print(f"Success: {results.success}")  # True
-    print("output.data: ", results.data)
-    print("output.data.hessian:", results.data.hessian)
-    print(results.input_data)  # Input data used to generate the calculation
-    print(results.provenance)  # Provenance of generated calculation
+    print(result.logs)
+    print(f"Success: {result.success}")  # True
+    print("output.data: ", result.data)
+    print("output.data.hessian:", result.data.hessian)
+    print(result.input_data)  # Input data used to generate the calculation
+    print(result.provenance)  # Provenance of generated calculation

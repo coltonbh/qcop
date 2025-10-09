@@ -1,14 +1,14 @@
 import importlib
 from collections.abc import Callable
 
-from qcio import CalcSpec, CalcType, SinglePointData
+from qcio import CalcType, ProgramInput, SinglePointData
 
 from qcop.exceptions import ExternalProgramError, ProgramNotFoundError
 
 from .base import ProgramAdapter
 
 
-class TeraChemFEAdapter(ProgramAdapter[CalcSpec, SinglePointData]):
+class TeraChemFEAdapter(ProgramAdapter[ProgramInput, SinglePointData]):
     """Adapter for TeraChem's Protocol Buffer Server and Frontend file server."""
 
     supported_calctypes = [CalcType.energy, CalcType.gradient]
@@ -41,7 +41,7 @@ class TeraChemFEAdapter(ProgramAdapter[CalcSpec, SinglePointData]):
 
     def compute_data(
         self,
-        input_data: CalcSpec,
+        input_data: ProgramInput,
         update_func: Callable | None = None,
         update_interval: float | None = None,
         **kwargs,
@@ -49,7 +49,7 @@ class TeraChemFEAdapter(ProgramAdapter[CalcSpec, SinglePointData]):
         """Execute TeraChem on the given input.
 
         Args:
-            input_data: The qcio CalcSpec object for a computation.
+            input_data: The qcio ProgramInput object for a computation.
             update_func: A callback function to call as the program executes.
             update_interval: The minimum time in seconds between calls to the
                 update_func.

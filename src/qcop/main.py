@@ -6,12 +6,13 @@ from typing import Any
 from warnings import warn
 
 from qcio import (
-    CalcSpec,
     CalcType,
+    DataType,
     Files,
+    InputType,
     Model,
+    ProgramInput,
     Results,
-    SpecType,
     Structure,
 )
 from qcio.helper_types import StrOrPath
@@ -24,7 +25,7 @@ from .utils import get_adapter, inherit_docstring_from
 @inherit_docstring_from(BaseAdapter.compute)
 def compute(
     program: str,
-    input_data: SpecType,
+    input_data: InputType,
     *,
     scratch_dir: StrOrPath | None = None,
     rm_scratch_dir: bool = True,
@@ -38,7 +39,7 @@ def compute(
     propagate_wfn: bool = False,
     qcng_fallback: bool = True,
     **adapter_kwargs,
-) -> Results:
+) -> Results[InputType, DataType]:
     """Use the given program to compute on the given input.
 
     See BaseAdapter.compute for more details.
@@ -100,8 +101,8 @@ def compute_args(
     files: dict[str, str | bytes] | Files | None = None,
     extras: dict[str, Any] | None = None,
     **kwargs,
-) -> Results:
-    """Compute function that accepts independent argument for a CalcSpec.
+) -> Results[InputType, DataType]:
+    """Compute function that accepts independent argument for a ProgramInput.
 
     Args:
         program: The program to run.
@@ -123,7 +124,7 @@ def compute_args(
     if isinstance(files, Files):  # Check in case Files object is passed instead of dict
         files = files.files
 
-    input_data = CalcSpec(
+    program_input = ProgramInput(
         calctype=calctype,  # type: ignore
         structure=structure,
         model=model,  # type: ignore
@@ -132,4 +133,4 @@ def compute_args(
         extras=extras or {},
     )
 
-    return compute(program, input_data, **kwargs)
+    return compute(program, program_input, **kwargs)

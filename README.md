@@ -14,7 +14,7 @@ A package for operating Quantum Chemistry programs using [qcio](https://github.c
 
 - [qcconst](https://github.com/coltonbh/qcconst) - Physical constants, conversion factors, and a periodic table with clear source information for every value.
 - [qcio](https://github.com/coltonbh/qcio) - Elegant and intuitive data structures for quantum chemistry, featuring seamless Jupyter Notebook visualizations.
-- [qcinf](https://github.com/coltonbh/qcinf) - Cheminformatics algorithms and structure utilities using standardized [qcio](https://qcio.coltonhicks.com/) data structures.
+- [qcinf](https://github.com/coltonbh/qcinf) - Cheminformatics algorithms and structure utilities such as `rmsd` and alignment, using standardized [qcio](https://qcio.coltonhicks.com/) data structures.
 - [qccodec](https://github.com/coltonbh/qccodec) - A library for efficient parsing of quantum chemistry data into structured `qcio` objects.
 - [qcop](https://github.com/coltonbh/qcop) - A package for operating quantum chemistry programs using `qcio` standardized data structures. Compatible with `TeraChem`, `psi4`, `QChem`, `NWChem`, `ORCA`, `Molpro`, `geomeTRIC`, and many more, featuring seamless Jupyter Notebook visualizations.
 - [BigChem](https://github.com/mtzgroup/bigchem) - A distributed application for running quantum chemistry calculations at scale across clusters of computers or the cloud. Bring multi-node scaling to your favorite quantum chemistry program, featuring seamless Jupyter Notebook visualizations of your data.
@@ -33,14 +33,14 @@ python -m pip install qcop
 The `compute` function is the main entry point for the library and is used to run a calculation.
 
 ```python
-from qcio import Structure, CalcSpec
+from qcio import Structure, ProgramInput
 from qcop import compute
 from qcop.exceptions import ExternalProgramError
 # Create the Structure
 h2o = Structure.open("h2o.xyz")
 
-# Define the calcspec
-spec = CalcSpec(
+# Define the program input
+prog_input = ProgramInput(
     structure=h2o,
     calctype="energy",
     model={"method": "hf", "basis": "sto-3g"},
@@ -49,7 +49,7 @@ spec = CalcSpec(
 
 # Run the calculation; will return Results or raise an exception
 try:
-    result = compute("terachem", spec, collect_files=True)
+    result = compute("terachem", prog_input, collect_files=True)
 except ExternalProgramError as e:
     # External QQ program failed in some way
     result = e.results
@@ -76,14 +76,14 @@ else:
 One may also call `compute(..., raise_exc=False)` to return a `Results` object rather than raising an exception when a calculation fails. This may allow easier handling of failures in some cases.
 
 ```python
-from qcio import Structure, CalcSpec
+from qcio import Structure, ProgramInput
 from qcop import compute
 from qcop.exceptions import ExternalProgramError
 # Create the Structure
 h2o = Structure.open("h2o.xyz")
 
-# Define the calcspec
-spec = CalcSpec(
+# Define the program input
+prog_input = ProgramInput(
     structure=h2o,
     calctype="energy",
     model={"method": "hf", "basis": "sto-3g"},
@@ -91,7 +91,7 @@ spec = CalcSpec(
 )
 
 # Run the calculation; will return a Results object
-result = compute("terachem", spec, collect_files=True, raise_exc=False)
+result = compute("terachem", prog_input, collect_files=True, raise_exc=False)
 if not result.success:
     # Same as except block above
 
@@ -100,7 +100,7 @@ else:
 
 ```
 
-Alternatively, the `compute_args` function can be used to run a calculation with the input data structures passed in as arguments rather than as a single `CalcSpec` object.
+Alternatively, the `compute_args` function can be used to run a calculation with the input data structures passed in as arguments rather than as a single `ProgramInput` object.
 
 ```python
 from qcio import Structure

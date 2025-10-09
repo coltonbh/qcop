@@ -5,7 +5,7 @@ import qccodec
 from qccodec import exceptions as qccodec_exceptions
 from qccodec.encoders.terachem import XYZ_FILENAME
 from qccodec.parsers.terachem import parse_version
-from qcio import CalcSpec, CalcType, Results, SinglePointData
+from qcio import CalcType, ProgramInput, Results, SinglePointData
 
 from qcop.exceptions import AdapterError, AdapterInputError, ExternalProgramError
 
@@ -13,7 +13,7 @@ from .base import ProgramAdapter
 from .utils import execute_subprocess
 
 
-class TeraChemAdapter(ProgramAdapter[CalcSpec, SinglePointData]):
+class TeraChemAdapter(ProgramAdapter[ProgramInput, SinglePointData]):
     """Adapter for TeraChem."""
 
     supported_calctypes = [
@@ -51,7 +51,7 @@ class TeraChemAdapter(ProgramAdapter[CalcSpec, SinglePointData]):
     # Try using it for a while without and see what roadblocks we run into
     def compute_data(
         self,
-        input_data: CalcSpec,
+        input_data: ProgramInput,
         update_func: Callable | None = None,
         update_interval: float | None = None,
         **kwargs,
@@ -59,7 +59,7 @@ class TeraChemAdapter(ProgramAdapter[CalcSpec, SinglePointData]):
         """Execute TeraChem on the given input.
 
         Args:
-            input_data: The qcio CalcSpec object for a computation.
+            input_data: The qcio ProgramInput object for a computation.
             update_func: A callback function to call as the program executes.
             update_interval: The minimum time in seconds between calls to the
                 update_func.
@@ -128,15 +128,15 @@ class TeraChemAdapter(ProgramAdapter[CalcSpec, SinglePointData]):
                 wfns[str(wfn_path)] = wfn_path.read_bytes()
         return wfns
 
-    def propagate_wfn(self, output: Results, calcspec: CalcSpec) -> None:
+    def propagate_wfn(self, output: Results, program_input: ProgramInput) -> None:
         """Propagate the wavefunction from the previous calculation.
 
         Args:
             output: The output from a previous calculation containing wavefunction data.
-            calcspec: The CalcSpec object on which to place the wavefunction data.
+            program_input: The ProgramInput object on which to place the wavefunction data.
 
         Returns:
-            None. Modifies the calcspec object in place.
+            None. Modifies the program_input object in place.
         """
 
         # Naming conventions from TeraChem uses xyz filename as scratch dir postfix
@@ -156,14 +156,14 @@ class TeraChemAdapter(ProgramAdapter[CalcSpec, SinglePointData]):
                 message="Could not find c0 or ca/b0 files in output.",
             )
 
-        # Load wavefunction data onto CalcSpec object
+        # Load wavefunction data onto ProgramInput object
 
         if c0_bytes:
-            calcspec.files[c0] = c0_bytes
-            calcspec.keywords["guess"] = c0
+            program_input.files[c0] = c0_bytes
+            program_input.keywords["guess"] = c0
 
         else:  # ca0_bytes and cb0_bytes
             assert ca0_bytes and cb0_bytes  # for mypy
-            calcspec.files[ca0] = ca0_bytes
-            calcspec.files[cb0] = cb0_bytes
-            calcspec.keywords["guess"] = f"{ca0} {cb0}"
+            program_input.files[ca0] = ca0_bytes
+            program_input.files[cb0] = cb0_bytes
+            program_input.keywords["guess"] = f"{ca0} {cb0}"

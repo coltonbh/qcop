@@ -59,7 +59,7 @@ def test_adapter_subclasses_defining_program_and_supported_calctypes():
     assert registry.get("test") == TestAdapter
 
 
-def test_adapters_raise_error_if_calctype_not_supported(calcspec):
+def test_adapters_raise_error_if_calctype_not_supported(prog_input_factory):
     """Test that adapters raise an error if the calctype is not supported."""
 
     class TestAdapter(base.ProgramAdapter):
@@ -73,13 +73,13 @@ def test_adapters_raise_error_if_calctype_not_supported(calcspec):
         def compute_data(self, *args, **kwargs):
             pass
 
-    gradient_input = calcspec("gradient")
+    gradient_input = prog_input_factory("gradient")
     with pytest.raises(AdapterInputError):
         TestAdapter().compute(gradient_input)
 
 
 def test_data_added_to_results_object_if_exception_contains_it(
-    calcspec, mocker, results, test_adapter
+    prog_input_factory, mocker, results, test_adapter
 ):
     """Test that results are added to the Results object if the exception
     contains them."""
@@ -95,7 +95,7 @@ def test_data_added_to_results_object_if_exception_contains_it(
         "compute_data",
         side_effect=raise_error,
     )
-    energy_input = calcspec("energy")
+    energy_input = prog_input_factory("energy")
 
     # Check that the exception object contains the results
     with pytest.raises(ExternalProgramError) as excinfo:
@@ -108,7 +108,7 @@ def test_data_added_to_results_object_if_exception_contains_it(
     assert computed_results.data == results.data
 
 
-def test_results_object_added_to_exception(calcspec, mocker, results, test_adapter):
+def test_results_object_added_to_exception(prog_input_factory, mocker, results, test_adapter):
     """Test that exceptions contain the Results object."""
     test_adapter = registry["test"]()
 
@@ -124,7 +124,7 @@ def test_results_object_added_to_exception(calcspec, mocker, results, test_adapt
         "compute_data",
         side_effect=raise_error,
     )
-    energy_input = calcspec("energy")
+    energy_input = prog_input_factory("energy")
 
     # Check that the exception object contains the results
     with pytest.raises(ExternalProgramError) as excinfo:
@@ -137,7 +137,7 @@ def test_results_object_added_to_exception(calcspec, mocker, results, test_adapt
 
 
 def test_stdout_collected_with_failed_execution(
-    calcspec, mocker, results, test_adapter
+    prog_input_factory, mocker, results, test_adapter
 ):
     """Test that stdout is collected even if the execution fails."""
     test_adapter = registry["test"]()
@@ -154,7 +154,7 @@ def test_stdout_collected_with_failed_execution(
         "compute_data",
         side_effect=raise_error,
     )
-    energy_input = calcspec("energy")
+    energy_input = prog_input_factory("energy")
 
     # Check that the exception object contains the results
     with pytest.raises(ExternalProgramError) as excinfo:

@@ -1,9 +1,9 @@
 import pytest
 from qcio import (
-    CalcSpec,
     CalcType,
-    CoreSpec,
     OptimizationData,
+    ProgramArgs,
+    ProgramInput,
     Results,
     SinglePointData,
 )
@@ -42,11 +42,11 @@ def test_ensure_geometric():
         (CalcType.optimization, False),
     ],
 )
-def test_update_input_data(calctype, expected, ccalcspec):
+def test_update_input_data(calctype, expected, dual_prog_input_factory):
     adapter = GeometricAdapter()
-    prog_inp = ccalcspec(calctype)
-    adapter._update_input_data(prog_inp)
-    assert prog_inp.keywords["transition"] is expected
+    prog_input = dual_prog_input_factory(calctype)
+    adapter._update_input_data(prog_input)
+    assert prog_input.keywords["transition"] is expected
 
 
 def test_create_geometric_molecule(hydrogen):
@@ -69,7 +69,7 @@ def test_qcio_geometric_engine_exception_handling(
 
     engine = QCIOGeometricEngine(
         test_adapter,
-        CoreSpec(**{"model": {"method": "hf", "basis": "sto-3g"}}),
+        ProgramArgs(**{"model": {"method": "hf", "basis": "sto-3g"}}),
         hydrogen,
         geometric_hydrogen,
     )
@@ -80,7 +80,7 @@ def test_qcio_geometric_engine_exception_handling(
     # Create a failed Results object
     po_dict = results.model_dump()
     po_dict.update({"success": False, "traceback": "fake traceback"})
-    po_failure = Results[CalcSpec, SinglePointData](**po_dict)
+    po_failure = Results[ProgramInput, SinglePointData](**po_dict)
 
     # Mock adapter to raise ExternalProgramExecutionError
     mocker.patch.object(
@@ -103,7 +103,7 @@ def test_qcio_geometric_engine_exception_handling(
     )
 
 
-def test_geometric_exceptions_converted_to_qcop_exceptions(mocker, ccalcspec):
+def test_geometric_exceptions_converted_to_qcop_exceptions(mocker, dual_prog_input_factory):
     adapter = GeometricAdapter()
 
     # cause .optimizeGeometry to raise a geomeTRIC exception
@@ -112,6 +112,6 @@ def test_geometric_exceptions_converted_to_qcop_exceptions(mocker, ccalcspec):
         side_effect=adapter.geometric.errors.Error("Some geomeTRIC exception."),
     )
 
-    prog_inp = ccalcspec(CalcType.optimization)
+    prog_input = dual_prog_input_factory(CalcType.optimization)
     with pytest.raises(ExternalProgramError):
-        adapter.compute_data(prog_inp, propagate_wfn=False)
+        adapter.compute_data(prog_input, propagate_wfn=False)
