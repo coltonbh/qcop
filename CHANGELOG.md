@@ -6,6 +6,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## [unreleased]
 
+### Added
+
+- Adapter for ORCA (by @avcopan) #69.
+
 ## [0.12.0] - 2025-10-09
 
 ### Changed
