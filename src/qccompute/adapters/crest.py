@@ -13,7 +13,7 @@ from qcdata import (
     SinglePointData,
 )
 
-from qcop.exceptions import AdapterInputError, ExternalProgramError
+from qccompute.exceptions import AdapterInputError, ExternalProgramError
 
 from .base import ProgramAdapter
 from .utils import execute_subprocess

@@ -5,7 +5,7 @@ Constraints docs: https://geometric.readthedocs.io/en/latest/constraints.html
 
 from qcdata import DualProgramInput, Structure
 
-from qcop import compute, exceptions
+from qccompute import compute, exceptions
 
 # Create Structure
 h2 = Structure(
@@ -36,26 +36,28 @@ prog_input = DualProgramInput(
 
 # Run calculation
 try:
-    result = compute("geometric", prog_input, propagate_wfn=True, rm_scratch_dir=False)
-except exceptions.QCOPBaseError as e:
+    prog_output = compute(
+        "geometric", prog_input, propagate_wfn=True, rm_scratch_dir=False
+    )
+except exceptions.QCComputeBaseError as e:
     # Calculation failed
-    result = e.results
-    print(result.logs)
+    prog_output = e.prog_output
+    print(prog_output.logs)
     # Input data used to generate the calculation
-    print(result.input_data)
+    print(prog_output.input_data)
     # Provenance of generated calculation
-    print(result.provenance)
-    print(result.traceback)
+    print(prog_output.provenance)
+    print(prog_output.traceback)
     raise
 
 else:
     # Check results
-    print("Energies:", result.data.energies)
-    print("Structures:", result.data.structures)
-    print("Trajectory:", result.data.trajectory)
+    print("Energies:", prog_output.data.energies)
+    print("Structures:", prog_output.data.structures)
+    print("Trajectory:", prog_output.data.trajectory)
     # Stdout from the program
-    print(result.logs)
+    print(prog_output.logs)
     # Input data used to generate the calculation
-    print(result.input_data)
+    print(prog_output.input_data)
     # Provenance of generated calculation
-    print(result.provenance)
+    print(prog_output.provenance)

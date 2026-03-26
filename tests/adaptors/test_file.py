@@ -1,9 +1,9 @@
 import pytest
 from qcdata import FileInput
 
-from qcop.adapters import FileAdapter
-from qcop.adapters.utils import tmpdir
-from qcop.exceptions import ProgramNotFoundError
+from qccompute.adapters import FileAdapter
+from qccompute.adapters.utils import tmpdir
+from qccompute.exceptions import ProgramNotFoundError
 
 
 def test_file_adapter_compute(tmp_path):

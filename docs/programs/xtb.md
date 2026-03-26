@@ -1,4 +1,4 @@
-::: qcop.adapters.xtb.XTBAdapter
+::: qccompute.adapters.xtb.XTBAdapter
 
 ## Example
 

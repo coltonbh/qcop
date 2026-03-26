@@ -3,7 +3,7 @@ from pathlib import Path
 from qcdata import CalcType, SinglePointData
 from qcdata.qcel import from_qcel_output_results, to_qcel_input
 
-from qcop.exceptions import ExternalProgramError
+from qccompute.exceptions import ExternalProgramError
 
 from .base import ProgramAdapter
 
@@ -45,7 +45,7 @@ class QCEngineAdapter(ProgramAdapter):
         # Keep scratch files so qcdata can collect them
         task_config["scratch_messy"] = True
 
-        # Remove qcop-specific kwargs
+        # Remove qccompute-specific kwargs
         kwargs.pop("collect_rotamers", None)
         
         try:

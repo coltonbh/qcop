@@ -1,4 +1,4 @@
-"""Top level compute functions for qcop."""
+"""Top level compute functions for qccompute."""
 
 import traceback
 from collections.abc import Callable
@@ -47,16 +47,16 @@ def compute(
     try:
         adapter = get_adapter(program, input_data, qcng_fallback)
     except (AdapterNotFoundError, ProgramNotFoundError) as e:
-        # Add results to the exception
-        output_obj = ProgramOutput[type(input_data), Files](  # type: ignore
+        # Add ProgramOutput to the exception
+        prog_output = ProgramOutput[type(input_data), Files](  # type: ignore
             input_data=input_data,
             data=Files(),
             success=False,
             provenance={"program": program},
             traceback=traceback.format_exc(),
         )
-        e.results = output_obj
-        e.args = (*e.args, output_obj)
+        e.prog_output = prog_output
+        e.args = (*e.args, prog_output)
         raise e
 
     else:

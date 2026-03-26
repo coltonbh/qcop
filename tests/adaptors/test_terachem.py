@@ -3,9 +3,9 @@ from pathlib import Path
 import pytest
 from qccodec.encoders.terachem import XYZ_FILENAME
 
-from qcop.adapters import TeraChemAdapter
-from qcop.adapters.utils import tmpdir
-from qcop.exceptions import AdapterError, AdapterInputError
+from qccompute.adapters import TeraChemAdapter
+from qccompute.adapters.utils import tmpdir
+from qccompute.exceptions import AdapterError, AdapterInputError
 
 
 def test_get_version_no_stdout(monkeypatch):
@@ -13,7 +13,7 @@ def test_get_version_no_stdout(monkeypatch):
     adapter = TeraChemAdapter()
     # Monkey patch execute_subprocess to return a version string
     monkeypatch.setattr(
-        "qcop.adapters.terachem.execute_subprocess",
+        "qccompute.adapters.terachem.execute_subprocess",
         lambda *args: (
             "TeraChem version 1.9-2021.12-dev "
             "[cc068f92bd92d3e9009c54834f0d63e9cfec3273]"
@@ -30,7 +30,7 @@ def test_get_version_stdout(mocker):
     adapter = TeraChemAdapter()
     # Create a mock for parse_version_string
     mock_parse_version = mocker.patch(
-        "qcop.adapters.terachem.parse_version"
+        "qccompute.adapters.terachem.parse_version"
     )
 
     adapter.program_version("some stdout data")

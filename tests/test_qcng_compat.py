@@ -1,13 +1,13 @@
 import pytest
 
-from qcop import compute
-from qcop.adapters import registry
-from qcop.exceptions import (
+from qccompute import compute
+from qccompute.adapters import registry
+from qccompute.exceptions import (
     AdapterNotFoundError,
     ExternalProgramError,
     ProgramNotFoundError,
 )
-from qcop.utils import check_qcng_support
+from qccompute.utils import check_qcng_support
 
 
 def test_compute_raises_adapter_not_found_if_no_adapter_in_qcng():
@@ -20,7 +20,7 @@ def test_compute_raises_program_not_found_if_adapter_but_no_program_in_qcng():
         check_qcng_support("mrchem")  # Assumes mrchem is not installed
 
 
-def test_qcng_fallback_tried_if_adapter_not_in_qcop(mocker, prog_input_factory):
+def test_qcng_fallback_tried_if_adapter_not_in_qccompute(mocker, prog_input_factory):
     # WOW: Just a crazy note. This test takes ~1.2 to execute, this is the startup
     # overhead cost of qcng.compute(). Absolutely crazy! It comes from the very slow
     # get_program() call, which takes >1s to execute.
@@ -36,7 +36,7 @@ def test_qcng_fallback_tried_if_adapter_not_in_qcop(mocker, prog_input_factory):
     )
 
     energy_inp = prog_input_factory("energy")
-    # Program not in qcop, but in qcn
+    # Program not in qccompute, but in qcn
     # Will raise qcengine.exceptions.ResourceError: Program mrchem is registered with
     # QCEngine, but cannot be found. Test still demonstrates that qcng.compute() is
     # called.
@@ -46,7 +46,7 @@ def test_qcng_fallback_tried_if_adapter_not_in_qcop(mocker, prog_input_factory):
     assert compute_spy.call_count == 1
 
 
-def test_qcng_compute_not_called_if_adapter_in_qcop(mocker, prog_input_factory, test_adapter):
+def test_qcng_compute_not_called_if_adapter_in_qccompute(mocker, prog_input_factory, test_adapter):
     qcng_spy = mocker.patch("qcengine.compute")
 
     test_adapter = registry["test"]
@@ -61,26 +61,26 @@ def test_qcng_compute_not_called_if_adapter_in_qcop(mocker, prog_input_factory, 
 
 def test_qcng_exception_wrapping_raise_exc_true(mocker, prog_input_factory):
     # So system check passes for harness and program installation
-    mocker.patch("qcop.utils.check_qcng_support")
+    mocker.patch("qccompute.utils.check_qcng_support")
     # qcng_spy = mocker.patch("qcengine.compute")
     # qcng_spy.side_effect = QCEngineException("QCEngine Failed!")
 
     energy_inp = prog_input_factory("energy")
-    # Program not in qcop, but in qcng
+    # Program not in qccompute, but in qcng
     with pytest.raises(ExternalProgramError):
         compute("mrchem", energy_inp, raise_exc=True)
 
 
 def test_qcng_exception_wrapping_raise_exc_false(mocker, prog_input_factory):
     # So system check passes for harness and program installation
-    mocker.patch("qcop.utils.check_qcng_support")
+    mocker.patch("qccompute.utils.check_qcng_support")
     qcng_adapter = registry["qcengine"]
     mocker.spy(qcng_adapter, "compute")
     # Mock the "program_version" method and set its return value
     mocker.patch.object(qcng_adapter, "program_version", return_value="fake-version")
 
     energy_inp = prog_input_factory("energy")
-    # Program not in qcop, but in qcng
+    # Program not in qccompute, but in qcng
     output = compute("mrchem", energy_inp, raise_exc=False)
     assert output.success is False
     assert isinstance(output.traceback, str)

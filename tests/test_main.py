@@ -8,9 +8,13 @@ from pathlib import Path
 import pytest
 from qcdata import FileInput, Files, ProgramInput, ProgramOutput
 
-from qcop.adapters import registry
-from qcop.exceptions import AdapterInputError, AdapterNotFoundError, QCOPBaseError
-from qcop.main import compute, compute_args
+from qccompute.adapters import registry
+from qccompute.exceptions import (
+    AdapterInputError,
+    AdapterNotFoundError,
+    QCComputeBaseError,
+)
+from qccompute.main import compute, compute_args
 
 
 def test_file_adapter_works_inside_top_level_compute_function():
@@ -27,7 +31,7 @@ def test_compute_raises_adapter_not_found_error(prog_input_factory):
     found."""
     energy_inp = prog_input_factory("energy")
     with pytest.raises(AdapterNotFoundError):
-        # Will check qcop and qcng
+        # Will check qccompute and qcng
         compute("not-a-real-program", energy_inp)
 
 
@@ -106,7 +110,7 @@ def test_compute_does_not_raise_exception_if_raise_exec_false(prog_input_factory
     mocker.patch.object(
         adapter,
         "compute_data",
-        side_effect=QCOPBaseError("Something failed!"),
+        side_effect=QCComputeBaseError("Something failed!"),
     )
     po = compute("test", grad_input, raise_exc=False)
     assert po.success is False
@@ -126,7 +130,7 @@ def test_qcengine_import_error(mocker, prog_input_factory):
 def test_compute_args(hydrogen, mocker):
     """Test that compute_args correctly constructs input object and calls compute."""
     # Spy on top level compute function
-    compute_spy = mocker.patch("qcop.main.compute")
+    compute_spy = mocker.patch("qccompute.main.compute")
     values_dict = {
         "structure": hydrogen,
         "calctype": "energy",
@@ -144,7 +148,7 @@ def test_compute_args(hydrogen, mocker):
 def test_compute_args_file_object_passed(hydrogen, mocker):
     """Test that compute_args correctly constructs input object and calls compute."""
     # Spy on top level compute function
-    compute_spy = mocker.patch("qcop.main.compute")
+    compute_spy = mocker.patch("qccompute.main.compute")
     values_dict = {
         "structure": hydrogen,
         "calctype": "energy",

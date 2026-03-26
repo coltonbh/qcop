@@ -2,7 +2,7 @@
 
 from qcdata import CalcType, ProgramInput, Structure
 
-from qcop import compute
+from qccompute import compute
 
 # Create the structure
 # Can also open a structure from a file
@@ -25,5 +25,5 @@ prog_input = ProgramInput(
 )
 
 
-result = compute("xtb", prog_input)
-print(result)
+prog_output = compute("xtb", prog_input)
+print(prog_output)

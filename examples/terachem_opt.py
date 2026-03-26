@@ -1,8 +1,8 @@
-"""Example of how to run an optimization calculation with TeraChem using qcop."""
+"""Example of how to run an optimization calculation with TeraChem using qccompute."""
 
 from qcdata import ProgramInput, Structure
 
-from qcop import compute, exceptions
+from qccompute import compute, exceptions
 
 # Create the structure
 # Can also open a structure from a file
@@ -27,24 +27,24 @@ prog_input = ProgramInput(
 
 # Run the calculation
 try:
-    # result is a ProgramOutput instance
-    result = compute("terachem", prog_input, collect_files=True)
-except exceptions.QCOPBaseError as e:
-    result = e.results
-    print(result.logs)
-    print(f"Success: {result.success}")  # False
-    print(result.input_data)  # Input data used to generate the calculation
-    print(result.provenance)  # Provenance of generated calculation
-    print(result.traceback)  # or output.ptraceback for short
+    # prog_output is a ProgramOutput instance
+    prog_output = compute("terachem", prog_input, collect_files=True)
+except exceptions.QCComputeBaseError as e:
+    prog_output = e.prog_output
+    print(prog_output.logs)
+    print(f"Success: {prog_output.success}")  # False
+    print(prog_output.input_data)  # Input data used to generate the calculation
+    print(prog_output.provenance)  # Provenance of generated calculation
+    print(prog_output.traceback)  # or output.ptraceback for short
     raise
 
 else:
     # Check results
-    print(result.logs)
-    print(f"Success: {result.success}")  # True
-    print("output.data: ", result.data)
-    print("output.data.energies:", result.data.energies)
-    print("output.data.structures:", result.data.structures)
-    print("output.data.final_structure:", result.data.final_structure)
-    print(result.input_data)  # Input data used to generate the calculation
-    print(result.provenance)  # Provenance of generated calculation
+    print(prog_output.logs)
+    print(f"Success: {prog_output.success}")  # True
+    print("output.data: ", prog_output.data)
+    print("output.data.energies:", prog_output.data.energies)
+    print("output.data.structures:", prog_output.data.structures)
+    print("output.data.final_structure:", prog_output.data.final_structure)
+    print(prog_output.input_data)  # Input data used to generate the calculation
+    print(prog_output.provenance)  # Provenance of generated calculation

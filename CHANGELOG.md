@@ -8,20 +8,21 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ### Changed
 
-- Migrated the codebase from `qcio` to `qcdata`, updating imports, docs, examples, and tests to the published `qcdata>=0.17.0` package.
-- Replaced uses of deprecated `Results` objects with `ProgramOutput` throughout `qcop`, including exception payloads and adapter return types.
-- Updated core dependency versions to `qccodec>=0.10.0`, `qcdata>=0.17.0`, and `tcpb>=0.16.0` to align with the published rename away from `qcio`.
+- Renamed the package from `qcop` to `qccompute`, updating package metadata, import paths, documentation, examples, and tests to the new name. [#71](https://github.com/coltonbh/qcop/pull/71)
+- Migrated the codebase from `qcio` to `qcdata`, updating imports, docs, examples, and tests to the published `qcdata>=0.17.0` package. [#70](https://github.com/coltonbh/qcop/pull/70)
+- Replaced uses of deprecated `Results` objects with `ProgramOutput` throughout `qccompute`, including exception payloads and adapter return types. [#70](https://github.com/coltonbh/qcop/pull/70)
+- Updated core dependency versions to `qccodec>=0.10.0`, `qcdata>=0.17.0`, and `tcpb>=0.16.0` to align with the published rename away from `qcio`. [#70](https://github.com/coltonbh/qcop/pull/70)
 
 ### Fixed
 
-- Corrected `BaseAdapter.compute()` to attach collected wavefunction files at `ProgramOutput.data.files`, matching the current `qcdata` output model instead of relying on backwards-compatibility shims.
-- Aligned the pre-commit mypy hook with the published package environment so pre-commit and direct mypy runs report the same type-checking results.
+- Corrected `BaseAdapter.compute()` to attach collected wavefunction files at `ProgramOutput.data.files`, matching the current `qcdata` output model instead of relying on backwards-compatibility shims. [#70](https://github.com/coltonbh/qcop/pull/70)
+- Aligned the pre-commit mypy hook with the published package environment so pre-commit and direct mypy runs report the same type-checking results. [#70](https://github.com/coltonbh/qcop/pull/70)
 
 ## [0.12.1] - 2025-11-18
 
 ### Added
 
-- Adapter for ORCA (by @avcopan) [#69](https://github.com/coltonbh/qcop/pull/69).
+- Adapter for ORCA (by @avcopan) [#69](https://github.com/coltonbh/qccompute/pull/69).
 
 ## [0.12.0] - 2025-10-09
 
@@ -34,16 +35,16 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ### Changed
 
-- 🚨 Dropped python 3.9 support. Minimum supported version is 3.10. [#67](https://github.com/coltonbh/qcop/pull/67)
-- 🚨 Upgraded to latest `qcio` `v0.15.0` with new data structure nomenclature. [#67](https://github.com/coltonbh/qcop/pull/67)
-- 🚨 Removed `poetry` in favor of `uv` for package management. [#67](https://github.com/coltonbh/qcop/pull/67)
-- 🚨 Renamed `compute` kwarg `collect_stdout` -> `collect_logs`. [#67](https://github.com/coltonbh/qcop/pull/67)
-- 🚨 Renamed `compute` kwarg `print_stdout` -> `print_logs`. [#67](https://github.com/coltonbh/qcop/pull/67)
-- 🚨 `qcop` Exception classes updated to `.results` and `.data` nomenclature. [#67](https://github.com/coltonbh/qcop/pull/67)
+- 🚨 Dropped python 3.9 support. Minimum supported version is 3.10. [#67](https://github.com/coltonbh/qccompute/pull/67)
+- 🚨 Upgraded to latest `qcio` `v0.15.0` with new data structure nomenclature. [#67](https://github.com/coltonbh/qccompute/pull/67)
+- 🚨 Removed `poetry` in favor of `uv` for package management. [#67](https://github.com/coltonbh/qccompute/pull/67)
+- 🚨 Renamed `compute` kwarg `collect_stdout` -> `collect_logs`. [#67](https://github.com/coltonbh/qccompute/pull/67)
+- 🚨 Renamed `compute` kwarg `print_stdout` -> `print_logs`. [#67](https://github.com/coltonbh/qccompute/pull/67)
+- 🚨 `qcop` Exception classes updated to `.results` and `.data` nomenclature. [#67](https://github.com/coltonbh/qccompute/pull/67)
 
 ### Removed
 
-- 🚨 Removed `xtb` support from the installation options as it is no longer supported and cannot install on python 3.12+. [#67](https://github.com/coltonbh/qcop/pull/67)
+- 🚨 Removed `xtb` support from the installation options as it is no longer supported and cannot install on python 3.12+. [#67](https://github.com/coltonbh/qccompute/pull/67)
 
 ## [0.10.2] - 2025-04-01
 
@@ -422,46 +423,46 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 [0.12.1]: https://github.com/coltonbh/qcio/releases/tag/0.12.1
 [0.12.0]: https://github.com/coltonbh/qcio/releases/tag/0.12.0
 [0.11.0]: https://github.com/coltonbh/qcio/releases/tag/0.11.0
-[0.10.2]: https://github.com/coltonbh/qcop/releases/tag/0.10.2
-[0.10.1]: https://github.com/coltonbh/qcop/releases/tag/0.10.1
-[0.10.0]: https://github.com/coltonbh/qcop/releases/tag/0.10.0
-[0.9.8]: https://github.com/coltonbh/qcop/releases/tag/0.9.8
-[0.9.7]: https://github.com/coltonbh/qcop/releases/tag/0.9.7
-[0.9.6]: https://github.com/coltonbh/qcop/releases/tag/0.9.6
-[0.9.5]: https://github.com/coltonbh/qcop/releases/tag/0.9.5
-[0.9.4]: https://github.com/coltonbh/qcop/releases/tag/0.9.4
-[0.9.3]: https://github.com/coltonbh/qcop/releases/tag/0.9.3
-[0.9.2]: https://github.com/coltonbh/qcop/releases/tag/0.9.2
-[0.9.1]: https://github.com/coltonbh/qcop/releases/tag/0.9.1
-[0.9.0]: https://github.com/coltonbh/qcop/releases/tag/0.9.0
-[0.8.1]: https://github.com/coltonbh/qcop/releases/tag/0.8.1
-[0.8.0]: https://github.com/coltonbh/qcop/releases/tag/0.8.0
-[0.7.5]: https://github.com/coltonbh/qcop/releases/tag/0.7.5
-[0.7.4]: https://github.com/coltonbh/qcop/releases/tag/0.7.4
-[0.7.3]: https://github.com/coltonbh/qcop/releases/tag/0.7.3
-[0.7.2]: https://github.com/coltonbh/qcop/releases/tag/0.7.2
-[0.7.1]: https://github.com/coltonbh/qcop/releases/tag/0.7.1
-[0.7.0]: https://github.com/coltonbh/qcop/releases/tag/0.7.0
-[0.6.2]: https://github.com/coltonbh/qcop/releases/tag/0.6.2
-[0.6.1]: https://github.com/coltonbh/qcop/releases/tag/0.6.1
-[0.6.0]: https://github.com/coltonbh/qcop/releases/tag/0.6.0
-[0.5.5]: https://github.com/coltonbh/qcop/releases/tag/0.5.5
-[0.5.4]: https://github.com/coltonbh/qcop/releases/tag/0.5.4
-[0.5.3]: https://github.com/coltonbh/qcop/releases/tag/0.5.3
-[0.5.2]: https://github.com/coltonbh/qcop/releases/tag/0.5.2
-[0.5.1]: https://github.com/coltonbh/qcop/releases/tag/0.5.1
-[0.5.0]: https://github.com/coltonbh/qcop/releases/tag/0.5.0
-[0.4.8]: https://github.com/coltonbh/qcop/releases/tag/0.4.8
-[0.4.7]: https://github.com/coltonbh/qcop/releases/tag/0.4.7
-[0.4.6]: https://github.com/coltonbh/qcop/releases/tag/0.4.6
-[0.4.5]: https://github.com/coltonbh/qcop/releases/tag/0.4.5
-[0.4.4]: https://github.com/coltonbh/qcop/releases/tag/0.4.4
-[0.4.3]: https://github.com/coltonbh/qcop/releases/tag/0.4.3
-[0.4.2]: https://github.com/coltonbh/qcop/releases/tag/0.4.2
-[0.4.1]: https://github.com/coltonbh/qcop/releases/tag/0.4.1
-[0.4.0]: https://github.com/coltonbh/qcop/releases/tag/0.4.0
-[0.3.2]: https://github.com/coltonbh/qcop/releases/tag/0.3.2
-[0.3.1]: https://github.com/coltonbh/qcop/releases/tag/0.3.1
-[0.3.0]: https://github.com/coltonbh/qcop/releases/tag/0.3.0
-[0.2.0]: https://github.com/coltonbh/qcop/releases/tag/0.2.0
-[0.1.0]: https://github.com/coltonbh/qcop/releases/tag/0.1.0
+[0.10.2]: https://github.com/coltonbh/qccompute/releases/tag/0.10.2
+[0.10.1]: https://github.com/coltonbh/qccompute/releases/tag/0.10.1
+[0.10.0]: https://github.com/coltonbh/qccompute/releases/tag/0.10.0
+[0.9.8]: https://github.com/coltonbh/qccompute/releases/tag/0.9.8
+[0.9.7]: https://github.com/coltonbh/qccompute/releases/tag/0.9.7
+[0.9.6]: https://github.com/coltonbh/qccompute/releases/tag/0.9.6
+[0.9.5]: https://github.com/coltonbh/qccompute/releases/tag/0.9.5
+[0.9.4]: https://github.com/coltonbh/qccompute/releases/tag/0.9.4
+[0.9.3]: https://github.com/coltonbh/qccompute/releases/tag/0.9.3
+[0.9.2]: https://github.com/coltonbh/qccompute/releases/tag/0.9.2
+[0.9.1]: https://github.com/coltonbh/qccompute/releases/tag/0.9.1
+[0.9.0]: https://github.com/coltonbh/qccompute/releases/tag/0.9.0
+[0.8.1]: https://github.com/coltonbh/qccompute/releases/tag/0.8.1
+[0.8.0]: https://github.com/coltonbh/qccompute/releases/tag/0.8.0
+[0.7.5]: https://github.com/coltonbh/qccompute/releases/tag/0.7.5
+[0.7.4]: https://github.com/coltonbh/qccompute/releases/tag/0.7.4
+[0.7.3]: https://github.com/coltonbh/qccompute/releases/tag/0.7.3
+[0.7.2]: https://github.com/coltonbh/qccompute/releases/tag/0.7.2
+[0.7.1]: https://github.com/coltonbh/qccompute/releases/tag/0.7.1
+[0.7.0]: https://github.com/coltonbh/qccompute/releases/tag/0.7.0
+[0.6.2]: https://github.com/coltonbh/qccompute/releases/tag/0.6.2
+[0.6.1]: https://github.com/coltonbh/qccompute/releases/tag/0.6.1
+[0.6.0]: https://github.com/coltonbh/qccompute/releases/tag/0.6.0
+[0.5.5]: https://github.com/coltonbh/qccompute/releases/tag/0.5.5
+[0.5.4]: https://github.com/coltonbh/qccompute/releases/tag/0.5.4
+[0.5.3]: https://github.com/coltonbh/qccompute/releases/tag/0.5.3
+[0.5.2]: https://github.com/coltonbh/qccompute/releases/tag/0.5.2
+[0.5.1]: https://github.com/coltonbh/qccompute/releases/tag/0.5.1
+[0.5.0]: https://github.com/coltonbh/qccompute/releases/tag/0.5.0
+[0.4.8]: https://github.com/coltonbh/qccompute/releases/tag/0.4.8
+[0.4.7]: https://github.com/coltonbh/qccompute/releases/tag/0.4.7
+[0.4.6]: https://github.com/coltonbh/qccompute/releases/tag/0.4.6
+[0.4.5]: https://github.com/coltonbh/qccompute/releases/tag/0.4.5
+[0.4.4]: https://github.com/coltonbh/qccompute/releases/tag/0.4.4
+[0.4.3]: https://github.com/coltonbh/qccompute/releases/tag/0.4.3
+[0.4.2]: https://github.com/coltonbh/qccompute/releases/tag/0.4.2
+[0.4.1]: https://github.com/coltonbh/qccompute/releases/tag/0.4.1
+[0.4.0]: https://github.com/coltonbh/qccompute/releases/tag/0.4.0
+[0.3.2]: https://github.com/coltonbh/qccompute/releases/tag/0.3.2
+[0.3.1]: https://github.com/coltonbh/qccompute/releases/tag/0.3.1
+[0.3.0]: https://github.com/coltonbh/qccompute/releases/tag/0.3.0
+[0.2.0]: https://github.com/coltonbh/qccompute/releases/tag/0.2.0
+[0.1.0]: https://github.com/coltonbh/qccompute/releases/tag/0.1.0

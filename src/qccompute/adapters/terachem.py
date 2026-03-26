@@ -7,7 +7,7 @@ from qccodec.encoders.terachem import XYZ_FILENAME
 from qccodec.parsers.terachem import parse_version
 from qcdata import CalcType, ProgramInput, ProgramOutput, SinglePointData
 
-from qcop.exceptions import AdapterError, AdapterInputError, ExternalProgramError
+from qccompute.exceptions import AdapterError, AdapterInputError, ExternalProgramError
 
 from .base import ProgramAdapter
 from .utils import execute_subprocess

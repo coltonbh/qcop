@@ -1,7 +1,7 @@
 import pytest
 from qcdata import CalcType, DualProgramInput, OptimizationResults, ProgramOutput
 
-from qcop.adapters import GeometricAdapter
+from qccompute.adapters import GeometricAdapter
 from tests.conftest import skipif_program_not_available
 
 

@@ -1,5 +1,5 @@
 [project]
-name = "qcop"
+name = "qccompute"
 version = "0.12.1"
 description = "A package for operating Quantum Chemistry programs using qcdata standardized data structures. Compatible with TeraChem, psi4, QChem, NWChem, ORCA, Molpro, geomeTRIC and many more."
 authors = [{ name = "Colton Hicks", email = "github@coltonhicks.com" }]
@@ -37,12 +37,12 @@ all = [
 ]
 
 [project.urls]
-Homepage = "https://github.com/coltonbh/qcop"
-Source = "https://github.com/coltonbh/qcop"
-Repository = "https://github.com/coltonbh/qcop"
-Changelog = "https://github.com/coltonbh/qcop/blob/master/CHANGELOG.md"
-"Bug Tracker" = "https://github.com/coltonbh/qcop/issues"
-Documentation = "https://qcop.coltonhicks.com"
+Homepage = "https://github.com/coltonbh/qccompute"
+Source = "https://github.com/coltonbh/qccompute"
+Repository = "https://github.com/coltonbh/qccompute"
+Changelog = "https://github.com/coltonbh/qccompute/blob/master/CHANGELOG.md"
+"Bug Tracker" = "https://github.com/coltonbh/qccompute/issues"
+Documentation = "https://qccompute.coltonhicks.com"
 
 
 [dependency-groups]
@@ -79,7 +79,7 @@ line-length = 88
 target-version = "py39"
 
 [tool.ruff.lint]
-isort = { known-first-party = ["qcop", "tests"] }
+isort = { known-first-party = ["qccompute", "tests"] }
 select = ["I", "F401"]
 
 [tool.coverage.run]

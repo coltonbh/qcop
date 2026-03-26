@@ -41,7 +41,7 @@ def available_programs():
 
 
 def check_qcng_support(program: str) -> None:
-    """Wrapper around qcng.get_program that raises correct qcop errors if the
+    """Wrapper around qcng.get_program that raises correct qccompute errors if the
     adapter (harness) or program are not found.
 
     Args:
@@ -58,7 +58,7 @@ def check_qcng_support(program: str) -> None:
         raise ModuleNotFoundError(
             "QCEngine not installed. To use qcengine as a fallback, "
             "install it by running 'python -m pip install "
-            "'qcop[qcengine]'."
+            "'qccompute[qcengine]'."
         ) from e
 
     try:
@@ -80,7 +80,7 @@ def get_adapter(
     Args:
         program: The program to get the adapter for.
         input_data: The input object for the calculation. Required only for FileInput.
-        qcng_fallback: Fallback to use QCEngine if the adapter is not in qcop.
+        qcng_fallback: Fallback to use QCEngine if the adapter is not in qccompute.
 
     Returns:
         The adapter for the program.

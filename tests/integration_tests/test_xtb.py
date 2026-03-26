@@ -2,7 +2,7 @@ import numpy as np
 import pytest
 from qcdata import ProgramInput, Structure
 
-from qcop import compute
+from qccompute import compute
 from tests.conftest import skipif_program_not_available
 
 

@@ -8,9 +8,9 @@ from qcdata import (
     SinglePointData,
 )
 
-from qcop.adapters import GeometricAdapter
-from qcop.adapters.utils import tmpdir
-from qcop.exceptions import (
+from qccompute.adapters import GeometricAdapter
+from qccompute.adapters.utils import tmpdir
+from qccompute.exceptions import (
     ExternalProgramError,
     ProgramNotFoundError,
 )
@@ -89,7 +89,7 @@ def test_qcdata_geometric_engine_exception_handling(
         side_effect=ExternalProgramError(
             program="terachem",
             logs="some stdout",
-            results=po_failure,
+            prog_output=po_failure,
         ),
     )
 
@@ -103,7 +103,7 @@ def test_qcdata_geometric_engine_exception_handling(
     )
 
 
-def test_geometric_exceptions_converted_to_qcop_exceptions(mocker, dual_prog_input_factory):
+def test_geometric_exceptions_converted_to_qccompute_exceptions(mocker, dual_prog_input_factory):
     adapter = GeometricAdapter()
 
     # cause .optimizeGeometry to raise a geomeTRIC exception
