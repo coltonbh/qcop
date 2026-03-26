@@ -142,7 +142,7 @@ python -m pip install 'qcdata[view]'
 
 Then in a Jupyter notebook import the `qcdata` view module and call `view.view(...)` passing it one or any number of `qcdata` objects you want to visualize, including `Structure` objects or any `ProgramOutput` object. You may also pass arrays of `titles` and/or `subtitles` to add additional information to the molecular structure display. If no titles are passed, `qcdata` will look for `Structure` identifiers such as a name or SMILES to label the `Structure`.
 
-![Structure Viewer](https://public.coltonhicks.com/assets/qcio/structure_viewer.png)
+![Structure Viewer](https://public.coltonhicks.com/assets/qcdata/structure_viewer.png)
 
 Seamless visualizations for `ProgramOutput` objects make results analysis easy!
 
