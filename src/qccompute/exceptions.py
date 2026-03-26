@@ -4,12 +4,12 @@
 from qcdata import Data, ProgramOutput
 
 
-class QCOPBaseError(Exception):
+class QCComputeBaseError(Exception):
     """
-    Base class for all qcop exceptions.
+    Base class for all qccompute exceptions.
 
-    All QCOP exceptions must eventually have a non-None results attribute.
-    Lower-level code may leave results as None; the top-level compute() method
+    All QCCompute exceptions must eventually have a non-None prog_output attribute.
+    Lower-level code may leave prog_output as None; the top-level compute() method
     should attach the final ProgramOutput before propagating the error. If some results
     were computed before the error occurred, they should be attached to the exception
     as well.
@@ -18,14 +18,19 @@ class QCOPBaseError(Exception):
     def __init__(
         self,
         message: str,
-        results: ProgramOutput | None = None,
+        prog_output: ProgramOutput | None = None,
         data: Data | None = None,
     ):
         # Pass everything as positional arguments so they are captured in .args
         # Required for pickling and other serialization methods including celery.
-        super().__init__(message, results, data)
-        self.results = results
+        super().__init__(message, prog_output, data)
+        self.prog_output = prog_output
         self.data = data
+
+    @property
+    def results(self) -> ProgramOutput | None:
+        """Backward-compatible alias for prog_output."""
+        return self.prog_output
 
     def __str__(self):
         # Only the message is shown in the string representation.
@@ -34,14 +39,14 @@ class QCOPBaseError(Exception):
     def __repr__(self):
         return (
             f"{self.__class__.__name__}(message={self.args[0]!r}, "
-            f"results={self.results!r}, data={self.data!r})"
+            f"prog_output={self.prog_output!r}, data={self.data!r})"
         )
 
 
 # ===================== Adapter-Related Errors =====================
 
 
-class AdapterError(QCOPBaseError):
+class AdapterError(QCComputeBaseError):
     """Exceptions due to misconfiguration or invalid inputs for adapters."""
 
     pass
@@ -54,11 +59,11 @@ class AdapterNotFoundError(AdapterError):
         self,
         program: str,
         message: str | None = None,
-        results: ProgramOutput | None = None,
+        prog_output: ProgramOutput | None = None,
     ):
         if message is None:
             message = f"No adapter found for program '{program}'."
-        super().__init__(message, results, None)
+        super().__init__(message, prog_output, None)
         self.program = program
 
     def __repr__(self):
@@ -72,11 +77,11 @@ class AdapterInputError(AdapterError):
         self,
         program: str,
         message: str | None = None,
-        results: ProgramOutput | None = None,
+        prog_output: ProgramOutput | None = None,
     ):
         if message is None:
             message = f"Invalid inputs for program '{program}'."
-        super().__init__(message, results, None)
+        super().__init__(message, prog_output, None)
         self.program = program
 
     def __repr__(self):
@@ -86,7 +91,7 @@ class AdapterInputError(AdapterError):
 # ===================== External Program Errors =====================
 
 
-class ExternalProgramError(QCOPBaseError):
+class ExternalProgramError(QCComputeBaseError):
     """
     Raised when an external program or package fails to complete successfully.
 
@@ -98,14 +103,14 @@ class ExternalProgramError(QCOPBaseError):
         self,
         program: str,
         message: str | None = None,
-        results: ProgramOutput | None = None,
+        prog_output: ProgramOutput | None = None,
         data: Data | None = None,
         original_exception: Exception | None = None,
         logs: str | None = None,
     ):
         if message is None:
             message = f"External program '{program}' failed."
-        super().__init__(message, results, data)
+        super().__init__(message, prog_output, data)
         self.program = program
         self.original_exception = original_exception
         self.logs = logs
@@ -124,7 +129,7 @@ class ProgramNotFoundError(ExternalProgramError):
         self,
         program: str,
         message: str | None = None,
-        results: ProgramOutput | None = None,
+        prog_output: ProgramOutput | None = None,
         install_msg: str | None = None,
     ):
         if message is None:
@@ -132,8 +137,15 @@ class ProgramNotFoundError(ExternalProgramError):
                 install_msg
                 or f"Program not found: '{program}'. Please install it and ensure it is on your PATH."
             )
-        # Call ExternalProgramError with results, original_exception, and logs defaulting to None.
-        super().__init__(program, message, results, None, None, None)
+        # Call ExternalProgramError with prog_output, original_exception, and logs defaulting to None.
+        super().__init__(
+            program,
+            message,
+            prog_output,
+            None,
+            None,
+            None,
+        )
         self.program = program
         self.install_msg = install_msg
 

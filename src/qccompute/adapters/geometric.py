@@ -15,13 +15,13 @@ from qcdata import (
     Structure,
 )
 
-from qcop.exceptions import (
+from qccompute.exceptions import (
     AdapterInputError,
     ExternalProgramError,
     ProgramNotFoundError,
-    QCOPBaseError,
+    QCComputeBaseError,
 )
-from qcop.utils import get_adapter
+from qccompute.utils import get_adapter
 
 from .base import ProgramAdapter
 from .utils import capture_logs
@@ -170,7 +170,7 @@ class GeometricAdapter(ProgramAdapter[DualProgramInput, OptimizationData]):
             input_data: The qcdata DualProgramInput object for a computation.
             geometric_molecule: The geomeTRIC Molecule object.
             internal_coords_sys: The geomeTRIC internal coordinate system.
-            qcdata_adapter: The qcop adapter for the subprogram.
+            qcdata_adapter: The qccompute adapter for the subprogram.
 
         Returns:
             The geomeTRIC optimizer object.
@@ -244,10 +244,10 @@ class GeometricAdapter(ProgramAdapter[DualProgramInput, OptimizationData]):
         )
 
     def _geometric_engine(self):
-        """Return the qcop geomeTRIC engine class."""
+        """Return the qccompute geomeTRIC engine class."""
 
-        class QCOPGeometricEngine(self.geometric.engine.Engine):
-            """QCOP Engine for Geometric"""
+        class QCComputeGeometricEngine(self.geometric.engine.Engine):
+            """QCCompute Engine for Geometric"""
 
             def __init__(
                 self,
@@ -308,14 +308,14 @@ class GeometricAdapter(ProgramAdapter[DualProgramInput, OptimizationData]):
                             update_interval=self.update_interval,
                         )
                     )
-                except QCOPBaseError as e:
-                    if e.results:  # For mypy
+                except QCComputeBaseError as e:
+                    if e.prog_output:  # For mypy
                         # Append error output
-                        self.qcdata_trajectory.append(e.results)
+                        self.qcdata_trajectory.append(e.prog_output)
                     data = OptimizationData(trajectory=self.qcdata_trajectory)
                     e.data = data
                     # TODO: Add args/kwargs update for Celery serialization?
-                    # Maybe not because .data is folded into e.results in
+                    # Maybe not because .data is folded into e.prog_output in
                     # BaseAdapter.compute()?
                     raise e
 
@@ -334,4 +334,4 @@ class GeometricAdapter(ProgramAdapter[DualProgramInput, OptimizationData]):
                     "gradient": results.data.gradient.flatten(),
                 }
 
-        return QCOPGeometricEngine
+        return QCComputeGeometricEngine

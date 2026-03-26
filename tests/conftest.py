@@ -11,8 +11,8 @@ from qcdata import (
     Structure,
 )
 
-from qcop.adapters.base import ProgramAdapter
-from qcop.utils import prog_available
+from qccompute.adapters.base import ProgramAdapter
+from qccompute.utils import prog_available
 
 
 @pytest.fixture(scope="session")

@@ -2,7 +2,7 @@ from collections.abc import Callable
 
 from qcdata import FileInput, Files
 
-from qcop.adapters.base import BaseAdapter
+from qccompute.adapters.base import BaseAdapter
 
 from .utils import execute_subprocess
 

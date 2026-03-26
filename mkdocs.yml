@@ -1,5 +1,5 @@
-site_name: Quantum Chemistry Operate (QCOP)
-site_url: https://qcop.coltonhicks.com/
+site_name: qccompute
+site_url: https://qccompute.coltonhicks.com/
 theme:
   name: material
   palette:
@@ -37,7 +37,7 @@ theme:
   icon:
     repo: fontawesome/brands/github-alt
 
-repo_url: https://github.com/coltonbh/qcop
+repo_url: https://github.com/coltonbh/qccompute
 edit_uri: edit/master/docs/
 site_author: Colton Hicks
 plugins:
@@ -93,13 +93,13 @@ markdown_extensions:
   - markdown_include.include
 
 watch:
-  - src/qcop
+  - src/qccompute
   - examples
 
 nav:
   - Getting Started:
-      - Welcome to qcop: index.md
-  #     - Why use qcop?: why.md
+      - Welcome to QCCompute: index.md
+  #     - Why use QCCompute?: why.md
   - Programs:
       - Overview: programs/overview.md
       - TeraChem: programs/terachem.md
@@ -113,4 +113,4 @@ nav:
       - Optimization: examples/optimization.md
       - Conformer Search: examples/conformer_search.md
       - File Input: examples/file_input.md
-  - Changelog: https://github.com/coltonbh/qcop/blob/master/CHANGELOG.md
+  - Changelog: https://github.com/coltonbh/qccompute/blob/master/CHANGELOG.md

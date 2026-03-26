@@ -1,5 +1,5 @@
-::: qcop.adapters.terachem.TeraChemAdapter
+::: qccompute.adapters.terachem.TeraChemAdapter
 
-::: qcop.adapters.terachem_fe.TeraChemFEAdapter
+::: qccompute.adapters.terachem_fe.TeraChemFEAdapter
 
-::: qcop.adapters.terachem_pbs.TeraChemPBSAdapter
+::: qccompute.adapters.terachem_pbs.TeraChemPBSAdapter

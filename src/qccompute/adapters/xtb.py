@@ -11,7 +11,7 @@ from collections.abc import Callable
 import numpy as np
 from qcdata import CalcType, ProgramInput, SinglePointData, Wavefunction
 
-from qcop.exceptions import (
+from qccompute.exceptions import (
     AdapterInputError,
     ExternalProgramError,
     ProgramNotFoundError,
@@ -92,8 +92,8 @@ class XTBAdapter(ProgramAdapter[ProgramInput, SinglePointData]):
                     "xtb",
                     install_msg=(
                         "Program not found: 'xtb'. To use xtb please install it with "
-                        "pip install qcop[xtb] or add '' if your shell requires it. "
-                        "e.g., pip install 'qcop[xtb]'."
+                        "pip install qccompute[xtb] or add '' if your shell requires it. "
+                        "e.g., pip install 'qccompute[xtb]'."
                     ),
                 )
 

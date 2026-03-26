@@ -3,7 +3,7 @@ from collections.abc import Callable
 
 from qcdata import CalcType, ProgramInput, SinglePointData
 
-from qcop.exceptions import ExternalProgramError, ProgramNotFoundError
+from qccompute.exceptions import ExternalProgramError, ProgramNotFoundError
 
 from .base import ProgramAdapter
 
@@ -30,8 +30,8 @@ class TeraChemFEAdapter(ProgramAdapter[ProgramInput, SinglePointData]):
                 "tcpb",
                 install_msg=(
                     "Program not found: 'tcpb'. To use tcpb please install it with "
-                    "pip install qcop[tcpb] or add '' if your shell requires it. "
-                    "e.g., pip install 'qcop[tcpb]'."
+                    "pip install qccompute[tcpb] or add '' if your shell requires it. "
+                    "e.g., pip install 'qccompute[tcpb]'."
                 ),
             )
 
@@ -65,7 +65,7 @@ class TeraChemFEAdapter(ProgramAdapter[ProgramInput, SinglePointData]):
                 program=self.program,
                 # Pass logs to .compute() via the exception
                 # Will only exist for TeraChemFrontendAdapter
-                logs=e.results.logs,
+                logs=e.prog_output.logs,
             )
 
             raise exc

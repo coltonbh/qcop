@@ -7,7 +7,7 @@ from qccodec import exceptions as qccodec_exceptions
 from qccodec.parsers.orca import parse_version
 from qcdata import CalcType, ProgramInput, SinglePointData
 
-from qcop.exceptions import (
+from qccompute.exceptions import (
     AdapterInputError,
     ExternalProgramError,
     ProgramNotFoundError,

@@ -2,9 +2,9 @@ import numpy as np
 import pytest
 from qcdata import CalcType, ProgramInput, Structure
 
-from qcop import compute
-from qcop.adapters import XTBAdapter
-from qcop.exceptions import AdapterInputError
+from qccompute import compute
+from qccompute.adapters import XTBAdapter
+from qccompute.exceptions import AdapterInputError
 from tests.conftest import skipif_program_not_available
 
 

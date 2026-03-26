@@ -4,7 +4,7 @@ from pathlib import Path
 
 from qcdata import FileInput, Structure
 
-from qcop import compute
+from qccompute import compute
 
 # Input files for QC Program
 inp_file = Path("path/to/tc.in").read_text()  # Or your own function to create tc.in
@@ -20,12 +20,12 @@ file_input = FileInput(
 
 # This will write the files to disk in a temporary directory and then run
 # "terachem tc.in" in that directory.
-result = compute("terachem", file_input, print_logs=True)
+prog_output = compute("terachem", file_input, print_logs=True)
 
 # Data
-result.logs
-result.input_data
-result.data.files  # Has all the files terachem creates
-result.data.files.keys()  # Print out file names
+prog_output.logs
+prog_output.input_data
+prog_output.data.files  # Has all the files terachem creates
+prog_output.data.files.keys()  # Print out file names
 # Saves all outputs with the exact structure produced by the QC program
-result.data.save_files("to/this/directory")
+prog_output.data.save_files("to/this/directory")

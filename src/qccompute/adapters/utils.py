@@ -20,7 +20,7 @@ from time import time
 from qcdata import Provenance
 from qcdata.helper_types import StrOrPath
 
-from qcop.exceptions import ExternalProgramError, ProgramNotFoundError
+from qccompute.exceptions import ExternalProgramError, ProgramNotFoundError
 
 
 def execute_subprocess(

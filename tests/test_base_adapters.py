@@ -1,12 +1,12 @@
 import pytest
 from qcdata import CalcType, ProgramOutput, SinglePointData
 
-from qcop.adapters import base, registry
-from qcop.exceptions import AdapterInputError, ExternalProgramError
+from qccompute.adapters import base, registry
+from qccompute.exceptions import AdapterInputError, ExternalProgramError
 
 
 def test_adapter_subclasses_must_define_program():
-    """Test that subclasses of QCOPProgramAdapter must define a nonempty
+    """Test that subclasses of QCComputeProgramAdapter must define a nonempty
     program list."""
     with pytest.raises(NotImplementedError):
 
@@ -19,7 +19,7 @@ def test_adapter_subclasses_must_define_program():
 
 
 def test_adapter_subclasses_must_define_supported_calctypes():
-    """Test that subclasses of QCOPSinglePointAdapter must define a nonempty
+    """Test that subclasses of QCComputeSinglePointAdapter must define a nonempty
     supported_calctypes list."""
     with pytest.raises(NotImplementedError):
 
@@ -32,7 +32,7 @@ def test_adapter_subclasses_must_define_supported_calctypes():
 
 
 def test_adapter_subclasses_must_define_compute_method():
-    """Test that subclasses of QCOPProgramAdapter defining a nonempty program
+    """Test that subclasses of QCComputeProgramAdapter defining a nonempty program
     list and supported_calctypes list can be instantiated."""
 
     class TestAdapter(base.ProgramAdapter):
@@ -45,7 +45,7 @@ def test_adapter_subclasses_must_define_compute_method():
 
 
 def test_adapter_subclasses_defining_program_and_supported_calctypes():
-    """Test that subclasses of QCOPProgramAdapter defining a nonempty program
+    """Test that subclasses of QCComputeProgramAdapter defining a nonempty program
     list and supported_calctypes list can be instantiated."""
 
     class TestAdapter(base.ProgramAdapter):
@@ -130,8 +130,9 @@ def test_results_object_added_to_exception(prog_input_factory, mocker, results, 
     with pytest.raises(ExternalProgramError) as excinfo:
         test_adapter.compute(energy_input, raise_exc=True)
 
-    assert isinstance(excinfo.value.results, ProgramOutput)
-    assert excinfo.value.results.success is False
+    assert isinstance(excinfo.value.prog_output, ProgramOutput)
+    assert excinfo.value.prog_output.success is False
+    assert excinfo.value.results is excinfo.value.prog_output
     # NOTE: CHECK WITH BIGCHEM
     assert isinstance(excinfo.value.args[-1], SinglePointData)
 
@@ -163,7 +164,7 @@ def test_stdout_collected_with_failed_execution(
     # Added to exception
     assert excinfo.value.logs == "some stdout"
     # Added to ProgramOutput
-    assert excinfo.value.results.logs == "some stdout"
+    assert excinfo.value.prog_output.logs == "some stdout"
     # Added to exception
     assert excinfo.value.data == results.data
 

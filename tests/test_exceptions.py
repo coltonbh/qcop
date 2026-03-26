@@ -2,7 +2,7 @@ import pickle
 
 import pytest
 
-from qcop.exceptions import (
+from qccompute.exceptions import (
     AdapterInputError,
     AdapterNotFoundError,
     ExternalProgramError,
@@ -22,8 +22,8 @@ def test_exception_pickle(results, exc_class, args):
     # Instantiate the exception.
     exc_instance = exc_class(*args)
 
-    # Append results
-    exc_instance.results = results
+    # Append ProgramOutput
+    exc_instance.prog_output = results
 
     # Perform a full pickle round-trip.
     pickled = pickle.dumps(exc_instance)
@@ -38,3 +38,12 @@ def test_exception_pickle(results, exc_class, args):
         assert getattr(unpickled, attr) == getattr(
             exc_instance, attr
         ), f"Attribute {attr} changed after unpickling."
+
+
+def test_results_property_is_read_only_alias(results):
+    exc = ExternalProgramError("psi4", prog_output=results)
+
+    assert exc.results == results
+
+    with pytest.raises(AttributeError):
+        exc.results = results

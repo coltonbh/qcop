@@ -1,8 +1,8 @@
-Calculations are run by calling the `qcop.compute()` function with the relevant arguments and keywords like this:
+Calculations are run by calling the `qccompute.compute()` function with the relevant arguments and keywords like this:
 
 ```python
 from qcdata import Structure, ProgramInput
-from qcop import compute
+from qccompute import compute
 
 # Create the Structure
 structure = Structure(
@@ -28,7 +28,7 @@ result = compute("terachem", prog_input, collect_files=True)
 
 The `compute` selects the correct program adapter and then calls `adapter.compute()`. The available arguments and keywords for the top level `compute()` function match those shown here:
 
-::: qcop.adapters.BaseAdapter.compute
+::: qccompute.adapters.BaseAdapter.compute
 
 ```
 

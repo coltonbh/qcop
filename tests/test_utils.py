@@ -5,9 +5,9 @@ from pathlib import Path
 
 import pytest
 
-from qcop.adapters.utils import capture_logs, execute_subprocess, tmpdir
-from qcop.exceptions import ExternalProgramError, ProgramNotFoundError
-from qcop.utils import available_programs, prog_available
+from qccompute.adapters.utils import capture_logs, execute_subprocess, tmpdir
+from qccompute.exceptions import ExternalProgramError, ProgramNotFoundError
+from qccompute.utils import available_programs, prog_available
 
 
 def test_tmpdir_makes_dir_by_default():
