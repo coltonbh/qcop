@@ -6,6 +6,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## [unreleased]
 
+## [0.13.0] - 2026-03-26
+
 ### Changed
 
 - Renamed the package from `qcop` to `qccompute`, updating package metadata, import paths, documentation, examples, and tests to the new name. [#71](https://github.com/coltonbh/qcop/pull/71)
@@ -419,7 +421,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 - Created adapter for TeraChem.
 - Exposed general purpose computing for any subprocess with `FileAdaptor`
 
-[unreleased]: https://github.com/coltonbh/qcio/compare/0.12.1...HEAD
+[unreleased]: https://github.com/coltonbh/qccompute/compare/0.13.0...HEAD
+[0.13.0]: https://github.com/coltonbh/qccompute/releases/tag/0.13.0
 [0.12.1]: https://github.com/coltonbh/qcio/releases/tag/0.12.1
 [0.12.0]: https://github.com/coltonbh/qcio/releases/tag/0.12.0
 [0.11.0]: https://github.com/coltonbh/qcio/releases/tag/0.11.0
