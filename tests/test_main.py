@@ -6,7 +6,7 @@ from collections.abc import Callable
 from pathlib import Path
 
 import pytest
-from qcio import FileInput, Files, ProgramInput, Results
+from qcdata import FileInput, Files, ProgramInput, ProgramOutput
 
 from qcop.adapters import registry
 from qcop.exceptions import AdapterInputError, AdapterNotFoundError, QCOPBaseError
@@ -18,7 +18,7 @@ def test_file_adapter_works_inside_top_level_compute_function():
     file_inp = FileInput(cmdline_args=["hello_world.py"])
     file_inp.files["hello_world.py"] = "print('hello world')"
     result = compute("python", file_inp)
-    isinstance(result, Results)
+    isinstance(result, ProgramOutput)
     assert result.logs == "hello world\n"
 
 

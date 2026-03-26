@@ -1,6 +1,6 @@
 import numpy as np
 import pytest
-from qcio import ProgramInput, Structure
+from qcdata import ProgramInput, Structure
 
 from qcop import compute
 from tests.conftest import skipif_program_not_available

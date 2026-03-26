@@ -1,4 +1,4 @@
-from qcio import CalcType, ProgramInput, Structure
+from qcdata import CalcType, ProgramInput, Structure
 
 from qcop import compute, exceptions
 
@@ -23,7 +23,7 @@ prog_input = ProgramInput(
 
 # Run the calculation
 try:
-    # results is instance of Results
+    # result is a ProgramOutput instance
     result = compute("terachem", prog_input, collect_files=True)
 except exceptions.QCOPBaseError as e:
     result = e.results

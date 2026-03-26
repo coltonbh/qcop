@@ -1,12 +1,12 @@
 
 import numpy as np
 import pytest
-from qcio import (
+from qcdata import (
     CalcType,
     DualProgramInput,
     ProgramArgs,
     ProgramInput,
-    Results,
+    ProgramOutput,
     SinglePointData,
     Structure,
 )
@@ -76,14 +76,14 @@ def dual_prog_input_factory(hydrogen):
 
 @pytest.fixture
 def results(prog_input_factory):
-    """Create Results object"""
+    """Create ProgramOutput object"""
     sp_inp_energy = prog_input_factory("energy")
     energy = 1.0
     n_atoms = len(sp_inp_energy.structure.symbols)
     gradient = np.arange(n_atoms * 3).reshape(n_atoms, 3)
     hessian = np.arange(n_atoms**2 * 3**2).reshape(n_atoms * 3, n_atoms * 3)
 
-    return Results[ProgramInput, SinglePointData](
+    return ProgramOutput[ProgramInput, SinglePointData](
         input_data=sp_inp_energy,
         success=True,
         logs="program standard out...",
@@ -92,7 +92,7 @@ def results(prog_input_factory):
             "gradient": gradient,
             "hessian": hessian,
         },
-        provenance={"program": "qcio-test-suite", "scratch_dir": "/tmp/qcio"},
+        provenance={"program": "qcdata-test-suite", "scratch_dir": "/tmp/qcdata"},
         extras={"some_extra": 1},
     )
 

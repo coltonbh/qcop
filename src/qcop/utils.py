@@ -1,7 +1,7 @@
 import shutil
 from functools import lru_cache
 
-from qcio import FileInput, Inputs
+from qcdata import FileInput, Inputs
 
 from .adapters import BaseAdapter, FileAdapter, registry
 from .exceptions import AdapterNotFoundError, ProgramNotFoundError

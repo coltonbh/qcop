@@ -1,5 +1,5 @@
 import pytest
-from qcio import CalcType, Results, SinglePointData
+from qcdata import CalcType, ProgramOutput, SinglePointData
 
 from qcop.adapters import base, registry
 from qcop.exceptions import AdapterInputError, ExternalProgramError
@@ -81,7 +81,7 @@ def test_adapters_raise_error_if_calctype_not_supported(prog_input_factory):
 def test_data_added_to_results_object_if_exception_contains_it(
     prog_input_factory, mocker, results, test_adapter
 ):
-    """Test that results are added to the Results object if the exception
+    """Test that results are added to the ProgramOutput object if the exception
     contains them."""
     test_adapter = registry["test"]()
 
@@ -102,14 +102,14 @@ def test_data_added_to_results_object_if_exception_contains_it(
         test_adapter.compute(energy_input, raise_exc=True)
     assert excinfo.value.data == results.data
 
-    # If no raise_exc=False, the results are added to the Results
+    # If no raise_exc=False, the results are added to the ProgramOutput
     computed_results = test_adapter.compute(energy_input, raise_exc=False)
-    assert isinstance(computed_results, Results)
+    assert isinstance(computed_results, ProgramOutput)
     assert computed_results.data == results.data
 
 
 def test_results_object_added_to_exception(prog_input_factory, mocker, results, test_adapter):
-    """Test that exceptions contain the Results object."""
+    """Test that exceptions contain the ProgramOutput object."""
     test_adapter = registry["test"]()
 
     def raise_error(*args, **kwargs):
@@ -130,7 +130,7 @@ def test_results_object_added_to_exception(prog_input_factory, mocker, results, 
     with pytest.raises(ExternalProgramError) as excinfo:
         test_adapter.compute(energy_input, raise_exc=True)
 
-    assert isinstance(excinfo.value.results, Results)
+    assert isinstance(excinfo.value.results, ProgramOutput)
     assert excinfo.value.results.success is False
     # NOTE: CHECK WITH BIGCHEM
     assert isinstance(excinfo.value.args[-1], SinglePointData)
@@ -162,7 +162,7 @@ def test_stdout_collected_with_failed_execution(
 
     # Added to exception
     assert excinfo.value.logs == "some stdout"
-    # Added to Results
+    # Added to ProgramOutput
     assert excinfo.value.results.logs == "some stdout"
     # Added to exception
     assert excinfo.value.data == results.data

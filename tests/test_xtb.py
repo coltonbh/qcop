@@ -1,6 +1,6 @@
 import numpy as np
 import pytest
-from qcio import CalcType, ProgramInput, Structure
+from qcdata import CalcType, ProgramInput, Structure
 
 from qcop import compute
 from qcop.adapters import XTBAdapter

@@ -1015,16 +1015,16 @@ wheels = [
 
 [[package]]
 name = "qccodec"
-version = "0.9.0"
+version = "0.10.0"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "qcconst" },
-    { name = "qcio" },
+    { name = "qcdata" },
     { name = "tomli-w" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/2f/17/0083b860463e1ca22b2772634f91c28f45b717f53d1d1f58e86e06b6243b/qccodec-0.9.0.tar.gz", hash = "sha256:f1fe3630093a47ae24047db670e5da5fd470fbef09e29f0aff93fb7135437e6e", size = 401329 }
+sdist = { url = "https://files.pythonhosted.org/packages/55/a0/f2fe20494da9c6cccca8c2b83f4be776630a77af69f0c8ac0c8163a8c8c3/qccodec-0.10.0.tar.gz", hash = "sha256:5bb28802e6594e646710b63ab3c836d6a0d625c733baa65f9524f836a5b1b48b", size = 518027 }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/c8/f3/c927721458c8cd84e3cf0554cf55497c0f879f608ca17944a1c8d5189725/qccodec-0.9.0-py3-none-any.whl", hash = "sha256:953d27230e3d954daaa8aa1c0869f228ea4741cee3b624c780684b0d681a080f", size = 24626 },
+    { url = "https://files.pythonhosted.org/packages/d8/aa/d95279e7a0edcea470ee3ccf964a089c7a96b0d266a0730a3504e99a7d93/qccodec-0.10.0-py3-none-any.whl", hash = "sha256:ab2e0bf8bbc779b0ce027d6b8fa9ccc269bcd037c6f49b47d38c21fedd4415e4", size = 27643 },
 ]
 
 [[package]]
@@ -1034,6 +1034,24 @@ source = { registry = "https://pypi.org/simple" }
 sdist = { url = "https://files.pythonhosted.org/packages/04/9b/5e257bfa14fb4abc6f90b5109c51d697f3e412b4afeac008b6ebaf92f36c/qcconst-0.2.1.tar.gz", hash = "sha256:97aee85ba2ba078eb076dc0544737fe59206cf68d8efababc57e4578b7e4595a", size = 56039 }
 wheels = [
     { url = "https://files.pythonhosted.org/packages/93/d7/f12f520a35d8ff5cd647d37627bcf1be98f701c4ab69b520164214ba7e77/qcconst-0.2.1-py3-none-any.whl", hash = "sha256:2c1489e60909ac03daa448a06b59705376be6d71d6d0cee1caecde5517559206", size = 34094 },
+]
+
+[[package]]
+name = "qcdata"
+version = "0.17.0"
+source = { registry = "https://pypi.org/simple" }
+dependencies = [
+    { name = "eval-type-backport" },
+    { name = "numpy" },
+    { name = "pydantic" },
+    { name = "pyyaml" },
+    { name = "qcconst" },
+    { name = "toml" },
+    { name = "typing-extensions" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/10/2b/191a7997d128c579dc365e876d66dacc05aded15a417b796afcfc7946350/qcdata-0.17.0.tar.gz", hash = "sha256:df05ca67b9a83bb3f6155926f4825d4736e87cb3460abe22116f8b70bcd01eba", size = 1479911 }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/3b/5f/8084b103f8ccecb0fa2437a862c01d1c6c8744b70daa607bc8cd6f31e27f/qcdata-0.17.0-py3-none-any.whl", hash = "sha256:515bf0d5fb6e3c048510301a3a8349ffc16156a30caf3bdecebe3d5c88942562", size = 37928 },
 ]
 
 [[package]]
@@ -1067,30 +1085,12 @@ wheels = [
 ]
 
 [[package]]
-name = "qcio"
-version = "0.16.0"
-source = { registry = "https://pypi.org/simple" }
-dependencies = [
-    { name = "eval-type-backport" },
-    { name = "numpy" },
-    { name = "pydantic" },
-    { name = "pyyaml" },
-    { name = "qcconst" },
-    { name = "toml" },
-    { name = "typing-extensions" },
-]
-sdist = { url = "https://files.pythonhosted.org/packages/ad/93/870c0e5ee6f4879e6942094d563ba0ad61fe5ccb0af24b6d2049534c1e87/qcio-0.16.0.tar.gz", hash = "sha256:5b803e9d831fb2280ac43c48f87b76e0c8150391c1d4d561f749f0a4f4c5e0cb", size = 1473997 }
-wheels = [
-    { url = "https://files.pythonhosted.org/packages/b2/d3/42d945e34abc54af2eb4454824dc63d29316b87cb58f72d4248fabff2278/qcio-0.16.0-py3-none-any.whl", hash = "sha256:d8fbd19d32a19ff2c3843b004cdc80b014ce2d8eff8714406fe4a9387143b6b7", size = 36723 },
-]
-
-[[package]]
 name = "qcop"
-version = "0.11.0"
+version = "0.12.1"
 source = { editable = "." }
 dependencies = [
     { name = "qccodec" },
-    { name = "qcio" },
+    { name = "qcdata" },
     { name = "tomli-w" },
 ]
 
@@ -1134,13 +1134,13 @@ docs = [
 requires-dist = [
     { name = "geometric", marker = "extra == 'all'", specifier = ">=1.0.1,<2" },
     { name = "geometric", marker = "extra == 'geometric'", specifier = ">=1.0.1,<2" },
-    { name = "qccodec", specifier = ">=0.9.0" },
+    { name = "qccodec", specifier = ">=0.10.0" },
+    { name = "qcdata", specifier = ">=0.17.0" },
     { name = "qcelemental", marker = "extra == 'all'", specifier = ">=0.26.0,<0.27" },
     { name = "qcelemental", marker = "extra == 'qcengine'", specifier = ">=0.26.0,<0.27" },
     { name = "qcengine", marker = "extra == 'all'", specifier = ">=0.27.0,<0.28" },
     { name = "qcengine", marker = "extra == 'qcengine'", specifier = ">=0.27.0,<0.28" },
-    { name = "qcio", specifier = ">=0.16.0" },
-    { name = "tcpb", marker = "extra == 'all'", specifier = ">=0.14.1" },
+    { name = "tcpb", marker = "extra == 'all'", specifier = ">=0.16.0" },
     { name = "tomli-w", specifier = ">=1.0.0,<2" },
 ]
 
@@ -1333,7 +1333,7 @@ wheels = [
 
 [[package]]
 name = "tcpb"
-version = "0.14.3"
+version = "0.16.0"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "google" },
@@ -1342,11 +1342,12 @@ dependencies = [
     { name = "protobuf" },
     { name = "pydantic" },
     { name = "pydantic-settings" },
-    { name = "qcio" },
+    { name = "qcconst" },
+    { name = "qcdata" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/7a/f1/ae5ee4c5e46958b0be84db5895c1c26b6d0b64779fd71139e42e653deab9/tcpb-0.14.3.tar.gz", hash = "sha256:e07dcafc9d7d7644c9f91d4b371cdc1fae1baa49b58de704a78acaadca87c13a", size = 26721 }
+sdist = { url = "https://files.pythonhosted.org/packages/71/44/e3b83d6c71b7476e312a1813a87429848e6dd082b54ff1294849c6e208f9/tcpb-0.16.0.tar.gz", hash = "sha256:0883566a465f0f1511383dfabdcbcadf895e906b248a68a541486451c82e7ab0", size = 141091 }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/bd/e2/ff02d5dfd56e4dd414a97d1c5436a8cc47e9b29dd34456929ecf759967e9/tcpb-0.14.3-py3-none-any.whl", hash = "sha256:c3585c66b4448a54f7403d3e9d019ce1e463d50932569e32b9baf9a1904712ff", size = 28720 },
+    { url = "https://files.pythonhosted.org/packages/6c/aa/edba4c35b63fbf2da3a2d807babde6031dca5e601e9bd77d3e6958657cd0/tcpb-0.16.0-py3-none-any.whl", hash = "sha256:3fe1bbb72606750696eeae127a4e96cd3bcb0a73a3fc2e752eab976a3830134a", size = 29572 },
 ]
 
 [[package]]

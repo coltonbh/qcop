@@ -5,7 +5,7 @@ from pathlib import Path
 
 import qccodec
 from qccodec.parsers.crest import parse_version
-from qcio import (
+from qcdata import (
     CalcType,
     ConformerSearchResults,
     OptimizationResults,
@@ -81,7 +81,7 @@ class CRESTAdapter(
         """Execute CREST on the given input.
 
         Args:
-            input_data: The qcio ProgramInput object for a computation.
+            input_data: The qcdata ProgramInput object for a computation.
             update_func: A function to call with the stdout at regular intervals.
             update_interval: The interval at which to call the update function.
             collect_rotamers: Collect rotamers if doing a conformer_search. Defaults to

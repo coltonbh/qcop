@@ -1,7 +1,7 @@
 import importlib
 from collections.abc import Callable
 
-from qcio import CalcType, ProgramInput, SinglePointData
+from qcdata import CalcType, ProgramInput, SinglePointData
 
 from qcop.exceptions import ExternalProgramError, ProgramNotFoundError
 
@@ -49,7 +49,7 @@ class TeraChemFEAdapter(ProgramAdapter[ProgramInput, SinglePointData]):
         """Execute TeraChem on the given input.
 
         Args:
-            input_data: The qcio ProgramInput object for a computation.
+            input_data: The qcdata ProgramInput object for a computation.
             update_func: A callback function to call as the program executes.
             update_interval: The minimum time in seconds between calls to the
                 update_func.

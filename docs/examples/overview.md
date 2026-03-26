@@ -1,7 +1,7 @@
 Calculations are run by calling the `qcop.compute()` function with the relevant arguments and keywords like this:
 
 ```python
-from qcio import Structure, ProgramInput
+from qcdata import Structure, ProgramInput
 from qcop import compute
 
 # Create the Structure
@@ -22,7 +22,7 @@ prog_input = ProgramInput(
     keywords={"purify": "no", "restricted": False},
 )
 
-# Run the calculation; will return Results or raise an exception
+# Run the calculation; will return a ProgramOutput or raise an exception
 result = compute("terachem", prog_input, collect_files=True)
 ```
 

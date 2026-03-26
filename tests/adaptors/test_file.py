@@ -1,5 +1,5 @@
 import pytest
-from qcio import FileInput
+from qcdata import FileInput
 
 from qcop.adapters import FileAdapter
 from qcop.adapters.utils import tmpdir

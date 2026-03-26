@@ -1,6 +1,6 @@
 from collections.abc import Callable
 
-from qcio import FileInput, Files
+from qcdata import FileInput, Files
 
 from qcop.adapters.base import BaseAdapter
 
@@ -28,13 +28,13 @@ class FileAdapter(BaseAdapter[FileInput, Files]):
         """Compute the given program on the given files.
 
         Args:
-            input_data: The qcio FileInput object for a computation.
+            input_data: The qcdata FileInput object for a computation.
             update_func: A callback function to call as the program executes.
             update_interval: The minimum time in seconds between calls to the
             update_func.
 
         Returns:
-            Tuple of None and Results object for a computation. None is
+            Tuple of None and ProgramOutput data for a computation. None is
                 returned because no computed properties are returned for a file
                 computation.
 

@@ -4,13 +4,13 @@ from collections.abc import Callable
 from pathlib import Path
 
 import numpy as np
-from qcio import (
+from qcdata import (
     CalcType,
     DualProgramInput,
     OptimizationData,
     ProgramArgs,
     ProgramInput,
-    Results,
+    ProgramOutput,
     SinglePointData,
     Structure,
 )
@@ -83,7 +83,7 @@ class GeometricAdapter(ProgramAdapter[DualProgramInput, OptimizationData]):
         """Compute the requested calculation.
 
         Args:
-            input_data: The qcio DualProgramInput object for a computation.
+            input_data: The qcdata DualProgramInput object for a computation.
             propagate_wfn: Whether to propagate the wavefunction between steps of the
                 optimization.
         """
@@ -92,14 +92,14 @@ class GeometricAdapter(ProgramAdapter[DualProgramInput, OptimizationData]):
         geometric_molecule = self._create_geometric_molecule(input_data.structure)
         internal_coords_sys = self._setup_coords(input_data, geometric_molecule)
 
-        qcio_adapter = get_adapter(
+        qcdata_adapter = get_adapter(
             input_data.subprogram, input_data, qcng_fallback=True
         )
         optimizer = self._construct_optimizer(
             input_data,
             geometric_molecule,
             internal_coords_sys,
-            qcio_adapter,
+            qcdata_adapter,
             propagate_wfn=propagate_wfn,
             update_func=update_func,
             update_interval=update_interval,
@@ -118,7 +118,7 @@ class GeometricAdapter(ProgramAdapter[DualProgramInput, OptimizationData]):
 
         return (
             OptimizationData(
-                trajectory=optimizer.engine.qcio_trajectory,
+                trajectory=optimizer.engine.qcdata_trajectory,
             ),
             log_string.getvalue(),
         )
@@ -127,7 +127,7 @@ class GeometricAdapter(ProgramAdapter[DualProgramInput, OptimizationData]):
         """Update the input_data based on its calctype
 
         Args:
-            input_data: The qcio DualProgramInput object for a computation.
+            input_data: The qcdata DualProgramInput object for a computation.
 
         Returns:
             None. The input_data is updated in place.
@@ -141,7 +141,7 @@ class GeometricAdapter(ProgramAdapter[DualProgramInput, OptimizationData]):
         """Create a geomeTRIC Structure from the input object.
 
         Args:
-            structure: The qcio Structure object for a computation.
+            structure: The qcdata Structure object for a computation.
 
         Returns:
             The geomeTRIC Structure object.
@@ -158,7 +158,7 @@ class GeometricAdapter(ProgramAdapter[DualProgramInput, OptimizationData]):
         input_data,
         geometric_molecule,
         internal_coords_sys,
-        qcio_adapter,
+        qcdata_adapter,
         propagate_wfn: bool = False,
         update_func: Callable | None = None,
         update_interval: float | None = None,
@@ -167,10 +167,10 @@ class GeometricAdapter(ProgramAdapter[DualProgramInput, OptimizationData]):
         """Construct the geomeTRIC optimizer object
 
         Args:
-            input_data: The qcio DualProgramInput object for a computation.
+            input_data: The qcdata DualProgramInput object for a computation.
             geometric_molecule: The geomeTRIC Molecule object.
             internal_coords_sys: The geomeTRIC internal coordinate system.
-            qcio_adapter: The qcio adapter for the subprogram.
+            qcdata_adapter: The qcop adapter for the subprogram.
 
         Returns:
             The geomeTRIC optimizer object.
@@ -180,7 +180,7 @@ class GeometricAdapter(ProgramAdapter[DualProgramInput, OptimizationData]):
             geometric_molecule,
             internal_coords_sys,
             engine=self._geometric_engine()(
-                qcio_adapter,
+                qcdata_adapter,
                 input_data.subprogram_args,
                 input_data.structure,
                 geometric_molecule,
@@ -193,7 +193,7 @@ class GeometricAdapter(ProgramAdapter[DualProgramInput, OptimizationData]):
             # This file will contain every geometry in the optimization as a
             # multi-structure .xyz file with the energy of each step as a comment.
             params=self.geometric.params.OptParams(
-                xyzout="qcio_optim.xyz", **input_data.keywords
+                xyzout="qcdata_optim.xyz", **input_data.keywords
             ),
         )
 
@@ -201,7 +201,7 @@ class GeometricAdapter(ProgramAdapter[DualProgramInput, OptimizationData]):
         """Setup the internal coordinate system.
 
         Args:
-            input_data: The qcio DualProgramInput object for a computation.
+            input_data: The qcdata DualProgramInput object for a computation.
             geometric_structure: The geomeTRIC Structure object.
 
         Returns:
@@ -251,20 +251,20 @@ class GeometricAdapter(ProgramAdapter[DualProgramInput, OptimizationData]):
 
             def __init__(
                 self,
-                qcio_adapter: ProgramAdapter,
-                qcio_program_args: ProgramArgs,
-                qcio_structure: Structure,
+                qcdata_adapter: ProgramAdapter,
+                qcdata_program_args: ProgramArgs,
+                qcdata_structure: Structure,
                 geometric_structure,
                 propagate_wfn: bool = False,
                 update_func: Callable | None = None,
                 update_interval: float | None = None,
             ):
                 super().__init__(geometric_structure)
-                self.qcio_adapter = qcio_adapter
-                self.qcio_program_args = qcio_program_args
-                self.qcio_structure = qcio_structure
+                self.qcdata_adapter = qcdata_adapter
+                self.qcdata_program_args = qcdata_program_args
+                self.qcdata_structure = qcdata_structure
                 self.propagate_wfn = propagate_wfn
-                self.qcio_trajectory: list[Results] = []
+                self.qcdata_trajectory: list[ProgramOutput] = []
                 self.update_func = update_func
                 self.update_interval = update_interval
 
@@ -279,28 +279,28 @@ class GeometricAdapter(ProgramAdapter[DualProgramInput, OptimizationData]):
                 """
                 # Merge new coordinates into structure
                 structure = Structure(
-                    **{**self.qcio_structure.model_dump(), "geometry": coords}
+                    **{**self.qcdata_structure.model_dump(), "geometry": coords}
                 )
                 program_input = ProgramInput(
                     calctype=CalcType.gradient,
                     structure=structure,
-                    **self.qcio_program_args.model_dump(),
+                    **self.qcdata_program_args.model_dump(),
                 )
 
                 # Propagate wavefunction
                 if (
-                    self.qcio_trajectory  # Not the first step
+                    self.qcdata_trajectory  # Not the first step
                     and self.propagate_wfn
-                    and hasattr(self.qcio_adapter, "propagate_wfn")
+                    and hasattr(self.qcdata_adapter, "propagate_wfn")
                 ):
-                    self.qcio_adapter.propagate_wfn(
-                        self.qcio_trajectory[-1], program_input
+                    self.qcdata_adapter.propagate_wfn(
+                        self.qcdata_trajectory[-1], program_input
                     )
 
                 # Calculate energy and gradient
                 try:
-                    results: Results[ProgramInput, SinglePointData] = (
-                        self.qcio_adapter.compute(
+                    results: ProgramOutput[ProgramInput, SinglePointData] = (
+                        self.qcdata_adapter.compute(
                             program_input,
                             raise_exc=True,
                             collect_wfn=self.propagate_wfn,
@@ -311,8 +311,8 @@ class GeometricAdapter(ProgramAdapter[DualProgramInput, OptimizationData]):
                 except QCOPBaseError as e:
                     if e.results:  # For mypy
                         # Append error output
-                        self.qcio_trajectory.append(e.results)
-                    data = OptimizationData(trajectory=self.qcio_trajectory)
+                        self.qcdata_trajectory.append(e.results)
+                    data = OptimizationData(trajectory=self.qcdata_trajectory)
                     e.data = data
                     # TODO: Add args/kwargs update for Celery serialization?
                     # Maybe not because .data is folded into e.results in
@@ -320,7 +320,7 @@ class GeometricAdapter(ProgramAdapter[DualProgramInput, OptimizationData]):
                     raise e
 
                 else:
-                    self.qcio_trajectory.append(results)
+                    self.qcdata_trajectory.append(results)
 
                 assert (  # for mypy
                     results.data is not None

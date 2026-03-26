@@ -5,9 +5,13 @@ from pathlib import Path
 import qccodec
 from qccodec import exceptions as qccodec_exceptions
 from qccodec.parsers.orca import parse_version
-from qcio import CalcType, ProgramInput, SinglePointData
+from qcdata import CalcType, ProgramInput, SinglePointData
 
-from qcop.exceptions import AdapterInputError, ExternalProgramError
+from qcop.exceptions import (
+    AdapterInputError,
+    ExternalProgramError,
+    ProgramNotFoundError,
+)
 
 from .base import ProgramAdapter
 from .utils import execute_subprocess
@@ -49,7 +53,7 @@ class OrcaAdapter(ProgramAdapter[ProgramInput, SinglePointData]):
         """Execute Orca on the given input.
 
         Args:
-            input_data: The qcio ProgramInput object for a computation.
+            input_data: The qcdata ProgramInput object for a computation.
             update_func: A callback function to call as the program executes.
             update_interval: The minimum time in seconds between calls to the
                 update_func.
@@ -73,6 +77,8 @@ class OrcaAdapter(ProgramAdapter[ProgramInput, SinglePointData]):
         # in parallel. See:
         # https://www.faccts.de/docs/orca/6.1/tutorials/first_steps/parallel.html)
         full_orca_path = shutil.which(self.program)
+        if full_orca_path is None:
+            raise ProgramNotFoundError(program=self.program)
         stdout = execute_subprocess(
             full_orca_path, [input_filename], update_func, update_interval
         )

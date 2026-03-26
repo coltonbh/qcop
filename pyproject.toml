@@ -1,14 +1,14 @@
 [project]
 name = "qcop"
 version = "0.12.1"
-description = "A package for operating Quantum Chemistry programs using qcio standardized data structures. Compatible with TeraChem, psi4, QChem, NWChem, ORCA, Molpro, geomeTRIC and many more."
+description = "A package for operating Quantum Chemistry programs using qcdata standardized data structures. Compatible with TeraChem, psi4, QChem, NWChem, ORCA, Molpro, geomeTRIC and many more."
 authors = [{ name = "Colton Hicks", email = "github@coltonhicks.com" }]
 requires-python = ">=3.10"
 readme = "README.md"
 license = { file = "LICENSE" }
 dependencies = [
-    "qcio>=0.16.0",
-    "qccodec>=0.9.1",
+    "qccodec>=0.10.0",
+    "qcdata>=0.17.0",
     "tomli-w>=1.0.0,<2",
 ]
 classifiers = [
@@ -33,12 +33,12 @@ all = [
     "qcelemental>=0.26.0,<0.27",
     "qcengine>=0.27.0,<0.28",
     "geometric>=1.0.1,<2",
-    "tcpb>=0.14.1",
+    "tcpb>=0.16.0",
 ]
 
 [project.urls]
 Homepage = "https://github.com/coltonbh/qcop"
-Source = "https://github.com/coltonbh/qcio"
+Source = "https://github.com/coltonbh/qcop"
 Repository = "https://github.com/coltonbh/qcop"
 Changelog = "https://github.com/coltonbh/qcop/blob/master/CHANGELOG.md"
 "Bug Tracker" = "https://github.com/coltonbh/qcop/issues"
@@ -89,6 +89,7 @@ omit = ["*/tests/*", "*/migrations/*", "*site-packages*", "*__init__.py"]
 [tool.mypy]
 plugins = "pydantic.mypy"
 ignore_missing_imports = true
+exclude = "(^|/)(dist|site|htmlcov)/"
 
 [tool.pydantic-mypy]
 init_forbid_extra = true

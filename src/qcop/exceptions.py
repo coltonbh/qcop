@@ -1,7 +1,7 @@
 """Experimental exception hierarchy. This may be too complex and unhelpful for now"""
 
 
-from qcio import Data, Results
+from qcdata import Data, ProgramOutput
 
 
 class QCOPBaseError(Exception):
@@ -10,7 +10,7 @@ class QCOPBaseError(Exception):
 
     All QCOP exceptions must eventually have a non-None results attribute.
     Lower-level code may leave results as None; the top-level compute() method
-    should attach the final Results before propagating the error. If some results
+    should attach the final ProgramOutput before propagating the error. If some results
     were computed before the error occurred, they should be attached to the exception
     as well.
     """
@@ -18,7 +18,7 @@ class QCOPBaseError(Exception):
     def __init__(
         self,
         message: str,
-        results: Results | None = None,
+        results: ProgramOutput | None = None,
         data: Data | None = None,
     ):
         # Pass everything as positional arguments so they are captured in .args
@@ -54,7 +54,7 @@ class AdapterNotFoundError(AdapterError):
         self,
         program: str,
         message: str | None = None,
-        results: Results | None = None,
+        results: ProgramOutput | None = None,
     ):
         if message is None:
             message = f"No adapter found for program '{program}'."
@@ -72,7 +72,7 @@ class AdapterInputError(AdapterError):
         self,
         program: str,
         message: str | None = None,
-        results: Results | None = None,
+        results: ProgramOutput | None = None,
     ):
         if message is None:
             message = f"Invalid inputs for program '{program}'."
@@ -98,7 +98,7 @@ class ExternalProgramError(QCOPBaseError):
         self,
         program: str,
         message: str | None = None,
-        results: Results | None = None,
+        results: ProgramOutput | None = None,
         data: Data | None = None,
         original_exception: Exception | None = None,
         logs: str | None = None,
@@ -124,7 +124,7 @@ class ProgramNotFoundError(ExternalProgramError):
         self,
         program: str,
         message: str | None = None,
-        results: Results | None = None,
+        results: ProgramOutput | None = None,
         install_msg: str | None = None,
     ):
         if message is None:
