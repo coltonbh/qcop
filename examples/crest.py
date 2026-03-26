@@ -1,4 +1,4 @@
-from qcio import ProgramInput, Structure
+from qcdata import ProgramInput, Structure
 
 from qcop import compute, exceptions
 
@@ -24,7 +24,7 @@ prog_input = ProgramInput(
 
 # Run the calculation
 try:
-    # result is instance of Results
+    # result is a ProgramOutput instance
     result = compute(
         "crest", prog_input, collect_files=True, collect_rotamers=False
     )

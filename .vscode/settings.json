@@ -22,6 +22,7 @@
         "psutil",
         "pyenv",
         "qcconst",
+        "qcdata",
         "qcel",
         "qcio",
         "qcop",

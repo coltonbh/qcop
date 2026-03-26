@@ -5,7 +5,7 @@ import qccodec
 from qccodec import exceptions as qccodec_exceptions
 from qccodec.encoders.terachem import XYZ_FILENAME
 from qccodec.parsers.terachem import parse_version
-from qcio import CalcType, ProgramInput, Results, SinglePointData
+from qcdata import CalcType, ProgramInput, ProgramOutput, SinglePointData
 
 from qcop.exceptions import AdapterError, AdapterInputError, ExternalProgramError
 
@@ -59,7 +59,7 @@ class TeraChemAdapter(ProgramAdapter[ProgramInput, SinglePointData]):
         """Execute TeraChem on the given input.
 
         Args:
-            input_data: The qcio ProgramInput object for a computation.
+            input_data: The qcdata ProgramInput object for a computation.
             update_func: A callback function to call as the program executes.
             update_interval: The minimum time in seconds between calls to the
                 update_func.
@@ -128,7 +128,11 @@ class TeraChemAdapter(ProgramAdapter[ProgramInput, SinglePointData]):
                 wfns[str(wfn_path)] = wfn_path.read_bytes()
         return wfns
 
-    def propagate_wfn(self, output: Results, program_input: ProgramInput) -> None:
+    def propagate_wfn(
+        self,
+        output: ProgramOutput[ProgramInput, SinglePointData],
+        program_input: ProgramInput,
+    ) -> None:
         """Propagate the wavefunction from the previous calculation.
 
         Args:

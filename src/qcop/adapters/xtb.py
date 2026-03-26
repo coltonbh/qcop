@@ -9,7 +9,7 @@ import os
 from collections.abc import Callable
 
 import numpy as np
-from qcio import CalcType, ProgramInput, SinglePointData, Wavefunction
+from qcdata import CalcType, ProgramInput, SinglePointData, Wavefunction
 
 from qcop.exceptions import (
     AdapterInputError,
@@ -107,7 +107,7 @@ class XTBAdapter(ProgramAdapter[ProgramInput, SinglePointData]):
         """Execute xtb on the given input.
 
         Args:
-            input_data: The qcio ProgramInput object for a computation.
+            input_data: The qcdata ProgramInput object for a computation.
             update_func: A callback function to call as the program executes.
             update_interval: The minimum time in seconds between calls to the
                 update_func.

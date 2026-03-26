@@ -1,6 +1,6 @@
 # Quantum Chemistry Operate
 
-A package for operating Quantum Chemistry programs using [qcio](https://github.com/coltonbh/qcio) standardized data structures. Compatible with `TeraChem`, `psi4`, `QChem`, `NWChem`, `ORCA`, `Molpro`, `geomeTRIC` and many more.
+A package for operating Quantum Chemistry programs using [qcdata](https://github.com/coltonbh/qcdata) standardized data structures. Compatible with `TeraChem`, `psi4`, `QChem`, `NWChem`, `ORCA`, `Molpro`, `geomeTRIC` and many more.
 
 [![image](https://img.shields.io/pypi/v/qcop.svg)](https://pypi.python.org/pypi/qcop)
 [![image](https://img.shields.io/pypi/l/qcop.svg)](https://pypi.python.org/pypi/qcop)
@@ -13,10 +13,10 @@ A package for operating Quantum Chemistry programs using [qcio](https://github.c
 ## The QC Suite of Programs
 
 - [qcconst](https://github.com/coltonbh/qcconst) - Physical constants, conversion factors, and a periodic table with clear source information for every value.
-- [qcio](https://github.com/coltonbh/qcio) - Elegant and intuitive data structures for quantum chemistry, featuring seamless Jupyter Notebook visualizations.
-- [qcinf](https://github.com/coltonbh/qcinf) - Cheminformatics algorithms and structure utilities such as `rmsd` and alignment, using standardized [qcio](https://qcio.coltonhicks.com/) data structures.
-- [qccodec](https://github.com/coltonbh/qccodec) - A library for efficient parsing of quantum chemistry data into structured `qcio` objects.
-- [qcop](https://github.com/coltonbh/qcop) - A package for operating quantum chemistry programs using `qcio` standardized data structures. Compatible with `TeraChem`, `psi4`, `QChem`, `NWChem`, `ORCA`, `Molpro`, `geomeTRIC`, and many more, featuring seamless Jupyter Notebook visualizations.
+- [qcdata](https://github.com/coltonbh/qcdata) - Elegant and intuitive data structures for quantum chemistry, featuring seamless Jupyter Notebook visualizations.
+- [qcinf](https://github.com/coltonbh/qcinf) - Cheminformatics algorithms and structure utilities such as `rmsd` and alignment, using standardized [qcdata](https://qcdata.coltonhicks.com/) data structures.
+- [qccodec](https://github.com/coltonbh/qccodec) - A library for efficient parsing of quantum chemistry data into structured `qcdata` objects.
+- [qcop](https://github.com/coltonbh/qcop) - A package for operating quantum chemistry programs using `qcdata` standardized data structures. Compatible with `TeraChem`, `psi4`, `QChem`, `NWChem`, `ORCA`, `Molpro`, `geomeTRIC`, and many more, featuring seamless Jupyter Notebook visualizations.
 - [BigChem](https://github.com/mtzgroup/bigchem) - A distributed application for running quantum chemistry calculations at scale across clusters of computers or the cloud. Bring multi-node scaling to your favorite quantum chemistry program, featuring seamless Jupyter Notebook visualizations of your data.
 - `ChemCloud` - A [web application](https://github.com/mtzgroup/chemcloud-server) and associated [Python client](https://github.com/mtzgroup/chemcloud-client) for exposing a BigChem cluster securely over the internet, featuring seamless Jupyter Notebook visualizations.
 
@@ -28,12 +28,12 @@ python -m pip install qcop
 
 ## Quickstart
 
-`qcop` uses the `qcio` data structures to drive quantum chemistry programs in a standardized way. This allows for a simple and consistent interface to a wide variety of quantum chemistry programs. See the [qcio](https://github.com/coltonbh/qcio) library for documentation on the input and output data structures.
+`qcop` uses the `qcdata` data structures to drive quantum chemistry programs in a standardized way. This allows for a simple and consistent interface to a wide variety of quantum chemistry programs. See the [qcdata](https://github.com/coltonbh/qcdata) library for documentation on the input and output data structures.
 
 The `compute` function is the main entry point for the library and is used to run a calculation.
 
 ```python
-from qcio import Structure, ProgramInput
+from qcdata import Structure, ProgramInput
 from qcop import compute
 from qcop.exceptions import ExternalProgramError
 # Create the Structure
@@ -47,7 +47,7 @@ prog_input = ProgramInput(
     keywords={"purify": "no", "restricted": False},
 )
 
-# Run the calculation; will return Results or raise an exception
+# Run the calculation; will return a ProgramOutput or raise an exception
 try:
     result = compute("terachem", prog_input, collect_files=True)
 except ExternalProgramError as e:
@@ -73,10 +73,10 @@ else:
 
 ```
 
-One may also call `compute(..., raise_exc=False)` to return a `Results` object rather than raising an exception when a calculation fails. This may allow easier handling of failures in some cases.
+One may also call `compute(..., raise_exc=False)` to return a `ProgramOutput` object rather than raising an exception when a calculation fails. This may allow easier handling of failures in some cases.
 
 ```python
-from qcio import Structure, ProgramInput
+from qcdata import Structure, ProgramInput
 from qcop import compute
 from qcop.exceptions import ExternalProgramError
 # Create the Structure
@@ -90,7 +90,7 @@ prog_input = ProgramInput(
     keywords={"purify": "no", "restricted": False},
 )
 
-# Run the calculation; will return a Results object
+# Run the calculation; will return a ProgramOutput object
 result = compute("terachem", prog_input, collect_files=True, raise_exc=False)
 if not result.success:
     # Same as except block above
@@ -103,7 +103,7 @@ else:
 Alternatively, the `compute_args` function can be used to run a calculation with the input data structures passed in as arguments rather than as a single `ProgramInput` object.
 
 ```python
-from qcio import Structure
+from qcdata import Structure
 from qcop import compute_args
 # Create the Structure
 h2o = Structure.open("h2o.xyz")
@@ -131,20 +131,20 @@ Visualize all your results with a single line of code!
 First install the visualization module:
 
 ```sh
-python -m pip install qcio[view]
+python -m pip install qcdata[view]
 ```
 
 or if your shell requires `''` around arguments with brackets:
 
 ```sh
-python -m pip install 'qcio[view]'
+python -m pip install 'qcdata[view]'
 ```
 
-Then in a Jupyter notebook import the `qcio` view module and call `view.view(...)` passing it one or any number of `qcio` objects you want to visualizing including `Structure` objects or any `Results` object. You may also pass an array of `titles` and/or `subtitles` to add additional information to the molecular structure display. If no titles are passed `qcio` with look for `Structure` identifiers such as a name or SMILES to label the `Structure`.
+Then in a Jupyter notebook import the `qcdata` view module and call `view.view(...)` passing it one or any number of `qcdata` objects you want to visualize, including `Structure` objects or any `ProgramOutput` object. You may also pass arrays of `titles` and/or `subtitles` to add additional information to the molecular structure display. If no titles are passed, `qcdata` will look for `Structure` identifiers such as a name or SMILES to label the `Structure`.
 
-![Structure Viewer](https://public.coltonhicks.com/assets/qcio/structure_viewer.png)
+![Structure Viewer](https://public.coltonhicks.com/assets/qcdata/structure_viewer.png)
 
-Seamless visualizations for `Results` objects make results analysis easy!
+Seamless visualizations for `ProgramOutput` objects make results analysis easy!
 
 ![Optimization Viewer](./assets/optimization_viewer.png)
 
@@ -152,7 +152,7 @@ Single point calculations display their results in a table.
 
 ![Single Point Viewer](./assets/single_point_viewer.png)
 
-If you want to use the HTML generated by the viewer to build your own dashboards use the functions inside of `qcio.view.py` that begin with the word `generate_` to create HTML you can insert into any dashboard.
+If you want to use the HTML generated by the viewer to build your own dashboards, use the functions inside `qcdata.view.py` that begin with `generate_` to create HTML you can insert into any dashboard.
 
 ## Support
 

@@ -6,11 +6,22 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## [unreleased]
 
+### Changed
+
+- Migrated the codebase from `qcio` to `qcdata`, updating imports, docs, examples, and tests to the published `qcdata>=0.17.0` package.
+- Replaced uses of deprecated `Results` objects with `ProgramOutput` throughout `qcop`, including exception payloads and adapter return types.
+- Updated core dependency versions to `qccodec>=0.10.0`, `qcdata>=0.17.0`, and `tcpb>=0.16.0` to align with the published rename away from `qcio`.
+
+### Fixed
+
+- Corrected `BaseAdapter.compute()` to attach collected wavefunction files at `ProgramOutput.data.files`, matching the current `qcdata` output model instead of relying on backwards-compatibility shims.
+- Aligned the pre-commit mypy hook with the published package environment so pre-commit and direct mypy runs report the same type-checking results.
+
 ## [0.12.1] - 2025-11-18
 
 ### Added
 
-- Adapter for ORCA (by @avcopan) #69.
+- Adapter for ORCA (by @avcopan) [#69](https://github.com/coltonbh/qcop/pull/69).
 
 ## [0.12.0] - 2025-10-09
 

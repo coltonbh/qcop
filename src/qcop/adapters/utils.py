@@ -17,8 +17,8 @@ from io import StringIO
 from pathlib import Path
 from time import time
 
-from qcio import Provenance
-from qcio.helper_types import StrOrPath
+from qcdata import Provenance
+from qcdata.helper_types import StrOrPath
 
 from qcop.exceptions import ExternalProgramError, ProgramNotFoundError
 

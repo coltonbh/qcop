@@ -2,7 +2,7 @@
 
 from pathlib import Path
 
-from qcio import FileInput, Structure
+from qcdata import FileInput, Structure
 
 from qcop import compute
 

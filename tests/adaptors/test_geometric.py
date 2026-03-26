@@ -1,10 +1,10 @@
 import pytest
-from qcio import (
+from qcdata import (
     CalcType,
     OptimizationData,
     ProgramArgs,
     ProgramInput,
-    Results,
+    ProgramOutput,
     SinglePointData,
 )
 
@@ -60,7 +60,7 @@ def test_create_geometric_molecule(hydrogen):
         assert not any(scratch_dir.iterdir())  # check that the file was deleted
 
 
-def test_qcio_geometric_engine_exception_handling(
+def test_qcdata_geometric_engine_exception_handling(
     test_adapter, hydrogen, results, mocker
 ):
     adapter = GeometricAdapter()  # Just for using helper methods below
@@ -75,12 +75,12 @@ def test_qcio_geometric_engine_exception_handling(
     )
 
     # Set trajectory
-    engine.qcio_trajectory = [results]
+    engine.qcdata_trajectory = [results]
 
-    # Create a failed Results object
+    # Create a failed ProgramOutput object
     po_dict = results.model_dump()
     po_dict.update({"success": False, "traceback": "fake traceback"})
-    po_failure = Results[ProgramInput, SinglePointData](**po_dict)
+    po_failure = ProgramOutput[ProgramInput, SinglePointData](**po_dict)
 
     # Mock adapter to raise ExternalProgramExecutionError
     mocker.patch.object(

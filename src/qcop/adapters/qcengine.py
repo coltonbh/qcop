@@ -1,7 +1,7 @@
 from pathlib import Path
 
-from qcio import CalcType, SinglePointData
-from qcio.qcel import from_qcel_output_results, to_qcel_input
+from qcdata import CalcType, SinglePointData
+from qcdata.qcel import from_qcel_output_results, to_qcel_input
 
 from qcop.exceptions import ExternalProgramError
 
@@ -40,9 +40,9 @@ class QCEngineAdapter(ProgramAdapter):
         from qcengine.exceptions import QCEngineException
 
         task_config = kwargs.pop("task_config", {})
-        # Use qcio selected working_directory
+        # Use qcdata selected working_directory
         task_config["scratch_directory"] = str(Path.cwd())
-        # Keep scratch files so qcio can collect them
+        # Keep scratch files so qcdata can collect them
         task_config["scratch_messy"] = True
 
         # Remove qcop-specific kwargs
@@ -53,7 +53,7 @@ class QCEngineAdapter(ProgramAdapter):
                 to_qcel_input(input_data),
                 self.external_program,
                 raise_error=True,  # Always raise exceptions
-                return_dict=True,  # qcio works with dicts for qcel i/o
+                return_dict=True,  # qcdata works with dicts for qcel i/o
                 task_config=task_config,
                 **kwargs,
             )

@@ -1,6 +1,6 @@
 """Must run script like this: python -m examples.xtb"""
 
-from qcio import CalcType, ProgramInput, Structure
+from qcdata import CalcType, ProgramInput, Structure
 
 from qcop import compute
 

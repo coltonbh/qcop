@@ -5,17 +5,17 @@ from collections.abc import Callable
 from typing import Any
 from warnings import warn
 
-from qcio import (
+from qcdata import (
     CalcType,
     DataType,
     Files,
     InputType,
     Model,
     ProgramInput,
-    Results,
+    ProgramOutput,
     Structure,
 )
-from qcio.helper_types import StrOrPath
+from qcdata.helper_types import StrOrPath
 
 from .adapters import BaseAdapter
 from .exceptions import AdapterNotFoundError, ProgramNotFoundError
@@ -39,7 +39,7 @@ def compute(
     propagate_wfn: bool = False,
     qcng_fallback: bool = True,
     **adapter_kwargs,
-) -> Results[InputType, DataType]:
+) -> ProgramOutput[InputType, DataType]:
     """Use the given program to compute on the given input.
 
     See BaseAdapter.compute for more details.
@@ -48,7 +48,7 @@ def compute(
         adapter = get_adapter(program, input_data, qcng_fallback)
     except (AdapterNotFoundError, ProgramNotFoundError) as e:
         # Add results to the exception
-        output_obj = Results[type(input_data), Files](  # type: ignore
+        output_obj = ProgramOutput[type(input_data), Files](  # type: ignore
             input_data=input_data,
             data=Files(),
             success=False,
@@ -101,7 +101,7 @@ def compute_args(
     files: dict[str, str | bytes] | Files | None = None,
     extras: dict[str, Any] | None = None,
     **kwargs,
-) -> Results[InputType, DataType]:
+) -> ProgramOutput[InputType, DataType]:
     """Compute function that accepts independent argument for a ProgramInput.
 
     Args:
@@ -110,7 +110,7 @@ def compute_args(
         calctype: The type of calculation to run.
         model: The model to use for the calculation.
         keywords: The keywords to use for the calculation.
-        files: The files to use for the calculation. Either a qcio.Files object or a
+        files: The files to use for the calculation. Either a qcdata.Files object or a
             dict mapping file names to file contents (bytes or str).
         extras: Extra arguments to pass to the adapter.
         **kwargs: Extra arguments to pass to the compute function.

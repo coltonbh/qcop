@@ -3,7 +3,7 @@
 Constraints docs: https://geometric.readthedocs.io/en/latest/constraints.html
 """
 
-from qcio import DualProgramInput, Structure
+from qcdata import DualProgramInput, Structure
 
 from qcop import compute, exceptions
 
