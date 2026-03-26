@@ -34,9 +34,9 @@ class FileAdapter(BaseAdapter[FileInput, Files]):
             update_func.
 
         Returns:
-            Tuple of None and ProgramOutput data for a computation. None is
-                returned because no computed properties are returned for a file
-                computation.
+            Tuple of a ``Files`` object and the program output string for a
+            computation. The returned ``Files`` instance is initially empty and
+            will be populated with file data by the :meth:`.compute` method.
 
         Raises:
             ProgramNotFoundException: If the program is not found.
