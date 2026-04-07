@@ -1,6 +1,7 @@
 import pytest
 from qcdata import (
     CalcType,
+    DualProgramInput,
     OptimizationData,
     ProgramArgs,
     ProgramInput,
@@ -115,3 +116,54 @@ def test_geometric_exceptions_converted_to_qccompute_exceptions(mocker, dual_pro
     prog_input = dual_prog_input_factory(CalcType.optimization)
     with pytest.raises(ExternalProgramError):
         adapter.compute_data(prog_input, propagate_wfn=False)
+
+
+def test_compute_data_does_not_mutate_input_keywords(mocker, hydrogen):
+    adapter = GeometricAdapter()
+    prog_input = DualProgramInput(
+        calctype=CalcType.optimization,
+        structure=hydrogen,
+        subprogram="test",
+        subprogram_args=ProgramArgs(
+            model={"method": "hf", "basis": "sto-3g"},
+        ),
+        keywords={
+            "check": 3,
+            "constraints": {
+                "freeze": [
+                    {"type": "distance", "indices": [0, 1], "value": 1.4},
+                ],
+            },
+        },
+    )
+    original = prog_input.model_copy(deep=True)
+
+    mocker.patch.object(
+        adapter,
+        "_create_geometric_molecule",
+        return_value=object(),
+    )
+    mocker.patch.object(
+        adapter,
+        "_setup_coords",
+        return_value=object(),
+    )
+
+    class DummyOptimizer:
+        def __init__(self):
+            self.engine = type("Engine", (), {"qcdata_trajectory": []})()
+
+        def optimizeGeometry(self):
+            return None
+
+    mocker.patch.object(
+        adapter,
+        "_construct_optimizer",
+        return_value=DummyOptimizer(),
+    )
+
+    data, logs = adapter.compute_data(prog_input, propagate_wfn=False)
+
+    assert data == OptimizationData(trajectory=[])
+    assert logs == ""
+    assert prog_input == original

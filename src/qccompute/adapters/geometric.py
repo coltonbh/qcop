@@ -87,11 +87,14 @@ class GeometricAdapter(ProgramAdapter[DualProgramInput, OptimizationData]):
             propagate_wfn: Whether to propagate the wavefunction between steps of the
                 optimization.
         """
+        # geomeTRIC setup mutates keywords (for example by removing constraints), so
+        # operate on an internal copy and preserve the caller's original input object.
+        input_data = input_data.model_copy(deep=True)
+
         # Update the input object based on its calctype
         self._update_input_data(input_data)
         geometric_molecule = self._create_geometric_molecule(input_data.structure)
         internal_coords_sys = self._setup_coords(input_data, geometric_molecule)
-
         qcdata_adapter = get_adapter(
             input_data.subprogram, input_data, qcng_fallback=True
         )
