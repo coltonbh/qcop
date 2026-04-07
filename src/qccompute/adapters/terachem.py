@@ -3,7 +3,6 @@ from pathlib import Path
 
 import qccodec
 from qccodec import exceptions as qccodec_exceptions
-from qccodec.encoders.terachem import XYZ_FILENAME
 from qccodec.parsers.terachem import parse_version
 from qcdata import CalcType, ProgramInput, ProgramOutput, SinglePointData
 
@@ -85,11 +84,11 @@ class TeraChemAdapter(ProgramAdapter[ProgramInput, SinglePointData]):
 
         # Get the scratch output directory
         parent = Path.cwd()
-        # TeraChem creates a directory named scr.<xyz_filename> in the current working
-        scr_dir = next(parent.glob("scr.*"), None)
+        # TeraChem creates a directory named scr<xyz_filename> in the current working
+        scr_dir = next(parent.glob("scr*"), None)
         if scr_dir is None:
             raise ExternalProgramError(
-                self.program, f"TeraChem did not create a 'scr.' directory in {parent}."
+                self.program, f"TeraChem did not create a 'scr' directory in {parent}."
             )
 
         # Parse output
@@ -114,11 +113,14 @@ class TeraChemAdapter(ProgramAdapter[ProgramInput, SinglePointData]):
         """Append wavefunction data to the output."""
 
         # Naming conventions from TeraChem uses xyz filename as scratch dir postfix
-        scr_postfix = XYZ_FILENAME.split(".")[0]
-
+        scr_dir = next(Path().glob("scr*"), None)
+        if not scr_dir:
+            raise AdapterError(
+                "No scratch directory found for wavefunction collection."
+            )
         # Wavefunction filenames
         wfn_filenames = ("c0", "ca0", "cb0")
-        wfn_paths = [Path(f"scr.{scr_postfix}/{fn}") for fn in wfn_filenames]
+        wfn_paths = [scr_dir / fn for fn in wfn_filenames]
         if not any(wfn_path.exists() for wfn_path in wfn_paths):
             raise AdapterError(f"No wavefunction files found in {Path.cwd()}")
 
@@ -143,18 +145,15 @@ class TeraChemAdapter(ProgramAdapter[ProgramInput, SinglePointData]):
             None. Modifies the program_input object in place.
         """
 
-        # Naming conventions from TeraChem uses xyz filename as scratch dir postfix
-        scr_postfix = XYZ_FILENAME.split(".")[0]
-
         # Wavefunction filenames
-        c0, ca0, cb0 = "c0", "ca0", "cb0"
+        suffixes = ("c0", "ca0", "cb0")
+        matches = {}
+        for k, v in output.data.files.items():
+            for suffix in suffixes:
+                if k.endswith(suffix):
+                    matches[suffix] = v
 
-        files = output.data.files
-        c0_bytes = files.get(f"scr.{scr_postfix}/{c0}")
-        ca0_bytes = files.get(f"scr.{scr_postfix}/{ca0}")
-        cb0_bytes = files.get(f"scr.{scr_postfix}/{cb0}")
-
-        if not c0_bytes and not (ca0_bytes and cb0_bytes):
+        if not "c0" in matches and not ("ca0" in matches and "cb0" in matches):
             raise AdapterInputError(
                 program=self.program,
                 message="Could not find c0 or ca/b0 files in output.",
@@ -162,12 +161,12 @@ class TeraChemAdapter(ProgramAdapter[ProgramInput, SinglePointData]):
 
         # Load wavefunction data onto ProgramInput object
 
-        if c0_bytes:
-            program_input.files[c0] = c0_bytes
-            program_input.keywords["guess"] = c0
+        if "c0" in matches:
+            program_input.files["c0"] = matches["c0"]
+            program_input.keywords["guess"] = "c0"
 
         else:  # ca0_bytes and cb0_bytes
-            assert ca0_bytes and cb0_bytes  # for mypy
-            program_input.files[ca0] = ca0_bytes
-            program_input.files[cb0] = cb0_bytes
-            program_input.keywords["guess"] = f"{ca0} {cb0}"
+            assert "ca0" in matches and "cb0" in matches  # for mypy
+            program_input.files["ca0"] = matches["ca0"]
+            program_input.files["cb0"] = matches["cb0"]
+            program_input.keywords["guess"] = "ca0 cb0"

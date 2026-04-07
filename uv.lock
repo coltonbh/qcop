@@ -1028,65 +1028,8 @@ wheels = [
 ]
 
 [[package]]
-name = "qcconst"
-version = "0.2.1"
-source = { registry = "https://pypi.org/simple" }
-sdist = { url = "https://files.pythonhosted.org/packages/04/9b/5e257bfa14fb4abc6f90b5109c51d697f3e412b4afeac008b6ebaf92f36c/qcconst-0.2.1.tar.gz", hash = "sha256:97aee85ba2ba078eb076dc0544737fe59206cf68d8efababc57e4578b7e4595a", size = 56039 }
-wheels = [
-    { url = "https://files.pythonhosted.org/packages/93/d7/f12f520a35d8ff5cd647d37627bcf1be98f701c4ab69b520164214ba7e77/qcconst-0.2.1-py3-none-any.whl", hash = "sha256:2c1489e60909ac03daa448a06b59705376be6d71d6d0cee1caecde5517559206", size = 34094 },
-]
-
-[[package]]
-name = "qcdata"
-version = "0.17.0"
-source = { registry = "https://pypi.org/simple" }
-dependencies = [
-    { name = "eval-type-backport" },
-    { name = "numpy" },
-    { name = "pydantic" },
-    { name = "pyyaml" },
-    { name = "qcconst" },
-    { name = "toml" },
-    { name = "typing-extensions" },
-]
-sdist = { url = "https://files.pythonhosted.org/packages/10/2b/191a7997d128c579dc365e876d66dacc05aded15a417b796afcfc7946350/qcdata-0.17.0.tar.gz", hash = "sha256:df05ca67b9a83bb3f6155926f4825d4736e87cb3460abe22116f8b70bcd01eba", size = 1479911 }
-wheels = [
-    { url = "https://files.pythonhosted.org/packages/3b/5f/8084b103f8ccecb0fa2437a862c01d1c6c8744b70daa607bc8cd6f31e27f/qcdata-0.17.0-py3-none-any.whl", hash = "sha256:515bf0d5fb6e3c048510301a3a8349ffc16156a30caf3bdecebe3d5c88942562", size = 37928 },
-]
-
-[[package]]
-name = "qcelemental"
-version = "0.26.0"
-source = { registry = "https://pypi.org/simple" }
-dependencies = [
-    { name = "numpy" },
-    { name = "pint" },
-    { name = "pydantic" },
-]
-sdist = { url = "https://files.pythonhosted.org/packages/e7/4a/c1b2b3c12f53e38c89650dbdb69c61ae4c50a8f297a2cd99b70d95b22f26/qcelemental-0.26.0.tar.gz", hash = "sha256:a14e8510cdbfda645ef1461c1afd02efb599311733dbba5f83fcd1d6168a6ddd", size = 300447 }
-wheels = [
-    { url = "https://files.pythonhosted.org/packages/95/46/119bdb125098ad82613b88e0ed78cd05ce637e22123e896fc178eec82a93/qcelemental-0.26.0-py3-none-any.whl", hash = "sha256:0b2e77e93dc8e14c78e54c2aafa6198661ffb49abae73a1352e5f384609dd5ff", size = 333584 },
-]
-
-[[package]]
-name = "qcengine"
-version = "0.27.0"
-source = { registry = "https://pypi.org/simple" }
-dependencies = [
-    { name = "psutil" },
-    { name = "py-cpuinfo" },
-    { name = "pydantic" },
-    { name = "pyyaml" },
-    { name = "qcelemental" },
-]
-sdist = { url = "https://files.pythonhosted.org/packages/db/c3/041c434504769862ace5ee6a3d500344695d4c11300f5987aa2a366ab0bd/qcengine-0.27.0.tar.gz", hash = "sha256:18673aee16d5dfc08762426d40ccb198d936718a24fcd14a366b3259d00d6f10", size = 301521 }
-wheels = [
-    { url = "https://files.pythonhosted.org/packages/db/e8/f98171b93876df2e839705a2dc3d26d732c206631e2146c627b037cb9389/qcengine-0.27.0-py3-none-any.whl", hash = "sha256:e76ff2a3c1e1654d4b00c917ab188c7084c33b2400b2c101ea2aa339fe28dd6a", size = 331746 },
-]
-
-[[package]]
 name = "qccompute"
-version = "0.12.1"
+version = "0.13.0"
 source = { editable = "." }
 dependencies = [
     { name = "qccodec" },
@@ -1163,6 +1106,63 @@ docs = [
     { name = "mkdocs-material", specifier = ">=9.5.31,<10" },
     { name = "mkdocstrings", extras = ["python"], specifier = ">=0.25.2,<0.26" },
     { name = "pymdown-extensions", specifier = "~=10.9" },
+]
+
+[[package]]
+name = "qcconst"
+version = "0.2.1"
+source = { registry = "https://pypi.org/simple" }
+sdist = { url = "https://files.pythonhosted.org/packages/04/9b/5e257bfa14fb4abc6f90b5109c51d697f3e412b4afeac008b6ebaf92f36c/qcconst-0.2.1.tar.gz", hash = "sha256:97aee85ba2ba078eb076dc0544737fe59206cf68d8efababc57e4578b7e4595a", size = 56039 }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/93/d7/f12f520a35d8ff5cd647d37627bcf1be98f701c4ab69b520164214ba7e77/qcconst-0.2.1-py3-none-any.whl", hash = "sha256:2c1489e60909ac03daa448a06b59705376be6d71d6d0cee1caecde5517559206", size = 34094 },
+]
+
+[[package]]
+name = "qcdata"
+version = "0.17.0"
+source = { registry = "https://pypi.org/simple" }
+dependencies = [
+    { name = "eval-type-backport" },
+    { name = "numpy" },
+    { name = "pydantic" },
+    { name = "pyyaml" },
+    { name = "qcconst" },
+    { name = "toml" },
+    { name = "typing-extensions" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/10/2b/191a7997d128c579dc365e876d66dacc05aded15a417b796afcfc7946350/qcdata-0.17.0.tar.gz", hash = "sha256:df05ca67b9a83bb3f6155926f4825d4736e87cb3460abe22116f8b70bcd01eba", size = 1479911 }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/3b/5f/8084b103f8ccecb0fa2437a862c01d1c6c8744b70daa607bc8cd6f31e27f/qcdata-0.17.0-py3-none-any.whl", hash = "sha256:515bf0d5fb6e3c048510301a3a8349ffc16156a30caf3bdecebe3d5c88942562", size = 37928 },
+]
+
+[[package]]
+name = "qcelemental"
+version = "0.26.0"
+source = { registry = "https://pypi.org/simple" }
+dependencies = [
+    { name = "numpy" },
+    { name = "pint" },
+    { name = "pydantic" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/e7/4a/c1b2b3c12f53e38c89650dbdb69c61ae4c50a8f297a2cd99b70d95b22f26/qcelemental-0.26.0.tar.gz", hash = "sha256:a14e8510cdbfda645ef1461c1afd02efb599311733dbba5f83fcd1d6168a6ddd", size = 300447 }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/95/46/119bdb125098ad82613b88e0ed78cd05ce637e22123e896fc178eec82a93/qcelemental-0.26.0-py3-none-any.whl", hash = "sha256:0b2e77e93dc8e14c78e54c2aafa6198661ffb49abae73a1352e5f384609dd5ff", size = 333584 },
+]
+
+[[package]]
+name = "qcengine"
+version = "0.27.0"
+source = { registry = "https://pypi.org/simple" }
+dependencies = [
+    { name = "psutil" },
+    { name = "py-cpuinfo" },
+    { name = "pydantic" },
+    { name = "pyyaml" },
+    { name = "qcelemental" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/db/c3/041c434504769862ace5ee6a3d500344695d4c11300f5987aa2a366ab0bd/qcengine-0.27.0.tar.gz", hash = "sha256:18673aee16d5dfc08762426d40ccb198d936718a24fcd14a366b3259d00d6f10", size = 301521 }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/db/e8/f98171b93876df2e839705a2dc3d26d732c206631e2146c627b037cb9389/qcengine-0.27.0-py3-none-any.whl", hash = "sha256:e76ff2a3c1e1654d4b00c917ab188c7084c33b2400b2c101ea2aa339fe28dd6a", size = 331746 },
 ]
 
 [[package]]

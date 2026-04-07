@@ -20,6 +20,16 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 - Corrected `BaseAdapter.compute()` to attach collected wavefunction files at `ProgramOutput.data.files`, matching the current `qcdata` output model instead of relying on backwards-compatibility shims. [#70](https://github.com/coltonbh/qcop/pull/70)
 - Aligned the pre-commit mypy hook with the published package environment so pre-commit and direct mypy runs report the same type-checking results. [#70](https://github.com/coltonbh/qcop/pull/70)
 
+### Changed
+
+- Updated TeraChemAdapter to look for scr directory at `scr*` instead of `scr.*`
+
+## [0.12.2] - 2026-04-07
+
+### Changed
+
+- Updated TeraChemAdapter to look for scr directory at `scr*` instead of `scr.*`
+
 ## [0.12.1] - 2025-11-18
 
 ### Added
@@ -423,6 +433,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 [unreleased]: https://github.com/coltonbh/qccompute/compare/0.13.0...HEAD
 [0.13.0]: https://github.com/coltonbh/qccompute/releases/tag/0.13.0
+[0.12.2]: https://github.com/coltonbh/qcio/releases/tag/0.12.2
 [0.12.1]: https://github.com/coltonbh/qcio/releases/tag/0.12.1
 [0.12.0]: https://github.com/coltonbh/qcio/releases/tag/0.12.0
 [0.11.0]: https://github.com/coltonbh/qcio/releases/tag/0.11.0
