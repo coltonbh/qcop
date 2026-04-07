@@ -6,6 +6,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## [unreleased]
 
+## [0.13.1] - 2026-04-07
+
 ### Fixed
 
 - Preserved `DualProgramInput.keywords` in `ProgramOutput.input_data` for geomeTRIC runs by avoiding in-place mutation of the caller's input object during optimizer setup.
@@ -435,7 +437,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 - Created adapter for TeraChem.
 - Exposed general purpose computing for any subprocess with `FileAdaptor`
 
-[unreleased]: https://github.com/coltonbh/qccompute/compare/0.13.0...HEAD
+[unreleased]: https://github.com/coltonbh/qccompute/compare/0.13.1...HEAD
+[0.13.1]: https://github.com/coltonbh/qccompute/releases/tag/0.13.1
 [0.13.0]: https://github.com/coltonbh/qccompute/releases/tag/0.13.0
 [0.12.2]: https://github.com/coltonbh/qcio/releases/tag/0.12.2
 [0.12.1]: https://github.com/coltonbh/qcio/releases/tag/0.12.1
