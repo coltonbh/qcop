@@ -1,7 +1,6 @@
 from pathlib import Path
 
 import pytest
-from qccodec.encoders.terachem import XYZ_FILENAME
 
 from qcop.adapters import TeraChemAdapter
 from qcop.adapters.utils import tmpdir
@@ -29,9 +28,7 @@ def test_get_version_stdout(mocker):
     """Test get_version method."""
     adapter = TeraChemAdapter()
     # Create a mock for parse_version_string
-    mock_parse_version = mocker.patch(
-        "qcop.adapters.terachem.parse_version"
-    )
+    mock_parse_version = mocker.patch("qcop.adapters.terachem.parse_version")
 
     adapter.program_version("some stdout data")
 
@@ -49,7 +46,7 @@ def test_propagate_wfn(prog_input_factory, results):
         adapter.propagate_wfn(results, prog_input_factory_inst)
 
     # TeraChem Output conventions
-    scr_postfix = XYZ_FILENAME.split(".")[0]
+    scr_postfix = "geometry".split(".")[0]
     scr_dir = f"scr.{scr_postfix}"
 
     # Add restricted wavefunction data to output
@@ -86,7 +83,7 @@ def test_collect_wfn(results):
         adapter.collect_wfn()
 
     # Check collection of c0
-    scr_dir_str = f"scr.{XYZ_FILENAME.split('.')[0]}"
+    scr_dir_str = "scr.geometry"
     with tmpdir():
         scr_dir = Path(scr_dir_str)
         scr_dir.mkdir()

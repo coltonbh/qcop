@@ -73,6 +73,11 @@ class OrcaAdapter(ProgramAdapter[ProgramInput, SinglePointData]):
         # in parallel. See:
         # https://www.faccts.de/docs/orca/6.1/tutorials/first_steps/parallel.html)
         full_orca_path = shutil.which(self.program)
+        if not full_orca_path:
+            raise ExternalProgramError(
+                program=self.program,
+                message=f"{self.program} executable not found in PATH.",
+            )
         stdout = execute_subprocess(
             full_orca_path, [input_filename], update_func, update_interval
         )

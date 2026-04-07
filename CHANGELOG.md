@@ -6,6 +6,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## [unreleased]
 
+### Changed
+
+- Updated TeraChemAdapter to look for scr directory at `scr*` instead of `scr.*`
+
 ## [0.12.1] - 2025-11-18
 
 ### Added
