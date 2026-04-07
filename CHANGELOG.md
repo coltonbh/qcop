@@ -6,6 +6,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## [unreleased]
 
+### Fixed
+
+- Preserved `DualProgramInput.keywords` in `ProgramOutput.input_data` for geomeTRIC runs by avoiding in-place mutation of the caller's input object during optimizer setup.
+
 ## [0.13.0] - 2026-03-26
 
 ### Changed
